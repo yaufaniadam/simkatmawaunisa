@@ -69,15 +69,15 @@
 	<div class="col-md-4">
 
 		<div class="card shadow">
-			<a href="#collStatus" class="d-block card-header pt-3 pb-2 bg-<?= $pengajuan->badge ?>" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collStatus">
-				<p class="h5 text-center font-weight-bold text-white"> <?= $pengajuan->status ?> </p>
+			<a href="#collStatus" class="d-block card-header pt-3 pb-2 bg-<?= (($pengajuan->status_id == 7) || ($pengajuan->status_id == 9)) ? 'birutua' : $pengajuan->badge; ?>" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collStatus">
+				<p class="h5 text-center font-weight-bold text-white"> <?= (($pengajuan->status_id == 7) || ($pengajuan->status_id == 9)) ? 'Tunggu Verifikasi Petugas' : $pengajuan->status;  ?> </p>
 			</a>
 			<div class="collapse show" id="collStatus">
 				<div class="card-body pl-2">
 
 					<div class="timeline timeline-xs">
 						<?php foreach ($timeline as $tl) { ?>
-							<div class="timeline-item">
+							<div class="timeline-item <?= ($tl['status_id'] === 7 || $tl['status_id'] === 9) ? 'd-none' : '' ?>">
 								<div class="timeline-item-marker">
 									<div class="timeline-item-marker-text"><?= $tl['date']; ?></div>
 									<div class="timeline-item-marker-indicator bg-<?= $tl['badge']; ?>"></div>

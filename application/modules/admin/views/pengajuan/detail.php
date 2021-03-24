@@ -49,10 +49,6 @@ mestinya ketika user mengganti, error messagenya langsung ilang -->
 			</a>
 			<div class="collapse<?= (($pengajuan['status_id'] == 9 || $pengajuan['status_id'] == 10) && $this->session->userdata('role') == 1) ? "" : " show" ?>" id="collKeterangan">
 				<div class="card-body">
-
-
-					<?= ($pengajuan['status_id'] == 1) ? '<a href="' . base_url('admin/pengajuan/proses_surat/' . $pengajuan['pengajuan_id']) . '" class="btn btn-warning btn-sm">Klik untuk Memproses</a>' : '' ?>
-
 					<input type="hidden" name="pengajuan_id" value="<?= $pengajuan['pengajuan_id']; ?>">
 
 					<input type="hidden" name="user_id" value="<?= $pengajuan['STUDENTID']; ?>">
@@ -81,8 +77,8 @@ mestinya ketika user mengganti, error messagenya langsung ilang -->
 									</div>
 									<div class="card-body">
 
-										<p> Setelah diperiksa dengan seksama, maka
-											<?= $this->session->userdata('FULLNAME'); ?> menyatakan bahwa permohonan <strong>Surat <?= $pengajuan['Jenis_Pengajuan']; ?></strong> yang diajukan oleh <strong><?= $pengajuan['FULLNAME']; ?></strong> : </p>
+										<p> Setelah diperiksa dengan seksama, maka <span class="badge badge-perak">
+												<?= $this->session->userdata('fullname'); ?></span> menyatakan bahwa permohonan <strong>Pengajuan prestasi <?= $pengajuan['Jenis_Pengajuan']; ?></strong> yang diajukan oleh <strong><?= $pengajuan['FULLNAME']; ?></strong> : </p>
 
 										<ul class="list-group list-group-flush">
 											<li class="list-group-item"><input type="radio" name="rev2" id="diterima" value="7" /> Diterima dan dapat diproses lebih lanjut
@@ -403,15 +399,20 @@ mestinya ketika user mengganti, error messagenya langsung ilang -->
 			</a>
 			<div class="collapse show" id="collStatus">
 				<div class="card-body pl-2">
-					<ul class="timeline">
+					<div class="timeline timeline-xs">
 						<?php foreach ($timeline as $tl) { ?>
-							<li>
-								<span class="badge badge-<?= $tl['badge']; ?>"><?= $tl['status']; ?></span>
-								<span class="badge badge-secondary"><?= $tl['date']; ?></span>
-								<span class="badge badge-perak"><?= $tl['time']; ?></span>
-							</li>
+							<div class="timeline-item">
+								<div class="timeline-item-marker">
+									<div class="timeline-item-marker-text"><?= $tl['date']; ?></div>
+									<div class="timeline-item-marker-indicator bg-<?= $tl['badge']; ?>"></div>
+								</div>
+								<div class="timeline-item-content">
+									<?= $tl['status']; ?>
+									<span class="badge badge-perak"><?= $tl['time']; ?></span>
+								</div>
+							</div>
 						<?php } ?>
-					</ul>
+					</div>
 				</div>
 			</div>
 		</div>

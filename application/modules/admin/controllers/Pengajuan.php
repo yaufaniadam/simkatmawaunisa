@@ -44,14 +44,15 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 					}
-					$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
-					$data = [
-						'id_periode' => $periode_id,
-						'id_pengajuan' => $pengajuan_id,
-						'pic' => $_SESSION['user_id'],
-						'STUDENTID' => $nim
-					];
-					$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+					//dicomment karena dobel datanya
+					// $nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
+					// $data = [
+					// 	'id_periode' => $periode_id,
+					// 	'id_pengajuan' => $pengajuan_id,
+					// 	'pic' => $_SESSION['user_id'],
+					// 	'STUDENTID' => $nim
+					// ];
+					// $this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 				} else {
 					$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 					$data = [
@@ -61,11 +62,11 @@ class Pengajuan extends Admin_Controller
 						'STUDENTID' => $nim
 					];
 					$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
-					$this->db->set('status_id', 9)
-						->set('pic', $this->session->userdata('user_id'))
-						->set('date', 'getdate()', FALSE)
-						->set('pengajuan_id', $pengajuan_id)
-						->insert('Tr_Pengajuan_Status');
+					// $this->db->set('status_id', 9)
+					// 	->set('pic', $this->session->userdata('user_id'))
+					// 	->set('date', 'getdate()', FALSE)
+					// 	->set('pengajuan_id', $pengajuan_id)
+					// 	->insert('Tr_Pengajuan_Status');
 				}
 			}
 			$this->db->set('status_id', 9)
@@ -77,8 +78,9 @@ class Pengajuan extends Admin_Controller
 			redirect(base_url('admin/pengajuan/verified'));
 		} else {
 			$data['query'] = $this->pengajuan_model->getVerifiedPengajuan();
-			$data['title'] = 'Pengajuan yang telah diverifikasi';
+			$data['title'] = 'Pengajuan lolos verifikasi';
 			$data['view'] = 'pengajuan/index';
+			$data['verified'] = true;
 			$data['daftar_periode'] = $this->periode_model->getPeriode('0');
 			$this->load->view('layout/layout', $data);
 		}
@@ -125,7 +127,9 @@ class Pengajuan extends Admin_Controller
 			FORMAT (ps.date, 'hh:mm:ss') as time 
 			FROM Tr_Pengajuan_Status ps
 			LEFT JOIN Tr_Status s ON s.status_id = ps.status_id
-			WHERE ps.pengajuan_id = $pengajuan_id"
+			WHERE ps.pengajuan_id = $pengajuan_id
+			ORDER BY status_pengajuan_id DESC"
+
 		)->result_array();
 
 		$data['fields'] = $this->db->query(
@@ -133,15 +137,12 @@ class Pengajuan extends Admin_Controller
 			LEFT JOIN Tr_Pengajuan_Field pf ON pf.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 			LEFT JOIN Mstr_Fields f ON f.field_id = pf.field_id
 			WHERE jp.Jenis_Pengajuan_Id = $jenis_pengajuan_id
-			AND pf.terpakai = 1"
+			AND pf.terpakai = 1
+			ORDER BY urutan ASC"
 		)->result_array();
 
 		$data['title'] = 'Detail Pengajuan';
 		$data['view'] = 'pengajuan/detail';
-
-		// echo "<pre>";
-		// print_r($data);
-		// echo "</pre>";
 
 		$this->load->view('layout/layout', $data);
 	}

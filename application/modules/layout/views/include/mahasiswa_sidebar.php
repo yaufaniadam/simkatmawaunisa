@@ -21,42 +21,21 @@
 
 	<li class="nav-item" id="menu_surat">
 		<a class="nav-link" href="<?= base_url("mahasiswa/pengajuan/index"); ?>">
-			<i class="fas fa-trophy"></i>
+			<i class="fas fa-plus"></i>
 			<span>Ajukan Prestasi</span></a>
 	</li>
 
-	<li class="nav-item" id="menu_surat">
-		<a class="nav-link" href="<?= base_url("/mahasiswa/pengajuan/pengajuan_saya/12"); ?>">
-			<i class="fas fa-trophy"></i>
-			<span>Rekognisi</span>
+	<li class="nav-item" id="pengajuan_saya">
+		<a class="nav-link" href="<?= base_url("/mahasiswa/pengajuan/pengajuan_saya"); ?>">
+			<i class="fas fa-envelope-open"></i>
+			<span>Pengajuan</span>
 		</a>
 	</li>
 
-	<li class="nav-item" id="menu_surat">
-		<a class="nav-link" href="<?= base_url("/mahasiswa/pengajuan/pengajuan_saya/13"); ?>">
+	<li class="nav-item" id="prestasi_saya">
+		<a class="nav-link" href="<?= base_url("/mahasiswa/pengajuan/prestasi_saya"); ?>">
 			<i class="fas fa-trophy"></i>
-			<span>Kelompok Wirausaha</span>
-		</a>
-	</li>
-
-	<li class="nav-item" id="menu_surat">
-		<a class="nav-link" href="<?= base_url("/mahasiswa/pengajuan/pengajuan_saya/14"); ?>">
-			<i class="fas fa-trophy"></i>
-			<span>Pengabdian Masyarakat</span>
-		</a>
-	</li>
-
-	<li class="nav-item" id="menu_surat">
-		<a class="nav-link" href="<?= base_url("/mahasiswa/pengajuan/pengajuan_saya/15"); ?>">
-			<i class="fas fa-trophy"></i>
-			<span>Student Exchange</span>
-		</a>
-	</li>
-
-	<li class="nav-item" id="menu_surat">
-		<a class="nav-link" href="<?= base_url("/mahasiswa/pengajuan/pengajuan_saya/16"); ?>">
-			<i class="fas fa-trophy"></i>
-			<span>Prestasi Mandiri</span>
+			<span>Prestasi</span>
 		</a>
 	</li>
 

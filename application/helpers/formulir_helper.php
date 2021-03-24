@@ -154,7 +154,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
         if ($verifikasi == 0 && $pengajuan_status == 4) {
           //field memiliki isi
           $form = '';
-          $listing = 'd-none';
+          $listing = '';
           $error = 'is-invalid';
         } else {
           $form = 'd-none';
@@ -173,7 +173,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
     <!-- pad akondisi default (data value kosong), form dNd muncul, listing tidak muncul -->
     <br>
-    <input type="hidden" class="id-dokumen-<?= $id; ?> <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" value="<?= (validation_errors()) ? set_value('dokumen[' . $id . ']') : (($verifikasi == 0) && ($pengajuan_status == 4) ? '' : $field_value);  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= ($pengajuan_status == 1 || $pengajuan_status == 2 || $pengajuan_status == 4 && $verifikasi == 0) ? "" : "disabled"; ?> />
+    <input type="hidden" class="id-dokumen-<?= $id; ?> <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" value="<?= (validation_errors()) ? set_value('dokumen[' . $id . ']') : (($verifikasi == 0) && ($pengajuan_status == 4) ? $field_value : '');  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= ($pengajuan_status == 1 || $pengajuan_status == 2 || $pengajuan_status == 4 && $verifikasi == 0) ? "" : "disabled"; ?> />
 
     <div class="tampilUploader">
       <div id="drag-and-drop-zone-<?= $id; ?>" class="dm-uploader p-3 <?= $form; ?> <?= $error; ?>">
@@ -185,8 +185,6 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
         </div>
       </div><!-- /uploader -->
 
-      <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-      <!-- <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> Berkas berikut ini perlu direvisi.</span> -->
 
       <ul class="list-unstyled p-2 d-flex flex-column col" id="files-<?= $id; ?>" style="border:1px solid #ddd; border-radius:4px;">
         <!-- <li class="text-muted text-center empty <?= (validation_errors()) ? (set_value('dokumen[' . $id . ']') ? 'd-none' : 'ga ada value') :  'd-none'  ?>">Belum ada file yang diupload.</li> -->
@@ -213,6 +211,9 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
         </li>
       </ul>
     </div>
+
+    <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
 
     <script>
@@ -328,6 +329,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
       <input type="text" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" />
     </fieldset>
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
   <?php } elseif ($fields['type'] == 'textarea') {
     $check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
@@ -336,6 +338,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
       <textarea class="form-control <?= $check['valid']; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]"><?= $check['value'];  ?></textarea>
     </fieldset>
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
   <?php } elseif ($fields['type'] == 'date_range') {
     $check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
@@ -365,7 +368,8 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
     </script>
 
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-    <!--  Piih Pembimbing -->
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+
 
   <?php } elseif ($fields['type'] == 'ta') { ?>
     <select class="form-control <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>">
@@ -380,6 +384,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
       ?>
     </select>
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
   <?php } elseif ($fields['type'] == 'date') { ?>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -387,7 +392,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
       <input type="text" class="form-control <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" value="<?= (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $field_value;  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" />
     </fieldset>
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
     <script>
       $(function() {
         $("#input-<?= $id; ?>").datepicker();
@@ -401,6 +406,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
     </fieldset>
 
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
   <?php } elseif ($fields['type'] == 'multi_select_anggota') {
 
@@ -438,10 +444,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
         $disabled = 'en';
       }
     }
-
-
   ?>
-
 
     <fieldset>
       <select class="js-data-example-ajax form-control form-control-lg <?= $fields['key']; ?> form-control <?= $valid; ?>" name="dokumen[<?= $id; ?>][]" multiple <?= $disabled; ?>>
@@ -454,11 +457,11 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
         <?php
         } ?>
-
       </select>
     </fieldset>
 
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
     <script>
       $(document).ready(function() {
@@ -516,7 +519,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
     </fieldset>
 
     <span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-
+    <span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
     <script>
       $(document).ready(function() {
@@ -845,7 +848,6 @@ function generate_keterangan_surat($field_id, $id_surat, $pengajuan_status)
   </script>
 
 <?php }
-
 
 function get_file_name($file_dir = 0)
 {

@@ -12,7 +12,7 @@ class Periode extends Admin_Controller
 	public function index($status = '')
 	{
 		$data['daftar_periode'] = $this->periode_model->getPeriode($status);
-		$data['title'] = 'Daftar Periode Pencairan';
+		$data['title'] = 'Periode Penerbitan';
 		$data['view'] = 'admin/periode/index';
 
 		$this->load->view('layout/layout', $data);

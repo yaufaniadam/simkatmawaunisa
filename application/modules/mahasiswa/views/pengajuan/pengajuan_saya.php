@@ -1,9 +1,3 @@
-<pre>
-	<?php
-	print_r($query)
-	?>
-</pre>
-
 <div class="row">
 	<div class="col-12">
 
@@ -15,13 +9,14 @@
 				<a class=" nav-lilk" href="<?= base_url("admin/pengajuan/index/"); ?>">
 					<i class="fas fa-fw fa-envelope"></i> Tampilkan semua pengajuan</a>
 			</div>
-			<div class="card-body">
+			<div class="card-body">asd
 				<?php
 				if ($query) {  ?>
 					<table id="pengajuan-desc" class="table table-bordered tb-pengajuans">
 						<thead>
 							<tr>
-								<th style="width:50%">Perihal</th>
+								<th style="width:50%">Judul</th>
+								<th style="width:50%">Kategori</th>
 								<th style="width:20%">Jenis Pengajuan</th>
 								<th>Mahasiswa</th>
 								<th>Tanggal</th>
@@ -37,6 +32,8 @@
 									<td>
 										<a class="judul" href="<?= base_url('admin/pengajuan/detail/' . $pengajuan['pengajuan_id']); ?>">
 											<?= $pengajuan['Jenis_Pengajuan']; ?></a>
+									</td>
+									<td class="table-<?= $pengajuan['badge']; ?>"> <?= get_meta_value('judul', $pengajuan['pengajuan_id'], false) ?></a>
 									</td>
 									<td class="table-<?= $pengajuan['badge']; ?>"><?= $pengajuan['status_id']; ?> -
 										<?= $pengajuan['status']; ?>

@@ -27,6 +27,13 @@
 	</li>
 
 	<li class="nav-item" id="semua_pengajuan">
+		<a class="nav-link" href="<?= base_url("admin/pengajuan/verified"); ?>">
+			<i class=" fas fa-fw fa-envelope"></i>
+			<span>Lolos Verifikasi</span>
+		</a>
+	</li>
+
+	<li class="nav-item" id="semua_pengajuan">
 		<a class="nav-link" href="<?= base_url("admin/periode/index/"); ?>">
 			<i class="fas fa-fw fa-envelope"></i>
 			<span>Periode</span>

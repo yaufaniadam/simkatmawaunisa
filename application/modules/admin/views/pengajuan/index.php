@@ -24,7 +24,8 @@
 						<thead>
 							<tr>
 								<th style="width:1%"><input type="checkbox" name="" id="check_all"></th>
-								<th style="width:50%">Perihal</th>
+								<th style="width:30%">Judul</th>
+								<th style="width:20%">Kategori</th>
 								<th style="width:20%">Status</th>
 								<th>Mahasiswa</th>
 								<th>Tanggal</th>
@@ -32,16 +33,22 @@
 						</thead>
 						<tbody>
 							<?php
-							foreach ($query as $pengajuan) {  ?>
+
+							foreach ($query as $pengajuan) {
+							?>
 								<tr class="<? ($pengajuan['status_id'] == 2) ? 'proses' : ''; ?> <?= ($pengajuan['status_id'] == 4) ? 'perlu-revisi' : ''; ?>">
 									<td class="text-center align-middle">
 										<input type="checkbox" name="pengajuan_id[]" value="<?= $pengajuan['pengajuan_id']; ?>" class="check">
 									</td>
 									<td>
 										<a class="judul" href="<?= base_url('admin/pengajuan/detail/' . $pengajuan['pengajuan_id']); ?>">
+											<?= get_meta_value('judul', $pengajuan['pengajuan_id'], false) ?></a>
+									</td>
+									<td>
+										<a class="judul" href="<?= base_url('admin/pengajuan/detail/' . $pengajuan['pengajuan_id']); ?>">
 											<?= $pengajuan['Jenis_Pengajuan']; ?></a>
 									</td>
-									<td class="table-<?= $pengajuan['badge']; ?>"><?= $pengajuan['status_id']; ?> -
+									<td class="table-<?= $pengajuan['badge']; ?>">
 										<?= $pengajuan['status']; ?>
 									</td>
 									<td>
@@ -65,7 +72,7 @@
 							<?php  } ?>
 						</tbody>
 					</table>
-					<?php if ($title == 'Pengajuan yang telah diverifikasi') { ?>
+					<?php if (isset($verified) == 1) { ?>
 						<div class="form-group row ml-0">
 							<select name="periode_id" class="form-control col-sm-2 col-form-label mr-2" id="exampleFormControlSelect1">
 								<?php foreach ($daftar_periode as $periode) { ?>
@@ -128,7 +135,7 @@
 			}
 		});
 
-		<?php if ($title != 'Pengajuan yang telah diverifikasi') { ?>
+		<?php if ($title != 'Pengajuan telah diverifikasi') { ?>
 			$('#pengajuan-desc').DataTable({});
 		<?php } ?>
 	});
