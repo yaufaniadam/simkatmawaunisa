@@ -316,6 +316,11 @@ class Pengajuan extends Mahasiswa_Controller
 		// }
 	}
 
+	public function detail_prestasi_saya($id)
+	{
+		echo $id;
+	}
+
 	public function getPembimbing()
 	{
 		$search = $this->input->post('search');

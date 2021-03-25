@@ -5,20 +5,20 @@
 				<table id="pengajuan-desc" class="display table table-striped table-bordered" style="width:100%">
 					<thead>
 						<tr>
-							<th>Judul</th>
+							<th>Judul Pengajuan</th>
+							<th>Kategori Award</th>
+							<th>Periode Award</th>
 							<th>Status</th>
-							<th>NIM</th>
-							<th>Terakhir Dilihat Admin</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
 						foreach ($prestasi as $prestasi) { ?>
 							<tr>
-								<td><?= $prestasi['id_pengajuan']; ?></td>
-								<td><?= $prestasi['id_pengajuan']; ?></td>
-								<td><?= $prestasi['id_pengajuan']; ?></td>
-								<td><?= $prestasi['id_pengajuan']; ?></td>
+								<td><a href="<?= base_url('mahasiswa/pengajuan/tambah/'); ?>">Judul Pengajuan</a></td>
+								<td></td>
+								<td></td>
+								<td>Sudah diambil</td>
 							</tr>
 						<?php }
 						?>
@@ -34,7 +34,7 @@
 <!-- /.row -->
 
 <!-- DataTables -->
-<script src="<?= base_url() ?>/public/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src=" <?= base_url() ?>/public/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= base_url() ?>/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <script>

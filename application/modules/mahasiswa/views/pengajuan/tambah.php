@@ -6,12 +6,33 @@
 
 <div class="row">
 	<div class="col-md-8 mb-4">
+		<?php if ($pengajuan->status_id == 10) {  ?>
+			<div class="card shadow mb-4">
+				<div class="card-body pb-3">
+					<div class="row">
+						<div class="col-md-4">
+							<img src="<?= base_url('public/dist/img/awarded.jpg'); ?>" width="200" height="" alt="" srcset="" />
+						</div>
+						<div class="col-md-8">
+							<div class="d-flex align-items-center mt-4">
+								<div>
+									<h3>Selamat!</h3>
+									<p>Pengajuan prestasi Anda dinyatakan lolos seleksi dan berhak memperoleh penghargaan dari UMY.</p>
+									<p> <a href="" class="badge bg-success" style="color:#fff;">Klik</a> untuk informasi lebih lanjut.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		<?php  } ?>
 
 		<div class="card shadow">
 			<a href="#collKeterangan" class="d-block card-header pt-3 pb-2 bg-abumuda <?= ($pengajuan->status_id == 10) ? "collapsed" : "" ?>" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collKeterangan">
 				<p class="h6 font-weight-bold text-white">Keterangan</p>
 			</a>
-			<div class="collapse<?= ($pengajuan->status_id == 10) ? "" : " show" ?>" id="collKeterangan">
+			<div class="collapse show" id="collKeterangan">
 				<div class="card-body">
 
 					<?php echo form_open(base_url('mahasiswa/pengajuan/tambah/' . $pengajuan->pengajuan_id), '') ?>
@@ -51,19 +72,7 @@
 			</div>
 
 		</div>
-		<?php if ($pengajuan->status_id == 10) {  ?>
-			<div class="card shadow mt-3">
-				<a href="#collterbit" class="d-block card-header pt-3 pb-2 bg-success" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collterbit">
-					<p class="h6 font-weight-bold text-white">Blangko</p>
-				</a>
-				<div class="collapse show" id="collterbit">
-					<div class="card-body pb-3">
-						Blangko
-						<a href="<?php /*echo base_url("mahasiswa/surat/tampil_surat/" . $surat['id']); */ ?>" class="btn btn-success"> <i class="fas fa-file-pdf"></i> PDF</a>
-					</div>
-				</div>
-			</div>
-		<?php  } ?>
+
 
 	</div>
 	<div class="col-md-4">

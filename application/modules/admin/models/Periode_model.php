@@ -5,7 +5,7 @@ class Periode_model extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('Tr_Periode_Penerbitan');
-		if ($status != '') {
+		if ($status != '' || $status !== NULL) {
 			$this->db->where('status', $status);
 		}
 		return $this->db->get()->result_array();

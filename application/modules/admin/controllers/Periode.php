@@ -36,10 +36,12 @@ class Periode extends Admin_Controller
 				$this->load->view('layout/layout', $data);
 			} else {
 				$data = [
-					'nama_periode' => $this->input->post('nama_periode')
+					'nama_periode' => $this->input->post('nama_periode'),
+					'tanggal' => '',
+					'status' => '0'
 				];
 				if ($this->periode_model->tambahPeriode($data)) {
-					redirect(base_url('admin/periode/tambah_nominal'));
+					redirect(base_url('admin/periode/tambah'));
 				}
 			}
 		} else {
@@ -76,7 +78,7 @@ class Periode extends Admin_Controller
 			$result = $this->db->get()->result_array();
 
 			foreach ($result as $pengajuan) {
-				$this->db->set('status_id', 7)
+				$this->db->set('status_id', 10)
 					->set('pic', $this->session->userdata('user_id'))
 					->set('date', 'getdate()', FALSE)
 					->set('pengajuan_id', $pengajuan['id_pengajuan'])
