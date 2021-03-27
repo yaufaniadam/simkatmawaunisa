@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['dbsqlsrv'] = array(
 	'dsn'	=> '',
-	'hostname' => 'ADAM-HP\SQLEXPRESS',
-	'username' => 'adam',
-	'password' => 'adamadam',
-	'database' => 'simkatmar',
+	'hostname' => '',
+	'username' => '',
+	'password' => '',
+	'database' => '',
 	'dbdriver' => 'sqlsrv',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
