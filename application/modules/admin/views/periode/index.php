@@ -20,7 +20,6 @@
 							<th style="width:50%">Periode</th>
 							<th style="width:20%">Status</th>
 							<th>Tanggal Terbit</th>
-							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -29,11 +28,6 @@
 								<td><a href="<?= base_url('admin/periode/bulan/' . $periode['id_periode']); ?>"><?= $periode['nama_periode']; ?></a></td>
 								<td><?= $periode['status'] == 0 ? 'Belum Diterbitkan' : 'Sudah Diterbitkan'; ?></td>
 								<td><?= $periode['tanggal'] == '' ? '-' : $periode['tanggal']; ?></td>
-								<td>
-									<button type="button" data-toggle="modal" class="btn btn-primary btn-sm" data-target="#exampleModal">
-										edit reward
-									</button>
-								</td>
 							</tr>
 						<?php } ?>
 					</tbody>
@@ -45,30 +39,6 @@
 </div>
 <!-- /.row -->
 
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<!-- <div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Reward</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div> -->
-			<div class="modal-body">
-				<div class="form-group text-center">
-					<label for="exampleInputEmail1">Masukkan nominal reward</label>
-					<span id="emailHelp" class="form-text text-muted">contoh : 200000</span>
-					<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
-			</div>
-		</div>
-	</div>
-</div>
 <!-- /.modal -->
 
 

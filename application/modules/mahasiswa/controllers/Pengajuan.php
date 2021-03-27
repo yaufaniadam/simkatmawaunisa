@@ -6,7 +6,7 @@ class Pengajuan extends Mahasiswa_Controller
 		parent::__construct();
 		// $this->load->library('mailer');
 		$this->load->model('pengajuan_model', 'pengajuan_model');
-		// $this->load->model('notif/Notif_model', 'notif_model');
+		$this->load->model('notif/Notif_model', 'notif_model');
 		$this->load->helper('formulir');
 	}
 
@@ -77,6 +77,7 @@ class Pengajuan extends Mahasiswa_Controller
 	public function detail_prestasi($id_penerbitan_pengajuan = 0)
 	{
 		$data['view'] = 'pengajuan/detail_prestasi';
+		$data['title'] = 'Detail Prestasi';
 
 		$query = $this->db->select('*')
 			->from('Tr_Penerbitan_Pengajuan pp')
@@ -425,8 +426,8 @@ class Pengajuan extends Mahasiswa_Controller
 				$next_status = 5;
 			}
 
-			echo $id_status;
-			echo $next_status;
+			// echo $id_status;
+			// echo $next_status;
 
 			$data_user = $this->session->userdata('user_id');
 
@@ -440,7 +441,6 @@ class Pengajuan extends Mahasiswa_Controller
 					]
 				);
 			}
-
 
 			if ($this->form_validation->run() == false) {
 				$data['pengajuan_fields'] = $pengajuan_fields;
@@ -479,6 +479,16 @@ class Pengajuan extends Mahasiswa_Controller
 						);
 					}
 				}
+
+				$data_for_notif = [
+					'pengirim' => '',
+					'penerima' => '',
+					'id_pengajuan' => $pengajuan_id,
+					'role' => [2],
+					'id_status_notif' => 3,
+				];
+
+				$this->notif_model->send_notif($data_for_notif);
 
 				redirect(base_url('mahasiswa/pengajuan/tambah/' . $pengajuan_id));
 			}

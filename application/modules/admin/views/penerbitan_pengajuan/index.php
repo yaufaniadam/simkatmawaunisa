@@ -18,6 +18,7 @@
 							<th style="width:25%">Status</th>
 							<th>Mahasiswa</th>
 							<th>Tanggal</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -52,6 +53,10 @@
 										<?= $pengajuan['time'];	?>
 									</p>
 								</td>
+								<td>
+									<button type="button" data-toggle="modal" class="btn btn-primary btn-sm" data-target="#exampleModal">
+										edit reward
+									</button>
 								</td>
 							</tr>
 						<?php } ?>
@@ -65,26 +70,30 @@
 <!-- /.row -->
 
 
-<div class="modal fade" id="confirm-delete">
-	<div class="modal-dialog">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Perhatian</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Tutuo">
+			<!-- <div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Reward</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-			</div>
+			</div> -->
+			<?= form_open('email/send'); ?>
 			<div class="modal-body">
-				<p>Yakin ingin menghapus data ini?&hellip;</p>
+				<div class="form-group text-center">
+					<label for="exampleInputEmail1">Masukkan nominal reward</label>
+					<span id="emailHelp" class="form-text text-muted">contoh : 200000</span>
+					<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+				</div>
 			</div>
-			<div class="modal-footer justify-content-between">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-				<a class="btn btn-danger btn-ok">Hapus</a>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
 			</div>
+			<?= form_close(); ?>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
 

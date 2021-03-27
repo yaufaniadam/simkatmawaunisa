@@ -25,26 +25,29 @@ class Notif_model extends CI_Model
 		return $query;
 	}
 
-
 	public function send_notif($data)
 	{
-		echo $id_status = $data['id_status'];
+		// $id_status = $data['id_status'];
+		date_default_timezone_set('Asia/Jakarta');
+		$date = date("Y/m/d h:i:s");
 
 		$notif = array();
 		foreach ($data['role'] as $role) {
 			$notif[] = array(
 				"role" => $role,
-				"id_surat" => $data['id_surat'],
-				"pengirim" => $_SESSION['user_id'],
-				"kepada" => $data['kepada'],
-				"id_prodi" => $_SESSION['id_prodi'],
-				"id_status_pesan" => $this->get_status_pesan($role, $id_status),
+				"id_pengajuan" => $data['id_pengajuan'],
+				"pengirim" => $_SESSION['studentid'],
+				"penerima" => $data['penerima'],
+				"tanggal_masuk" => $date,
+				'id_status_notif' => $data['id_status_notif']
+				// "id_prodi" => $_SESSION['id_prodi'],
+				// "id_status_pesan" => $this->get_status_pesan($role, $id_status),
 			);
 		}
-
-		$result = $this->db->insert_batch('notif', $notif);
+		$result = $this->db->insert_batch('Tr_Notif', $notif);
 		return $result;
 	}
+
 	//get status pesan by role dan status
 	private function get_status_pesan($role, $id_status)
 	{

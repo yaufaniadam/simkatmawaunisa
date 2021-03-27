@@ -2,7 +2,7 @@
 
 	<!-- Earnings (Monthly) Card Example -->
 	<div class="col-xl-6 col-md-6 mb-4">
-
+		<?php tampil_notif() ?>
 
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
