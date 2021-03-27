@@ -21,32 +21,32 @@ class Pengajuan extends Mahasiswa_Controller
 	public function pengajuan_saya()
 	{
 		$data['title'] = 'Pengajuan Saya';
-		$data['view'] = 'pengajuan/pengajuan_saya_ajax';
-		// $data['query'] = $this->db->query(
-		// 	"SELECT 
-		// 	p.*,
-		// 	jp.Jenis_Pengajuan,
-		// 	m.FULLNAME,
-		// 	m.NAME_OF_FACULTY,
-		// 	m.DEPARTMENT_ID,
-		// 	ps.pic,
-		// 	ps.status_id,
-		// 	ps.date,
-		// 	s.status,
-		// 	s.status_id,
-		// 	s.badge,
-		// 	FORMAT (ps.date, 'dd/MM/yyyy ') as date,
-		// 	FORMAT (ps.date, 'hh:mm:ss ') as time
-		// 	FROM Tr_Pengajuan p 
-		// 	LEFT JOIN Mstr_Jenis_Pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
-		// 	LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
-		// 	LEFT JOIN Tr_Pengajuan_Status ps ON ps.pengajuan_id = p.pengajuan_id
-		// 	LEFT JOIN Tr_Status s ON s.status_id = ps.status_id
-		// 	WHERE p.nim = 20190140096
-		// 	AND ps.status_pengajuan_id = (SELECT MAX(status_pengajuan_id) 
-		// 											FROM Tr_Pengajuan_Status  
-		// 											WHERE pengajuan_id = p.pengajuan_id)"
-		// )->result_array();
+		$data['view'] = 'pengajuan/pengajuan_saya';
+		$data['query'] = $this->db->query(
+			"SELECT 
+			p.*,
+			jp.Jenis_Pengajuan,
+			m.FULLNAME,
+			m.NAME_OF_FACULTY,
+			m.DEPARTMENT_ID,
+			ps.pic,
+			ps.status_id,
+			ps.date,
+			s.status,
+			s.status_id,
+			s.badge,
+			FORMAT (ps.date, 'dd/MM/yyyy ') as date,
+			FORMAT (ps.date, 'hh:mm:ss ') as time
+			FROM Tr_Pengajuan p 
+			LEFT JOIN Mstr_Jenis_Pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
+			LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
+			LEFT JOIN Tr_Pengajuan_Status ps ON ps.pengajuan_id = p.pengajuan_id
+			LEFT JOIN Tr_Status s ON s.status_id = ps.status_id
+			WHERE p.nim = 20190140096
+			AND ps.status_pengajuan_id = (SELECT MAX(status_pengajuan_id) 
+													FROM Tr_Pengajuan_Status  
+													WHERE pengajuan_id = p.pengajuan_id)"
+		)->result_array();
 		$this->load->view('layout/layout', $data);
 	}
 
@@ -54,13 +54,48 @@ class Pengajuan extends Mahasiswa_Controller
 	{
 		$data['title'] = 'Prestasi Saya';
 		$data['view'] = 'pengajuan/prestasi_saya';
+		$user_nim = $_SESSION['studentid'];
 
-		$data['prestasi'] = $this->db->select('*')
-			->from('Tr_Penerbitan_Pengajuan')
-			->where(array('STUDENTID' => '20190140096'))
+		$data['prestasi'] =
+			$this->db->select('*')
+			->from('Tr_Penerbitan_Pengajuan pp')
+			->join('Tr_Pengajuan p', 'pp.id_pengajuan = p.pengajuan_id')
+			->join('Mstr_Jenis_Pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
+			->join('V_Mahasiswa m', 'm.STUDENTID = p.nim')
+			->join('Tr_Periode_Penerbitan per', 'per.id_periode = pp.id_periode')
+			->where(array('pp.STUDENTID' => $user_nim))
 			->get()->result_array();
 
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+		// die();
 
+		$this->load->view('layout/layout', $data);
+	}
+
+	public function detail_prestasi($id_penerbitan_pengajuan = 0)
+	{
+		$data['view'] = 'pengajuan/detail_prestasi';
+
+		$query = $this->db->select('*')
+			->from('Tr_Penerbitan_Pengajuan pp')
+			->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
+			->join('Tr_Pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
+			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->where(
+				[
+					'pp.id_penerbitan_pengajuan' => $id_penerbitan_pengajuan
+				]
+			)
+			->get()
+			->row_array();
+
+		// echo "<pre>";
+		// print_r($query);
+		// echo "</pre>";
+
+		$data['pengajuan'] = $query;
 
 		$this->load->view('layout/layout', $data);
 	}

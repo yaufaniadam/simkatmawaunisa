@@ -30,7 +30,7 @@
 							foreach ($query as $pengajuan) {  ?>
 								<tr class="<? ($pengajuan['status_id'] == 2) ? 'proses' : ''; ?> <?= ($pengajuan['status_id'] == 4) ? 'perlu-revisi' : ''; ?>">
 									<td>
-										<a class="judul" href="<?= base_url('admin/pengajuan/detail/' . $pengajuan['pengajuan_id']); ?>">
+										<a class="judul" href="<?= base_url('mahasiswa/pengajuan/tambah/' . $pengajuan['pengajuan_id']); ?>">
 											<?= $pengajuan['Jenis_Pengajuan']; ?></a>
 									</td>
 									<td class="table-<?= $pengajuan['badge']; ?>"> <?= get_meta_value('judul', $pengajuan['pengajuan_id'], false) ?></a>
@@ -62,7 +62,6 @@
 					</table>
 					<?php /* } else { */ ?>
 
-					<p class="lead">Saat ini belum ada pengajuan yang perlu diproses</p>
 
 				<?php }
 				?>
