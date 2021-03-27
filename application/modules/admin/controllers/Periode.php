@@ -55,6 +55,7 @@ class Periode extends Admin_Controller
 	{
 		echo "tambah nomina";
 	}
+
 	public function bulan($id_periode = 0)
 	{
 		if ($this->input->post('submit')) {
