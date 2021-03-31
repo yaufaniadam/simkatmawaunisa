@@ -262,7 +262,7 @@ function tampil_notif()
 	} else if ($_SESSION['role'] == 3) {
 		$where = [
 			"n.role" => 3,
-			"n.penerima" =>  $_SESSION['studentid']
+			"n.penerima" =>  $_SESSION['studentid'],
 		];
 	} else if ($_SESSION['role'] == 4) {
 		$where = [
@@ -292,7 +292,9 @@ function tampil_notif()
 		->join('Tr_Pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
 		->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
 		->join('V_Mahasiswa m', 'm.STUDENTID=p.nim')
+		->order_by('tanggal_masuk', 'DESC')
 		->where($where)
+		->where(['n.status' => null, 'n.status' => 0])
 		->get();
 
 	// print_r($_SESSION);
@@ -318,14 +320,15 @@ function tampil_notif()
 				Notifikasi
 			</h6>
 
-			<?php if ($notif_count > 0) {
+			<?php
+			if ($notif_count > 0) {
 				foreach ($notif->result_array() as $notif) {
 			?>
-					<a class="dropdown-item d-flex align-items-center" href="<?//= base_url('notif/detail/' . $notif['id_notif']); ?>">
+					<a class="dropdown-item d-flex align-items-center notif" id="<?= $notif['id_notif']; ?>" name="<?= $notif['pengajuan_id']; ?>" href="#">
 						<div>
 							<div class="small text-gray-500"><?= $notif['tanggal_masuk']; ?></div>
 							<span class="font-weight-bold"> <i class=""></i>
-								<?//= $notif['judul_notif']; ?>
+								<?= $notif['judul_notif']; ?>
 							</span> &raquo; <span class="font-weight-bold">
 								<?= $notif['Jenis_Pengajuan']; ?>
 							</span>
@@ -343,9 +346,21 @@ function tampil_notif()
 				</a>
 			<?php	}	?>
 
-			<a class="dropdown-item text-center medium text-gray-500" href="<?//= base_url('notif'); ?>">Lihat semua Notifikasi</a>
+			<a class="dropdown-item text-center medium text-gray-500" href="#<?//= base_url('notif'); ?>">Lihat semua Notifikasi</a>
 		</div>
 	</li>
+	<script type="text/javascript">
+		$(".notif").click(function() {
+			var nid = this.id
+			var pid = this.name
+			$.ajax({
+				url: "<?= base_url('notif/read_notif/'); ?>" + nid,
+				success: function() {
+					window.location.href = "<?= base_url('admin/pengajuan/detail/'); ?>" + pid
+				}
+			});
+		});
+	</script>
 <?php
 }
 

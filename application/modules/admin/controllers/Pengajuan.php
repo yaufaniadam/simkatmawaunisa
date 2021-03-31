@@ -188,7 +188,6 @@ class Pengajuan extends Admin_Controller
 	public function verifikasi()
 	{
 		if ($this->input->post('submit')) {
-
 			$verifikasi = $this->input->post('verifikasi'); //ambil nilai 
 			$pengajuan_id = $this->input->post('pengajuan_id');
 			$id_notif = $this->input->post('id_notif');
