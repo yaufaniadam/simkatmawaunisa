@@ -99,7 +99,18 @@ class Notif extends MY_Controller
 			$data['title'] = 'Error 404!';
 			$data['view'] = 'error404';
 		}
-
 		$this->load->view('layout/layout', $data);
+	}
+
+	public function read_notif($id_notif)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$date = date("Y/m/d h:i:s");
+		$data = [
+			'status' => 1,
+			'tanggal_dibaca'  => $date,
+		];
+		$this->db->where('id_notif', $id_notif);
+		$this->db->update('Tr_Notif', $data);
 	}
 }

@@ -254,32 +254,50 @@ function tampil_notif()
 
 	//cek apakah ada kategori surat yg blm selesai
 	$CI = &get_instance();
+
 	if ($_SESSION['role'] == 1) {
-		$where = "n.role = 1";
+		$where = ['n.role' => 1];
 	} else if ($_SESSION['role'] == 2) {
-		$where = "n.role = 2";
+		$where = ["n.role" => 2];
 	} else if ($_SESSION['role'] == 3) {
-		$where = "n.role = 3 AND n.penerima = " . $_SESSION['user_id'];
+		$where = [
+			"n.role" => 3,
+			"n.penerima" =>  $_SESSION['studentid'],
+		];
 	} else if ($_SESSION['role'] == 4) {
-		$where = "n.role = 4 AND n.penerima = " . $_SESSION['user_id'];
+		$where = [
+			"n.role" => 4,
+			"n.penerima" => $_SESSION['user_id']
+		];
 	} else if ($_SESSION['role'] == 5) {
-		$where = "n.role = 5";
+		$where = ["n.role" => 5];
 	} else if ($_SESSION['role'] == 6) {
-		$where = "n.role = 6";
+		$where = ["n.role" => 6];
 	}
-	$notif = $CI->db->query("SELECT n.*, n.id as notif_id, sp.judul_notif, DATE_FORMAT(n.tanggal, '%H:%i') as time,  DATE_FORMAT(n.tanggal, '%d %M') as date_full, sp.badge, sp.icon, s.id_kategori_surat, ks.kategori_surat, u.fullname
-	FROM notif n 	
-	LEFT JOIN status_pesan sp ON sp.id = n.id_status_pesan
-	LEFT JOIN surat s ON s.id = n.id_surat
-	LEFT JOIN kategori_surat ks ON s.id_kategori_surat = ks.id
-	LEFT JOIN users u ON n.kepada = u.id
-	WHERE  $where AND n.status = 0 	
-	ORDER BY id DESC");
 
-	// $CI->db->select('*')
-	// 	->from('Tr_Notif n')
-	// 	->join('Mstr_Status_Pesan sp', 'sp.status_pesan_id = n.id_status_notif');
+	// $notif = $CI->db->query("SELECT n.*, n.id as notif_id, sp.judul_notif, DATE_FORMAT(n.tanggal, '%H:%i') as time,  DATE_FORMAT(n.tanggal, '%d %M') as date_full, sp.badge, sp.icon, s.id_kategori_surat, ks.kategori_surat, u.fullname
+	// FROM notif n 	
+	// LEFT JOIN status_pesan sp ON sp.id = n.id_status_pesan
+	// LEFT JOIN surat s ON s.id = n.id_surat
+	// LEFT JOIN kategori_surat ks ON s.id_kategori_surat = ks.id
+	// LEFT JOIN users u ON n.kepada = u.id
+	// WHERE  $where AND n.status = 0 	
+	// ORDER BY id DESC");
 
+	// ,FORMAT (ps.date, 'hh:mm:ss ') as time
+	$notif = $CI->db
+		->select("*")
+		->from('Tr_Notif n')
+		->join('Mstr_Status_Pesan sp', 'sp.status_pesan_id = n.id_status_notif')
+		->join('Tr_Pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
+		->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
+		->join('V_Mahasiswa m', 'm.STUDENTID=p.nim')
+		->order_by('tanggal_masuk', 'DESC')
+		->where($where)
+		->where(['n.status' => null, 'n.status' => 0])
+		->get();
+
+	// print_r($_SESSION);
 	// echo '<pre>';
 	// print_r($notif->result_array());
 	// echo '</pre>';
@@ -306,16 +324,19 @@ function tampil_notif()
 			if ($notif_count > 0) {
 				foreach ($notif->result_array() as $notif) {
 			?>
-					<a class="dropdown-item d-flex align-items-center" href="<?= base_url('notif/detail/' . $notif['notif_id']); ?>">
+					<a class="dropdown-item d-flex align-items-center notif" id="<?= $notif['id_notif']; ?>" name="<?= $notif['pengajuan_id']; ?>" href="#">
 						<div>
-
-							<div class="small text-gray-500"><?= $notif['date_full']; ?> <?= $notif['time']; ?></div>
-							<span class="font-weight-bold text-<?= $notif['badge']; ?>"> <i class="<?= $notif['icon']; ?>"></i> <?= $notif['judul_notif']; ?> </span> &raquo; <span class="font-weight-bold"><?= $notif['kategori_surat']; ?> </span>
-							<span class="font-weight-normal">(<?= $notif['fullname']; ?>)</span>
-
+							<div class="small text-gray-500"><?= $notif['tanggal_masuk']; ?></div>
+							<span class="font-weight-bold"> <i class=""></i>
+								<?= $notif['judul_notif']; ?>
+							</span> &raquo; <span class="font-weight-bold">
+								<?= $notif['Jenis_Pengajuan']; ?>
+							</span>
+							<span class="font-weight-normal">(
+								<?= $notif['FULLNAME']; ?>)
+							</span>
 						</div>
 					</a>
-
 				<?php } // end foreach
 			} else { ?>
 				<a class="dropdown-item d-flex align-items-center" href="#">
@@ -325,9 +346,21 @@ function tampil_notif()
 				</a>
 			<?php	}	?>
 
-			<a class="dropdown-item text-center medium text-gray-500" href="<?= base_url('notif'); ?>">Lihat semua Notifikasi</a>
+			<a class="dropdown-item text-center medium text-gray-500" href="#<?//= base_url('notif'); ?>">Lihat semua Notifikasi</a>
 		</div>
 	</li>
+	<script type="text/javascript">
+		$(".notif").click(function() {
+			var nid = this.id
+			var pid = this.name
+			$.ajax({
+				url: "<?= base_url('notif/read_notif/'); ?>" + nid,
+				success: function() {
+					window.location.href = "<?= base_url('admin/pengajuan/detail/'); ?>" + pid
+				}
+			});
+		});
+	</script>
 <?php
 }
 

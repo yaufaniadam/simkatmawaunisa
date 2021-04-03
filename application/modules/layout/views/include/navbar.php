@@ -12,8 +12,7 @@
 	<ul class="navbar-nav ml-auto">
 
 		<!-- notif di sini -->
-		<?php //tampil_notif(); 
-		?>
+		<?php tampil_notif(); ?>
 
 		<div class="topbar-divider d-none d-sm-block"></div>
 		<!-- Nav Item - User Information -->
