@@ -42,7 +42,7 @@ class Periode extends Admin_Controller
 					'status' => '0'
 				];
 				if ($this->periode_model->tambahPeriode($data)) {
-					redirect(base_url('admin/periode/tambah'));
+					redirect(base_url('admin/periode/index/0'));
 				}
 			}
 		} else {

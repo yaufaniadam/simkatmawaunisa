@@ -4,13 +4,13 @@
 			<div class="card-header">
 				<div class="row">
 					<div class="col-md-8">
-					<p>Nama mahasiswa yang memperoleh reward pada periode ini</p>
+					<p class="mb-0">Nama mahasiswa yang memperoleh reward pada periode ini</p>
 					</div>
 					<div class="col-md-4">
-						<?php if ($status_periode == 0) { ?>
+						<?php if ($status_periode == 0 ) { ?>
 							<?= form_open(base_url('admin/periode/bulan')); ?>
 							<input type="hidden" name="id_periode" value="<?= $id_periode; ?>">
-							<input type="submit" class="btn btn-sm btn-success mb-2 float-right" value="Terbitkan" name="submit">
+							<input type="submit" class="btn btn-sm btn-success mb-2 float-right" <?= (count($daftar_pengajuan) > 0) ? '' : 'disabled'; ?> value="Terbitkan reward periode ini" name="submit">
 							<?= form_close(); ?>
 						<?php } ?>
 					</div>
