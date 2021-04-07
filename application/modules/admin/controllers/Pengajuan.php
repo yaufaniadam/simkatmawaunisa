@@ -26,11 +26,6 @@ class Pengajuan extends Admin_Controller
 			$daftar_pengajuan_id = $this->input->post('pengajuan_id[]');
 			$periode_id = $this->input->post('periode_id');
 
-			// echo "<pre>";
-			// print_r($daftar_pengajuan_id);
-			// echo "</pre>";
-			// die();
-
 			foreach ($daftar_pengajuan_id as $pengajuan_id) {
 
 				$jenis_pengajuan_id = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->Jenis_Pengajuan_Id;
@@ -54,15 +49,7 @@ class Pengajuan extends Admin_Controller
 						->set('date', 'getdate()', FALSE)
 						->set('pengajuan_id', $pengajuan_id)
 						->insert('Tr_Pengajuan_Status');
-					//dicomment karena dobel datanya
-					// $nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
-					// $data = [
-					// 	'id_periode' => $periode_id,
-					// 	'id_pengajuan' => $pengajuan_id,
-					// 	'pic' => $_SESSION['user_id'],
-					// 	'STUDENTID' => $nim
-					// ];
-					// $this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+				
 				} else {
 					$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 					$data = [
@@ -86,7 +73,7 @@ class Pengajuan extends Admin_Controller
 			// 	->set('pengajuan_id', $pengajuan_id)
 			// 	->insert('Tr_Pengajuan_Status');
 
-			redirect(base_url('admin/pengajuan/verified'));
+			redirect(base_url('admin/periode/bulan/'.$periode_id));
 		} else {
 			$data['query'] = $this->pengajuan_model->getVerifiedPengajuan();
 			$data['title'] = 'Pengajuan yang Lolos Verifikasi';
