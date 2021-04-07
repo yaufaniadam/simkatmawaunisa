@@ -1,14 +1,24 @@
 <div class="row">
 	<div class="col-12">
-
 		<div class="card card-success card-outline">
-			<div class="card-body">
-				<?php if ($status_periode == 0) { ?>
-					<?= form_open(base_url('admin/periode/bulan')); ?>
-					<input type="hidden" name="id_periode" value="<?= $id_periode; ?>">
-					<input type="submit" class="btn btn-success mb-2" value="terbitkan" name="submit">
-					<?= form_close(); ?>
-				<?php } ?>
+			<div class="card-header">
+				<div class="row">
+					<div class="col-md-8">
+					<p>Nama mahasiswa yang memperoleh reward pada periode ini</p>
+					</div>
+					<div class="col-md-4">
+						<?php if ($status_periode == 0) { ?>
+							<?= form_open(base_url('admin/periode/bulan')); ?>
+							<input type="hidden" name="id_periode" value="<?= $id_periode; ?>">
+							<input type="submit" class="btn btn-sm btn-success mb-2 float-right" value="Terbitkan" name="submit">
+							<?= form_close(); ?>
+						<?php } ?>
+					</div>
+				</div>
+			
+		
+			</div>
+			<div class="card-body">	
 				<table id="pengajuan-desc" class="table table-bordered tb-pengajuans">
 					<thead>
 						<tr>
