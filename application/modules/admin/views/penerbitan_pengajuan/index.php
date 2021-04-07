@@ -31,11 +31,10 @@
 									<a class="judul" href="<?= base_url('admin/pengajuan/detail/' . $pengajuan['pengajuan_id']); ?>">
 										<?= $pengajuan['Jenis_Pengajuan']; ?></a>
 								</td>
-								<td class="table-<?= $pengajuan['badge']; ?>">
+								<td>
 									<?php echo get_meta_value('judul', $pengajuan['pengajuan_id'], false); ?>
 								</td>
-								<td class="table-<?= $pengajuan['badge']; ?>"><?= $pengajuan['status_id']; ?> -
-									<?= $pengajuan['status']; ?>
+								<td class="table-<?= $pengajuan['badge']; ?>"><?= $pengajuan['status']; ?>
 								</td>
 								<td>
 									<p class="m-0">

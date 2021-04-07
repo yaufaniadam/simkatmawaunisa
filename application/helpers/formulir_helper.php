@@ -77,7 +77,7 @@ function field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, 
 			} else {
 				$value = $field_value;
 				$valid = '';
-				$disabled = 'disabled';
+				$disabled = 'readonly';
 			}
 		} else {
 			//field kosong
@@ -89,7 +89,7 @@ function field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, 
 
 	return array(
 		'value' => $value,
-		'valid' => $valid,
+		'valid' => $valid, 
 		'disabled' => $disabled
 	);
 }
@@ -325,8 +325,8 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 	?>
 
-		<fieldset <?= $check['disabled'];  ?>>
-			<input type="text" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" />
+		<fieldset>
+			<input type="text" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]"  <?= $check['disabled'];  ?> />
 		</fieldset>
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
@@ -334,8 +334,8 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 	<?php } elseif ($fields['type'] == 'textarea') {
 		$check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
 	?>
-		<fieldset <?= $check['disabled'];  ?>>
-			<textarea class="form-control <?= $check['valid']; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]"><?= $check['value'];  ?></textarea>
+		<fieldset>
+			<textarea class="form-control <?= $check['valid']; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]"  <?= $check['disabled'];  ?>><?= $check['value'];  ?></textarea>
 		</fieldset>
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
@@ -435,7 +435,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				} else {
 					$value = explode(',', $field_value);
 					$valid = '';
-					$disabled = 'disabled';
+					$disabled = 'readonly';
 				}
 			} else {
 				//field kosong

@@ -2,20 +2,8 @@
 	<div class="col-12">
 
 		<div class="card card-success card-outline">
-			<div class="card-header">
-				<a class="nav-s text-danger" href="<?= base_url("admin/pengajuan/index/" . $this->session->userdata('role')); ?>">
-					<i class="fas fa-fw fa-exclamation-circle"></i>
-					Tampilkan yang perlu diproses
-				</a>
-				</a>&nbsp;
-				<a class=" nav-lilk" href="<?= base_url("admin/pengajuan/index/"); ?>">
-					<i class="fas fa-fw fa-envelope"></i>
-					Tampilkan semua pengajuan
-				</a>
-				<a class=" nav-lilk" href="<?= base_url("admin/pengajuan/verified/"); ?>">
-					<i class="fas fa-fw fa-envelope"></i>
-					Pengajuan Telah Diverifikasi
-				</a>
+			<div class="card-header"><i class="fas fa-info-circle"></i>
+				Berikut ini pengajuan yang lolos Verifikasi. Pilih pengajuan lalu pilih periode penerbitan.
 			</div>
 			<div class="card-body">
 				<?php echo form_open_multipart(base_url("admin/pengajuan/verified/"), '') ?>
@@ -26,7 +14,6 @@
 								<th style="width:1%"><input type="checkbox" name="" id="check_all"></th>
 								<th style="width:30%">Judul</th>
 								<th style="width:20%">Kategori</th>
-								<th style="width:20%">Status</th>
 								<th>Mahasiswa</th>
 								<th>Tanggal</th>
 							</tr>
@@ -48,9 +35,7 @@
 										<a class="judul" href="<?= base_url('admin/pengajuan/detail/' . $pengajuan['pengajuan_id']); ?>">
 											<?= $pengajuan['Jenis_Pengajuan']; ?></a>
 									</td>
-									<td class="table-<?= $pengajuan['badge']; ?>">
-										<?= $pengajuan['status']; ?>
-									</td>
+							
 									<td>
 										<p class="m-0">
 											<?= $pengajuan['FULLNAME']; ?>
@@ -72,8 +57,27 @@
 							<?php  } ?>
 						</tbody>
 					</table>
-					
-				<?php } ?>
+				
+						<div class="form-group row ml-0 mt-3">
+                <label for="" class="col-md-3">Pilih Periode Penerbitan</label>
+                <div class="col-md-8">
+                  <select name="periode_id" class="form-control col-sm-2 col-form-label mr-2" id="exampleFormControlSelect1">
+                  <?php foreach ($daftar_periode as $periode) { ?>
+                    <option value="<?= $periode['id_periode']; ?>"><?= $periode['nama_periode']; ?></option>
+                  <?php } ?>
+                  </select>
+                </div>
+							</div>
+            <div class="form-group row ml-0 mt-3">
+            <div class="col-md-12">
+            <input type="submit" name="submit" class="btn btn-success" value="Simpan">
+            </div>
+					</div>
+				
+				<?php }else {
+          echo "Belum ada pengajuan yang terverifikasi.";
+        } 
+        ?>
 				<?php echo form_close() ?>
 			</div><!-- /.card-body -->
 		</div><!-- /.card -->
@@ -81,31 +85,6 @@
 	<!-- /.col -->
 </div>
 <!-- /.row -->
-
-
-<div class="modal fade" id="confirm-delete">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Perhatian</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Tutuo">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>Yakin ingin menghapus data ini?&hellip;</p>
-			</div>
-			<div class="modal-footer justify-content-between">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-				<a class="btn btn-danger btn-ok">Hapus</a>
-			</div>
-		</div>
-		<!-- /.modal-content -->
-	</div>
-	<!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-
 
 
 <!-- DataTables -->
@@ -127,7 +106,12 @@
 		});
 
 		<?php if ($title != 'Pengajuan telah diverifikasi') { ?>
-			$('#pengajuan-desc').DataTable({});
+			$('#pengajuan-desc').DataTable({
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bInfo": false,
+      });
 		<?php } ?>
 	});
 </script>

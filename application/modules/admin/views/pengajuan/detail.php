@@ -1,8 +1,3 @@
-<!-- catatan:
-error message pada field jika invalidnya masih muncul, padahal field yg salah sudah diganti isinya,
-mestinya ketika user mengganti, error messagenya langsung ilang -->
-<h1 class="h3 mb-4 text-gray-900"><?= $pengajuan['Jenis_Pengajuan']; ?> </h1>
-
 <div class="row">
 	<div class="col-8">
 		<?php if (isset($msg) || validation_errors() !== '') : ?>
@@ -23,12 +18,12 @@ mestinya ketika user mengganti, error messagenya langsung ilang -->
 		<?php endif; ?>
 
 		<?php
-		if (
-			($pengajuan['status_id'] == 8 && $this->session->userdata('role') == 5) ||
-			($pengajuan['status_id'] == 7 && $this->session->userdata('role') == 6)
-		) {
-			echo form_open('admin/pengajuan/disetujui');
-		}
+		if ($pengajuan['status_id'] == 7 && $this->session->userdata('role') == 2) { ?>
+			<div class="alert alert-orangepastel">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+				Pengajuan berhasil diverifikasi. <a href="<?php echo base_url('admin/pengajuan/verified'); ?>">Klik di sini untuk proses selanjutnya</a>	
+			</div>
+		<?php }
 
 		if (($pengajuan['status_id'] == 2 || $pengajuan['status_id'] == 5) && $this->session->userdata('role') == 2) {
 			echo form_open('admin/pengajuan/verifikasi');

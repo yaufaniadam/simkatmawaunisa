@@ -89,8 +89,8 @@ class Pengajuan extends Admin_Controller
 			redirect(base_url('admin/pengajuan/verified'));
 		} else {
 			$data['query'] = $this->pengajuan_model->getVerifiedPengajuan();
-			$data['title'] = 'Pengajuan lolos verifikasi';
-			$data['view'] = 'pengajuan/index';
+			$data['title'] = 'Pengajuan yang Lolos Verifikasi';
+			$data['view'] = 'pengajuan/verified';
 			$data['verified'] = true;
 			$data['daftar_periode'] = $this->periode_model->getPeriode('0');
 			$this->load->view('layout/layout', $data);
@@ -158,7 +158,10 @@ class Pengajuan extends Admin_Controller
 		// $pengajuan_id = $this->pengajuan_model->get_detail_pengajuan($spengajuan_id)['pengajuan_id'];
 		$jenis_pengajuan_id = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id)['Jenis_Pengajuan_Id'];
 
-		$data['pengajuan'] = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id);
+		$pengajuan = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id);
+
+		
+		$data['pengajuan'] = $pengajuan;
 		$data['timeline'] = $this->db->query(
 			"SELECT 
 			*,
@@ -180,7 +183,7 @@ class Pengajuan extends Admin_Controller
 			ORDER BY urutan ASC"
 		)->result_array();
 
-		$data['title'] = 'Detail Pengajuan';
+		$data['title'] =  $pengajuan['Jenis_Pengajuan'];
 		$data['view'] = 'pengajuan/detail';
 
 		$this->load->view('layout/layout', $data);
