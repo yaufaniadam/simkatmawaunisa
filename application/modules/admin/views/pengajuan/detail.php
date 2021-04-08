@@ -10,7 +10,7 @@
 		<?php endif; ?>
 		<!-- fash message yang muncul ketika proses penghapusan data berhasil dilakukan -->
 		<?php if ($this->session->flashdata('msg') != '') : ?>
-			<div class="alert alert-success flash-msg alert-dismissible">
+			<div class="alert alert-success flash-mssg alert-dismissiblse">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 				<h4>Sukses!</h4>
 				<?= $this->session->flashdata('msg'); ?>

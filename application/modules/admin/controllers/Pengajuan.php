@@ -228,24 +228,8 @@ class Pengajuan extends Admin_Controller
 			];
 			$this->notif_model->send_notif($data_for_notif);
 
-			// // buat notifikasi
-			// $data_notif = array(
-			// 	'pengajuan_id' => $pengajuan_id,
-			// 	'status_id' => $this->input->post('rev2'),
-			// 	'kepada' => $this->input->post('user_id'),
-			// 	'role' => $role
-			// );
-
-			// hapus notifikasi "menunggu verifikasi"
-			// $set_notif = $this->db->set('status', 1)
-			// 	->set('dibaca', 'NOW()', FALSE)
-			// 	->where(array('id' => $id_notif, 'status' => 0))
-			// 	->update('notif');
-
-			// $result = $this->notif_model->send_notif($data_notif);
-
 			// if ($result) {
-			$this->session->set_flashdata('msg', 'Surat sudah diperiksa oleh TU!');
+		//	$this->session->set_flashdata('msg', 'Pengajuan diperiksa oleh TU!');
 			redirect(base_url('admin/pengajuan/detail/' . $pengajuan_id));
 			// }
 		} else {

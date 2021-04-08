@@ -61,43 +61,45 @@ class Periode extends Admin_Controller
 	{
 		if ($this->input->post('submit')) {
 
-			date_default_timezone_set('Asia/Jakarta');
-			$tanggal = date("Y/m/d h:i:s");
-			$id_periode = $this->input->post('id_periode');
-			$data = [
-				'tanggal' => $tanggal,
-				'status' => 1
-			];
+			echo '<pre>'; print_r($this->input->post()); echo '</pre>';
 
-			$this->db->where('id_periode', $id_periode);
-			$this->db->update('Tr_Periode_Penerbitan', $data);
+			// date_default_timezone_set('Asia/Jakarta');
+			// $tanggal = date("Y/m/d h:i:s");
+			// $id_periode = $this->input->post('id_periode');
+			// $data = [
+			// 	'tanggal' => $tanggal,
+			// 	'status' => 1
+			// ];
 
-			// $this->db->select('*');
-			$this->db->select('id_pengajuan');
-			$this->db->distinct();
-			$this->db->from('Tr_Penerbitan_Pengajuan');
-			$this->db->where(['id_periode' => $id_periode]);
-			$this->db->group_by('id_pengajuan');
-			$result = $this->db->get()->result_array();
+			// $this->db->where('id_periode', $id_periode);
+			// $this->db->update('Tr_Periode_Penerbitan', $data);
 
-			foreach ($result as $pengajuan) {
-				$this_pengajuan = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan['id_pengajuan']])->row_array();
-				$data_for_notif = [
-					'pengirim' => $_SESSION['userid'],
-					'penerima' => $this_pengajuan['nim'],
-					'id_pengajuan' => $pengajuan['id_pengajuan'],
-					'role' => [3],
-					'id_status_notif' => 10,
-				];
-				$this->notif_model->send_notif($data_for_notif);
+			// // $this->db->select('*');
+			// $this->db->select('id_pengajuan');
+			// $this->db->distinct();
+			// $this->db->from('Tr_Penerbitan_Pengajuan');
+			// $this->db->where(['id_periode' => $id_periode]);
+			// $this->db->group_by('id_pengajuan');
+			// $result = $this->db->get()->result_array();
 
-				$this->db->set('status_id', 10)
-					->set('pic', $this->session->userdata('user_id'))
-					->set('date', 'getdate()', FALSE)
-					->set('pengajuan_id', $pengajuan['id_pengajuan'])
-					->insert('Tr_Pengajuan_Status');
-			}
-			redirect(base_url('/admin/periode'));
+			// foreach ($result as $pengajuan) {
+			// 	$this_pengajuan = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan['id_pengajuan']])->row_array();
+			// 	$data_for_notif = [
+			// 		'pengirim' => $_SESSION['userid'],
+			// 		'penerima' => $this_pengajuan['nim'],
+			// 		'id_pengajuan' => $pengajuan['id_pengajuan'],
+			// 		'role' => [3],
+			// 		'id_status_notif' => 10,
+			// 	];
+			// 	$this->notif_model->send_notif($data_for_notif);
+
+			// 	$this->db->set('status_id', 10)
+			// 		->set('pic', $this->session->userdata('user_id'))
+			// 		->set('date', 'getdate()', FALSE)
+			// 		->set('pengajuan_id', $pengajuan['id_pengajuan'])
+			// 		->insert('Tr_Pengajuan_Status');
+			// }
+			//redirect(base_url('/admin/periode/bulan/'. $id_periode));
 		} else {
 			$nama_periode = $this->db->get_where('Tr_Periode_Penerbitan', ['id_periode' => $id_periode])->row_object()->nama_periode;
 			$status_periode = $this->db->get_where('Tr_Periode_Penerbitan', ['id_periode' => $id_periode])->row_object()->status;
