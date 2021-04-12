@@ -49,7 +49,6 @@ class Pengajuan extends Admin_Controller
 						->set('date', 'getdate()', FALSE)
 						->set('pengajuan_id', $pengajuan_id)
 						->insert('Tr_Pengajuan_Status');
-				
 				} else {
 					$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 					$data = [
@@ -73,7 +72,7 @@ class Pengajuan extends Admin_Controller
 			// 	->set('pengajuan_id', $pengajuan_id)
 			// 	->insert('Tr_Pengajuan_Status');
 
-			redirect(base_url('admin/periode/bulan/'.$periode_id));
+			redirect(base_url('admin/periode/bulan/' . $periode_id));
 		} else {
 			$data['query'] = $this->pengajuan_model->getVerifiedPengajuan();
 			$data['title'] = 'Pengajuan yang Lolos Verifikasi';
@@ -147,7 +146,7 @@ class Pengajuan extends Admin_Controller
 
 		$pengajuan = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id);
 
-		
+
 		$data['pengajuan'] = $pengajuan;
 		$data['timeline'] = $this->db->query(
 			"SELECT 
@@ -229,7 +228,7 @@ class Pengajuan extends Admin_Controller
 			$this->notif_model->send_notif($data_for_notif);
 
 			// if ($result) {
-		//	$this->session->set_flashdata('msg', 'Pengajuan diperiksa oleh TU!');
+			//	$this->session->set_flashdata('msg', 'Pengajuan diperiksa oleh TU!');
 			redirect(base_url('admin/pengajuan/detail/' . $pengajuan_id));
 			// }
 		} else {
@@ -412,6 +411,8 @@ class Pengajuan extends Admin_Controller
 				}
 			}
 		} else {
+			$id_pengajuan = $this->input->post('id_pengajuan');
+
 			$data['status'] = $this->pengajuan_model->get_pengajuan_status($id_pengajuan);
 			$data['pengajuan'] = $this->pengajuan_model->get_detail_pengajuan($id_pengajuan);
 			$data['timeline'] = $this->pengajuan_model->get_timeline($id_pengajuan);
