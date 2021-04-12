@@ -34,6 +34,7 @@
 					</thead>
 					<tbody>
 						<?php foreach ($daftar_pengajuan as $pengajuan) { ?>
+							<input type="hidden" name="pengajuan[]" value="<?= $pengajuan['pengajuan_id']; ?>" id="">
 							<tr class="<? ($pengajuan['status_id'] == 2) ? 'proses' : ''; ?> <?= ($pengajuan['status_id'] == 4) ? 'perlu-revisi' : ''; ?>">
 								<td class="text-center align-middle">
 									<input checked type="checkbox" name="pengajuan_id[]" value="<?= $pengajuan['STUDENTID']; ?>" class="check">
