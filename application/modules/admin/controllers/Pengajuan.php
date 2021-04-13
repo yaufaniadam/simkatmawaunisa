@@ -39,8 +39,8 @@ class Pengajuan extends Admin_Controller
 							'id_periode' => $periode_id,
 							'id_pengajuan' => $pengajuan_id,
 							'pic' => $_SESSION['user_id'],
-							'STUDENTID' => $mahasiswa,`
-							'prodi' => getProdiByNIM($mahasiswa)
+							'STUDENTID' => $mahasiswa,
+							'prodi' => $this->getProdiByNIM($mahasiswa)
 						];
 						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 					}
@@ -575,11 +575,10 @@ class Pengajuan extends Admin_Controller
 		];
 
 		$this->output->set_content_type('application/json')->set_output(json_encode($output));
-
-
 	}
 
-	private function getProdiByNIM($nim) {
+	private function getProdiByNIM($nim)
+	{
 		$prodi = substr($nim, 4, 3);
 		return $prodi;
 	}
