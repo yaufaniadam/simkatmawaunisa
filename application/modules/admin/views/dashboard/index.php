@@ -358,12 +358,12 @@
 	var myPieChart = new Chart(ctx, {
 		type: 'doughnut',
 		data: {
-			labels: [<?php foreach ($jenis_pengajuan as $pengajuan) { ?> "<?= $pengajuan['Jenis_Pengajuan']; ?>",
+			labels: [<?php foreach (get_jumlah_pengajuan_per_prodi() as $per_prodi) { ?> "<?= $per_prodi['nama_prodi']; ?>",
 				<?php } ?>
 			],
 			datasets: [{
-				data: [<?php foreach ($jenis_pengajuan as $pengajuan) { ?>
-						<?= get_jumlah_pengajuan_per_jenis_pengajuan($pengajuan['Jenis_Pengajuan_Id']); ?>,
+				data: [<?php foreach (get_jumlah_pengajuan_per_prodi() as $per_prodi) { ?>
+						<?= $per_prodi['jumlah_pengajuan']; ?>,
 					<?php } ?>
 				],
 				backgroundColor: ['#4e73df', '#1cc88a'],
@@ -407,12 +407,27 @@
 						<?= get_jumlah_pengajuan_per_jenis_pengajuan($pengajuan['Jenis_Pengajuan_Id']); ?>,
 					<?php } ?>
 				],
-				backgroundColor: ["#1CC88A", "#1CC88A", "#1CC88A", "#1CC88A", "#1CC88A", "#1CC88A", "#1CC88A"],
+				backgroundColor: [
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+					"#1CC88A",
+				],
 			}]
 		},
 		options: {
 			tooltips: {
-				enabled: false
+				enabled: true
 			},
 			responsive: true,
 			legend: {

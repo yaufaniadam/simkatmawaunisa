@@ -28,6 +28,31 @@ function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
 	)->num_rows();
 }
 
+function get_jumlah_pengajuan_per_prodi()
+{
+	$CI = &get_instance();
+
+	$department = $CI->db->select('*')
+		->from('Mstr_Department')->get()->result_array();
+
+	foreach ($department as $department) {
+		$pengajuan_per_prodi[] = [
+			'nama_prodi' => $department['NAME_OF_DEPARTMENT'],
+			'jumlah_pengajuan' => $CI->db->select('*')
+				->from('Tr_Pengajuan p')
+				->join('V_Mahasiswa m', 'm.STUDENTID = p.nim')
+				->join('Mstr_Department d', 'd.DEPARTMENT_ID = m.DEPARTMENT_ID')
+				->where([
+					'm.DEPARTMENT_ID' => $department['DEPARTMENT_ID']
+				])
+				->get()
+				->num_rows()
+		];
+	}
+
+	return $pengajuan_per_prodi;
+}
+
 function printrs($var)
 {
 	echo "<pre>";
