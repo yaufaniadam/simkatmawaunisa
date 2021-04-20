@@ -51,6 +51,7 @@ class Auth extends CI_Controller
 							);
 
 							$this->session->set_userdata($user_data);
+
 							if ($result['role'] != 3) {
 								redirect(base_url('admin/dashboard'), 'refresh');
 							} else {
@@ -111,8 +112,6 @@ class Auth extends CI_Controller
 							LEFT JOIN Mstr_Department d on d.DEPARTMENT_ID = m.DEPARTMENT_ID
 							WHERE email ='$email' "
 						)->row_array();
-
-
 
 						$user_data = array(
 							'studentid' => $result['STUDENTID'],
