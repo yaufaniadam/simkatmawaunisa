@@ -6,7 +6,7 @@
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-								Perngajuan Perlu Diproses
+								Pengajuan Perlu Diproses
 							</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
 								<?php if ($pengajuan_perlu_diproses > 0) { ?>
@@ -29,7 +29,7 @@
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-								Perngajuan Selesai
+								Pengajuan Selesai
 							</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
 								<?php if ($pengajuan_selesai > 0) { ?>
@@ -52,7 +52,7 @@
 					<div class="row no-gutters align-items-center">
 						<div class="col mr-2">
 							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-								Perngajuan Selesai
+								Pengajuan Selesai
 							</div>
 							<div class="h5 mb-0 font-weight-bold text-gray-800">
 								<?php if ($pengajuan_selesai > 0) { ?>
@@ -122,13 +122,11 @@
 	</div>
 
 	<div class="row">
-		<div class="col-xl-6 col-lg-6">
+		<div class="col-xl-12 col-lg-12">
 			<div class="card shadow mb-4">
-				<!-- Card Header - Dropdown -->
 				<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 					<h6 class="m-0 font-weight-bold text-primary">Prodi</h6>
 				</div>
-				<!-- Card Body -->
 				<div class="card-body">
 					<div class="chart-pie pt-4 pb-2">
 						<div class="chartjs-size-monitor">
@@ -146,13 +144,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-xl-6 col-lg-6">
+		<!-- <div class="col-xl-6 col-lg-6">
 			<div class="card shadow mb-4">
-				<!-- Card Header - Dropdown -->
 				<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 					<h6 class="m-0 font-weight-bold text-primary">Fakultas</h6>
 				</div>
-				<!-- Card Body -->
 				<div class="card-body">
 					<div class="chart-pie pt-4 pb-2">
 						<div class="chartjs-size-monitor">
@@ -169,7 +165,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 </div>
@@ -366,7 +362,7 @@
 						<?= $per_prodi['jumlah_pengajuan']; ?>,
 					<?php } ?>
 				],
-				backgroundColor: ['#4e73df', '#1cc88a'],
+				backgroundColor: ['#1CC88A', '#1CC88A'],
 				hoverBackgroundColor: ['#2e59d9', '#17a673'],
 				hoverBorderColor: "rgba(234, 236, 244, 1)",
 			}],
@@ -445,7 +441,7 @@
 					gridLines: {
 						display: true,
 						drawTicks: true,
-						drawOnChartArea: false
+						drawOnChartArea: true
 					},
 					ticks: {
 						fontColor: '#555759',
