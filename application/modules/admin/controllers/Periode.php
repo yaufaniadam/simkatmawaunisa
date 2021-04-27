@@ -72,8 +72,8 @@ class Periode extends Admin_Controller
 			$this->db->where('id_periode', $id_periode);
 			$this->db->update('Tr_Periode_Penerbitan', $data);
 
-			echo "<pre>";
-			echo "</pre>";
+			// echo "<pre>";
+			// echo "</pre>";
 
 			// echo "<pre>";
 			// print_r($this->input->post());
@@ -143,5 +143,34 @@ class Periode extends Admin_Controller
 
 			$this->load->view('layout/layout', $data);
 		}
+	}
+
+	public function reward($id_prestasi)
+	{
+		$query = $this->db->select('*')
+			->from('Tr_Penerbitan_Pengajuan pp')
+			->join('Tr_Pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
+			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->join('Mstr_Penghargaan_Rekognisi_Mahasiswa prm', 'prm.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
+			->where([
+				'pp.id_penerbitan_pengajuan' => $id_prestasi
+			])
+			->get()
+			->row_object();
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($query));
+	}
+
+	public function set_nominal()
+	{
+		$id_prestasi = $this->input->post('id_prestasi');
+		$id_periode = $this->db->get_where('Tr_Penerbitan_Pengajuan', ['id_penerbitan_pengajuan' => $id_prestasi])->row_object()->id_periode;
+
+		$this->db->set('nominal', $this->input->post('nominal'));
+		$this->db->where('id_penerbitan_pengajuan', $id_prestasi);
+		$this->db->update('Tr_Penerbitan_Pengajuan');
+		redirect(base_url('admin/periode/bulan/' . $id_periode));
 	}
 }
