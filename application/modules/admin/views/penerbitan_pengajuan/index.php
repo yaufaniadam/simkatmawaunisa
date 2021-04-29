@@ -127,7 +127,7 @@
 		$.ajax({
 			url: "<?= base_url('/admin/periode/reward/'); ?>" + id_prestasi,
 			success: function(data) {
-				$("#nominal_reward").val(data.nominal)
+				$("#nominal_reward").val(data)
 				$("#id_prestasi_value").val(id_prestasi)
 			}
 		});

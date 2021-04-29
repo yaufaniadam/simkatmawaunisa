@@ -58,30 +58,25 @@
 				Pengaturan
 			</div>
 
-
 			<li class="nav-item" id="menu_pengguna">
 				<a class="nav-link" href="<?= base_url("admin/pengguna"); ?>">
 					<i class="fas fa-fw fa-users"></i>
-					<span>Pengguna</span></span></a>
+					<span>Pengguna</span>
+				</a>
 			</li>
 
 			<li class="nav-item" id="menu_kategoripengajuan">
 				<a class="nav-link" href="<?= base_url("admin/jenispengajuan"); ?>">
 					<i class="fas fa-fw fa-list"></i>
-					<span>Jenis Pengajuan</span></span></a>
-			</li>
-
-			<li class="nav-item" id="semua_pengajuan">
-				<a class="nav-link" href="<?= base_url("admin/periode/index/"); ?>">
-					<i class="fas fa-fw fa-envelope"></i>
-					<span>Periode</span>
+					<span>Jenis Pengajuan</span>
 				</a>
 			</li>
 
 			<li class="nav-item" id="menu_kategoripengajuan">
 				<a class="nav-link" href="<?= base_url("admin/jenispengajuan/nominal_penghargaan"); ?>">
 					<i class="fas fa-fw fa-list"></i>
-					<span>Nominal Reward</span></span></a>
+					<span>Nominal Reward</span>
+				</a>
 			</li>
 
 		<?php } ?>
