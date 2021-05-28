@@ -2,9 +2,9 @@
 list($kat, $result) = $kategori;
 $selected_kat = array_column($result, 'field_id');
 
-echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['Jenis_Pengajuan_Id']), 'class="form-horizontal"');
-
+echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), 'class="form-horizontal"');
 ?>
+
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <style>
@@ -71,6 +71,11 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['Jenis_Pen
 		<div class="card card-success card-outline">
 			<div class="card-body box-profile">
 
+				<!-- <pre>
+					<?php
+					// print_r($kategori)
+					?>
+				</pre> -->
 				<div class="form-group row">
 					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Jenis Pengajuan</label>
 					<div class="col-md-9">
@@ -84,8 +89,8 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['Jenis_Pen
 					<div class="col-md-9">
 						<select class="form-control" name="tipe_reward" id="exampleFormControlSelect1">
 							<option <?= $kat['fixed'] == 1 ? 'selected' : ''; ?> value="1">1. Individu</option>
-							<option <?= $kat['fixed'] == 2 ? 'selected' : ''; ?> value="2">2. Kelompok (per individu) </option>
-							<option <?= $kat['fixed'] == 3 ? 'selected' : ''; ?> value="3">3. Kelompok </option>
+							<option <?= $kat['fixed'] == 2 ? 'selected' : ''; ?> value="2">2. Kelompok (per individu)</option>
+							<option <?= $kat['fixed'] == 3 ? 'selected' : ''; ?> value="3">3. Kelompok</option>
 							<option <?= $kat['fixed'] == 0 ? 'selected' : ''; ?> value="0">4. Hak cipta</option>
 						</select>
 					</div>
@@ -111,7 +116,71 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['Jenis_Pen
 					</div>
 				</div>
 
+				<div class="form-group row">
+					<label for="template" class="col-md-3 control-label">Form Field
+						<small id="" class="form-text text-muted">Seret lalu lepaskan form field yang tidak aktif ke kolom form field aktif.</small>
+					</label>
+					<div class="col-md-4">
+						<div class="card card-success card-outline">
+							<div class="card-header">Field terpakai</div>
+							<div class="card-body box-profile ">
 
+
+								<ul id="sortable2" class="connectedSortable errorTxt">
+									<?php
+
+									$jenis_pengajuan_id = $kat['jpi'];
+									$query = $this->db->query("SELECT Tr_Pengajuan_Field.*, Mstr_Fields.field FROM Tr_Pengajuan_Field
+									LEFT JOIN Mstr_Fields ON Tr_Pengajuan_Field.field_id = Mstr_Fields.field_id 
+									WHERE Tr_Pengajuan_Field.Jenis_Pengajuan_Id =" . $jenis_pengajuan_id .
+										" AND Tr_Pengajuan_Field.terpakai=1 ORDER BY urutan ASC");
+									$results = $query->result_array();
+
+									if ($results) {
+
+										$userial_array = array();
+										foreach ($result as $row) {
+											$unserial_array[] = "sort=" . $row['field_id'];
+										}
+
+										$impl = implode('&', $unserial_array);
+									}
+
+									foreach ($results as $result) { ?>
+										<li class="ui-state-highlight" id="item-<?= $result['field_id']; ?>">
+											<?= $result['field']; ?>
+										</li>
+									<?php	}
+									?>
+									<span id="errNm2"></span>
+								</ul>
+								<input type="hidden" name="fields" data-error="#errNm2" class="field_surat" id="" value="<?= $impl; ?>">
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-5">
+						<div class="card card-success card-outline">
+							<div class="card-header">Field tidak terpakai</div>
+							<div class="card-body box-profile">
+								<ul id="sortable1" style="list-style: none;" class="connectedSortable keterangan_surat list-group pl-0">
+									<?php
+									foreach ($all_fields as $field) {
+									?>
+										<li class="ui-state-highlight <?= (!in_array($field['field_id'], array_column($results, 'field_id'))) ? "" : "d-none"; ?>" id="item-<?= $field['field_id']; ?>">
+											<?= $field['field']; ?>
+										</li>
+									<?php	}	?>
+								</ul>
+							</div>
+						</div>
+
+						<span class="text-danger" style="line-height:1.5rem;font-size: 80%;"><?php echo form_error('kat_keterangan_surat[]'); ?></span>
+
+
+						<span class="text-danger" style="font-size: 80%;"><?php echo form_error('template'); ?></span>
+					</div>
+				</div>
 
 				<div class="form-group row">
 					<label for="kode" class="col-md-3 control-label"></label>

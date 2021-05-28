@@ -120,6 +120,7 @@ class Jenispengajuan extends Admin_Controller
 				$data = array(
 					'jenis_pengajuan' => $this->input->post('Jenis_Pengajuan'),
 					'deskripsi' => $this->input->post('deskripsinya'),
+					'fixed' => $this->input->post('tipe_reward')
 				);
 
 				date_default_timezone_set("Asia/Jakarta");
