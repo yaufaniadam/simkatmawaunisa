@@ -49,10 +49,11 @@ class Jenispengajuan extends Admin_Controller
 				$data = array(
 					'jenis_pengajuan' => $this->input->post('Jenis_Pengajuan'),
 					'deskripsi' => $this->input->post('deskripsinya'),
+					'fixed' => $this->input->post('tipe_reward')
 				);
 
-
 				$result = $this->pengajuan_model->tambah_jenis_pengajuan($data);
+
 				$id = $this->db->insert_id();
 				if ($result) {
 					$fields = $this->input->post('fields');
@@ -65,14 +66,16 @@ class Jenispengajuan extends Admin_Controller
 							'Jenis_Pengajuan_Id' => $id,
 							'field_id' => $exp[1],
 							'terpakai' => 1,
-							'urutan' => $key
+							'urutan' => $key,
 						);
 
 						$this->pengajuan_model->tambah_field_pengajuan($insert_field);
 
-						echo '<pre>';
-						print_r($insert_field);
-						echo '</pre>';
+						// echo '<pre>';
+						// print_r($insert_field);
+						// echo '</pre>';
+
+						// die();
 					}
 
 					$this->session->set_flashdata('msg', 'Kategori Pengajuan berhasil ditambah!');
