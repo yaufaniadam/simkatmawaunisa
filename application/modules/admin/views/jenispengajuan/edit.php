@@ -87,7 +87,7 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), '
 				<div class="form-group row">
 					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Tipe Hadiah</label>
 					<div class="col-md-9">
-						<select class="form-control" name="tipe_reward" id="exampleFormControlSelect1">
+						<select class="form-control" name="tipe_reward" id="tipe_reward">
 							<option <?= $kat['fixed'] == 1 ? 'selected' : ''; ?> value="1">1. Individu</option>
 							<option <?= $kat['fixed'] == 2 ? 'selected' : ''; ?> value="2">2. Kelompok (per individu)</option>
 							<option <?= $kat['fixed'] == 3 ? 'selected' : ''; ?> value="3">3. Kelompok</option>
@@ -99,7 +99,7 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), '
 				<div class="form-group row">
 					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Nominal</label>
 					<div class="col-md-9">
-						<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : $kat['nominal'];  ?>" name="nominal" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="Jenis_Pengajuan">
+						<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : $kat['nominal'];  ?>" name="nominal" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="nominal">
 						<span class="invalid-feedback"><?php echo form_error('Jenis_Pengajuan'); ?></span>
 					</div>
 				</div>
@@ -215,6 +215,16 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), '
 				$("#errNm2").html('');
 			},
 		});
+
+		var update_tipe_reward = function() {
+			if ($("#tipe_reward").val() == 0) {
+				$("#nominal").prop("disabled", true)
+			} else(
+				$("#nominal").prop("disabled", false)
+			)
+		};
+		$(update_tipe_reward);
+		$("#tipe_reward").change(update_tipe_reward);
 
 		$(document).on('change', '.checkbox_keterangan_surat', function() {
 			if (this.checked) {

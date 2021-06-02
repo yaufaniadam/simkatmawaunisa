@@ -49,13 +49,39 @@ class Jenispengajuan extends Admin_Controller
 				$data = array(
 					'jenis_pengajuan' => $this->input->post('Jenis_Pengajuan'),
 					'deskripsi' => $this->input->post('deskripsinya'),
-					'fixed' => $this->input->post('tipe_reward')
+					'fixed' => $this->input->post('tipe_reward'),
 				);
+
+				// echo '<pre>';
+				// print_r($data);
+				// echo '</pre>';
+
+				// die();
 
 				$result = $this->pengajuan_model->tambah_jenis_pengajuan($data);
 
 				$id = $this->db->insert_id();
 				if ($result) {
+					if ($data['fixed'] == 2) {
+						$new_nominal = explode(",", $this->input->post('nominal'));
+						for ($i = 0; $i < count($new_nominal); $i++) {
+							$data_penghargaan = [
+								"nominal" => $new_nominal[$i],
+								"Jenis_Pengajuan_Id" => $id,
+								"order" => $i
+							];
+							$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_penghargaan);
+						}
+					} else {
+						$data_penghargaan = [
+							"nominal" => $this->input->post('nominal')
+						];
+					}
+
+					if ($data['fixed'] == 1 && $data['fixed'] == 3) {
+						$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_penghargaan);
+					}
+
 					$fields = $this->input->post('fields');
 					$expl = explode('&', $fields);
 					foreach ($expl as $key => $exp) {
@@ -122,6 +148,33 @@ class Jenispengajuan extends Admin_Controller
 					'deskripsi' => $this->input->post('deskripsinya'),
 					'fixed' => $this->input->post('tipe_reward')
 				);
+
+				if ($data['fixed'] == 2) {
+					$new_nominal = explode(",", $this->input->post('nominal'));
+
+
+					for ($i = 0; $i < count($new_nominal); $i++) {
+						$data_penghargaan = [
+							"nominal" => $new_nominal[$i],
+							"Jenis_Pengajuan_Id" => $id,
+							"order" => $i
+						];
+						$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_penghargaan);
+					}
+				} else {
+					$data_penghargaan = [
+						"nominal" => $this->input->post('nominal')
+					];
+				}
+
+				if ($data['fixed'] == 1 && $data['fixed'] == 3) {
+					// echo "<pre>";
+					// print_r($data_penghargaan);
+					// echo "</pre>";
+					$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_penghargaan);
+				}
+
+				// die();
 
 				date_default_timezone_set("Asia/Jakarta");
 				$date = new DateTime();

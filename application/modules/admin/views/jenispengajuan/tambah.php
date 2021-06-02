@@ -78,12 +78,20 @@ echo form_open_multipart(base_url('admin/jenispengajuan/tambah/'), 'class="form-
 				<div class="form-group row">
 					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Tipe Hadiah</label>
 					<div class="col-md-9">
-						<select class="form-control" name="tipe_reward" id="exampleFormControlSelect1">
+						<select class="form-control" name="tipe_reward" id="tipe_reward">
 							<option value="1">1. Individu</option>
-							<option value="2">2. Kelompok (per indivicu) </option>
-							<option value="3">3. Kelompok </option>
+							<option value="2">2. Kelompok (per indivicu)</option>
+							<option value="3">3. Kelompok</option>
 							<option value="0">4. Hak cipta</option>
 						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Nominal</label>
+					<div class="col-md-9">
+						<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : ''; ?>" name="nominal" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="nominal">
+						<span class="invalid-feedback"><?php echo form_error('Jenis_Pengajuan'); ?></span>
 					</div>
 				</div>
 
@@ -176,9 +184,17 @@ echo form_open_multipart(base_url('admin/jenispengajuan/tambah/'), 'class="form-
 				$("#sortable2").css('border-color', '#eeeeee');
 				$("#errNm2").html('');
 			},
-
-
 		});
+
+		var update_tipe_reward = function() {
+			if ($("#tipe_reward").val() == 0) {
+				$("#nominal").prop("disabled", true)
+			} else(
+				$("#nominal").prop("disabled", false)
+			)
+		};
+		$(update_tipe_reward);
+		$("#tipe_reward").change(update_tipe_reward);
 
 		$(document).on('change', '.checkbox_keterangan_surat', function() {
 			if (this.checked) {
