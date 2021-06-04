@@ -80,7 +80,7 @@ echo form_open_multipart(base_url('admin/jenispengajuan/tambah/'), 'class="form-
 					<div class="col-md-9">
 						<select class="form-control" name="tipe_reward" id="tipe_reward">
 							<option value="1">1. Individu</option>
-							<option value="2">2. Kelompok (per indivicu)</option>
+							<option value="2">2. Kelompok (per individu)</option>
 							<option value="3">3. Kelompok</option>
 							<option value="0">4. Hak cipta</option>
 						</select>

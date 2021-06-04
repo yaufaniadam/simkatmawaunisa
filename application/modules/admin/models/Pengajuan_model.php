@@ -202,7 +202,12 @@ class Pengajuan_model extends CI_Model
 		$query2 = $this->db->query("SELECT field_id FROM Tr_Pengajuan_Field where Jenis_Pengajuan_Id=$id AND terpakai = 1");
 		$result2 = $query2->result_array();
 
-		return array($result1, $result2);
+		$result3 = $this->db->get_where(
+			"Mstr_Penghargaan_Rekognisi_Mahasiswa",
+			["Jenis_Pengajuan_Id" => $id]
+		)->result_array();
+
+		return array($result1, $result2, $result3);
 	}
 
 	public function edit_kategori_pengajuan($data, $id)

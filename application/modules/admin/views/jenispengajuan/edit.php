@@ -1,5 +1,5 @@
 <?php
-list($kat, $result) = $kategori;
+list($kat, $result, $nominal) = $kategori;
 $selected_kat = array_column($result, 'field_id');
 
 echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), 'class="form-horizontal"');
@@ -71,11 +71,11 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), '
 		<div class="card card-success card-outline">
 			<div class="card-body box-profile">
 
-				<!-- <pre>
+				<pre>
 					<?php
-					// print_r($kategori)
+					// print_r($kat)
 					?>
-				</pre> -->
+				</pre>
 				<div class="form-group row">
 					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Jenis Pengajuan</label>
 					<div class="col-md-9">
@@ -85,22 +85,28 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), '
 				</div>
 
 				<div class="form-group row">
-					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Tipe Hadiah</label>
+					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Tipe Nominal Reward</label>
 					<div class="col-md-9">
 						<select class="form-control" name="tipe_reward" id="tipe_reward">
 							<option <?= $kat['fixed'] == 1 ? 'selected' : ''; ?> value="1">1. Individu</option>
-							<option <?= $kat['fixed'] == 2 ? 'selected' : ''; ?> value="2">2. Kelompok (per individu)</option>
-							<option <?= $kat['fixed'] == 3 ? 'selected' : ''; ?> value="3">3. Kelompok</option>
-							<option <?= $kat['fixed'] == 0 ? 'selected' : ''; ?> value="0">4. Hak cipta</option>
+							<option <?= $kat['fixed'] == 2 ? 'selected' : ''; ?> value="2">2. Kelompok (Ketua dan anggota memperoleh nominal yang berbeda)</option>
+							<option <?= $kat['fixed'] == 3 ? 'selected' : ''; ?> value="3">3. Kelompok (Reward diberikan kepada kelompok, bukan kepada tiap anggota)</option>
+							<option <?= $kat['fixed'] == 0 ? 'selected' : ''; ?> value="0">4. Berdasarkan biaya yang dikeluarkan oleh mahasiswa</option>
 						</select>
+
 					</div>
 				</div>
 
 				<div class="form-group row">
 					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Nominal</label>
 					<div class="col-md-9">
-						<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : $kat['nominal'];  ?>" name="nominal" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="nominal">
+						<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : ($kat['fixed'] == 2 ? $nominal[0]['nominal'] : $kat['nominal']);  ?>" name="nominal[]" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="nominal">
 						<span class="invalid-feedback"><?php echo form_error('Jenis_Pengajuan'); ?></span>
+						<?php /*if ($kat['fixed'] == 2) {*/ ?>
+						<small id="nominalHelp" class="form-text text-muted">
+							<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : ($kat['fixed'] == 2 ? $nominal[1]['nominal'] : '');  ?>" name="nominal[]" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="nominal">
+						</small>
+						<?php /*}*/ ?>
 					</div>
 				</div>
 
@@ -221,6 +227,12 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), '
 				$("#nominal").prop("disabled", true)
 			} else(
 				$("#nominal").prop("disabled", false)
+			)
+
+			if ($("#tipe_reward").val() == 2) {
+				$("#nominalHelp").show()
+			} else(
+				$("#nominalHelp").hide()
 			)
 		};
 		$(update_tipe_reward);
