@@ -32,7 +32,7 @@
 							<th style="width:25%">Status</th>
 							<th>Mahasiswa</th>
 							<th>nominal</th>
-							<th>Tanggal</th>
+							<!-- <th>Tanggal</th> -->
 							<!-- <th></th> -->
 						</tr>
 					</thead>
@@ -65,16 +65,23 @@
 										<?= $pengajuan['nominal'];	?>
 									</p>
 								</td>
-								<td>
+								<!-- <td>
 									<p class="m-0">
-										<?= $pengajuan['date'];	?>
+										<?/*= $pengajuan['date'];	*/ ?>
 									</p>
 									<p class="badge m-0 badge-warning">
-										<?= $pengajuan['time'];	?>
+										<?/*= $pengajuan['time'];	*/ ?>
 									</p>
+								</td> -->
+								<td>
+									<?= form_open(base_url('admin/periode/hapus')); ?>
+									<input type="hidden" name="id_penerbitan_pengajuan" value="<?= $pengajuan['id_penerbitan_pengajuan']; ?>">
+									<input type="hidden" name="command" value="DELETE">
+									<input type="submit" value="hapus">
+									<?= form_close(); ?>
 								</td>
 								<!-- <td>
-									<button type="button" data-toggle="modal" id="<?= $pengajuan['id_penerbitan_pengajuan']; ?>" class="btn btn-primary btn-sm btn-reward" data-target="#exampleModal">
+									<button type="button" data-toggle="modal" id="<?/*= $pengajuan['id_penerbitan_pengajuan']; */ ?>" class="btn btn-primary btn-sm btn-reward" data-target="#exampleModal">
 										edit reward
 									</button>
 								</td> -->

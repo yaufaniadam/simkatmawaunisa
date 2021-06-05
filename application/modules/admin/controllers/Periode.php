@@ -206,4 +206,9 @@ class Periode extends Admin_Controller
 		$this->db->update('Tr_Penerbitan_Pengajuan');
 		redirect(base_url('admin/periode/bulan/' . $id_periode));
 	}
+
+	public function hapus($id_penerbitan_pengajuan)
+	{
+		# code...
+	}
 }

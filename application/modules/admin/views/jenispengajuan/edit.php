@@ -102,11 +102,9 @@ echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), '
 					<div class="col-md-9">
 						<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : ($kat['fixed'] == 2 ? $nominal[0]['nominal'] : $kat['nominal']);  ?>" name="nominal[]" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="nominal">
 						<span class="invalid-feedback"><?php echo form_error('Jenis_Pengajuan'); ?></span>
-						<?php /*if ($kat['fixed'] == 2) {*/ ?>
 						<small id="nominalHelp" class="form-text text-muted">
 							<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : ($kat['fixed'] == 2 ? $nominal[1]['nominal'] : '');  ?>" name="nominal[]" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="nominal">
 						</small>
-						<?php /*}*/ ?>
 					</div>
 				</div>
 
