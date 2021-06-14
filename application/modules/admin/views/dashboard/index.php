@@ -122,17 +122,21 @@
 						<table id="data-pengajuan-table" class="table table-bordered tb-pengajuans">
 							<thead>
 								<tr>
-									<?php foreach ($jenis_pengajuan as $pengajuan) { ?>
-										<th style="width:20%"><?= $pengajuan['Jenis_Pengajuan']; ?></th>
-									<?php } ?>
+									<th>kategori</th>
+									<th>jumlah</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<?php foreach ($jenis_pengajuan as $pengajuan) { ?>
-										<th style="width:20%"><?= get_jumlah_pengajuan_per_jenis_pengajuan($pengajuan['Jenis_Pengajuan_Id']); ?></th>
-									<?php } ?>
-								</tr>
+								<?php foreach ($jenis_pengajuan as $pengajuan) { ?>
+									<tr>
+										<th style="width:20%">
+											<?= $pengajuan['Jenis_Pengajuan']; ?>
+										</th>
+										<th style="width:20%">
+											<?= get_jumlah_pengajuan_per_jenis_pengajuan($pengajuan['Jenis_Pengajuan_Id']); ?>
+										</th>
+									</tr>
+								<?php } ?>
 							</tbody>
 						</table>
 					</div>
