@@ -129,10 +129,10 @@
 							<tbody>
 								<?php foreach ($jenis_pengajuan as $pengajuan) { ?>
 									<tr>
-										<th style="width:20%">
+										<th>
 											<?= $pengajuan['Jenis_Pengajuan']; ?>
 										</th>
-										<th style="width:20%">
+										<th>
 											<?= get_jumlah_pengajuan_per_jenis_pengajuan($pengajuan['Jenis_Pengajuan_Id']); ?>
 										</th>
 									</tr>
