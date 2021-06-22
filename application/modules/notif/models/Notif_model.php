@@ -28,6 +28,7 @@ class Notif_model extends CI_Model
 	public function send_notif($data)
 	{
 		// $id_status = $data['id_status'];
+
 		date_default_timezone_set('Asia/Jakarta');
 		$date = date("Y/m/d h:i:s");
 
@@ -46,6 +47,9 @@ class Notif_model extends CI_Model
 			);
 		}
 		$result = $this->db->insert_batch('Tr_Notif', $notif);
+
+
+
 		return $result;
 	}
 
