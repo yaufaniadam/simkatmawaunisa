@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 // print_r tool
 
-function get_jumlah_pengajuan_perbulan($nama_bulan)
+function get_jumlah_pengajuan_perbulan($no_urut)
 {
 	$CI = &get_instance();
 
@@ -17,7 +17,23 @@ function get_jumlah_pengajuan_perbulan($nama_bulan)
 	// 	// . $_SESSION['role'] == 5 ? "AND m.DEPARTMENT_ID = '$prodi_user'" : ""
 	// )->num_rows();
 
+	$no = (int)$no_urut;
 
+	$nama_bulan = [
+		1 =>
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"Oktober",
+		"November",
+		"December",
+	];
 
 	if ($_SESSION['role'] == 5) {
 		$prodi_user = $CI->db->select('prodi')
@@ -34,7 +50,7 @@ function get_jumlah_pengajuan_perbulan($nama_bulan)
 			->join('V_Mahasiswa m', "m.STUDENTID=pp.STUDENTID")
 			->join('Tr_Pengajuan_Status ps', 'ps.pengajuan_id=pp.id_pengajuan')
 			->where([
-				"FORMAT (ps.date, 'MMMM') =" => $nama_bulan,
+				"FORMAT (ps.date, 'MMMM') =" => $nama_bulan[$no],
 				"ps.status_id" => 9,
 				"m.DEPARTMENT_ID" => $prodi_user
 			])
@@ -46,12 +62,35 @@ function get_jumlah_pengajuan_perbulan($nama_bulan)
 			->join('V_Mahasiswa m', "m.STUDENTID=pp.STUDENTID")
 			->join('Tr_Pengajuan_Status ps', 'ps.pengajuan_id=pp.id_pengajuan')
 			->where([
-				"FORMAT (ps.date, 'MMMM') =" => $nama_bulan,
+				"FORMAT (ps.date, 'MMMM') =" => $nama_bulan[$no],
 				"ps.status_id" => 9,
 			])
 			->get()
 			->num_rows();
 	}
+}
+
+function get_nama_bulan($no_urut)
+{
+	$no = (int)$no_urut;
+
+	$nama_bulan = [
+		1 =>
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"Oktober",
+		"November",
+		"December",
+	];
+
+	return $nama_bulan[$no];
 }
 
 function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
@@ -66,6 +105,7 @@ function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
 	// )->num_rows();
 
 	if ($_SESSION['role'] == 5) {
+
 		$prodi_user = $CI->db->select('prodi')
 			->from('users')
 			->where([
@@ -165,7 +205,8 @@ function profPic($id, $w)
 function bulan_romawi($bulan)
 {
 	$bln = array(
-		1 =>   'I',
+		1 =>
+		'I',
 		'II',
 		'III',
 		'IV',
