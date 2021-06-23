@@ -1,3 +1,4 @@
+<?= form_open(base_url('admin/periode/bulan')); ?>
 <div class="row">
 	<div class="col-12">
 		<div class="card card-success card-outline">
@@ -8,13 +9,10 @@
 					</div>
 					<div class="col-md-4">
 						<?php if ($status_periode == 0) { ?>
-							<?= form_open(base_url('admin/periode/bulan')); ?>
 							<input type="hidden" name="id_periode" value="<?= $id_periode; ?>">
 							<button type="button" class="btn btn-sm btn-success mb-2 float-right" <?= (count($daftar_pengajuan) > 0) ? '' : 'disabled'; ?> data-toggle="modal" data-target="#confirm-modal">
 								Terbitkan reward periode ini
 							</button>
-
-
 						<?php } ?>
 					</div>
 				</div>
@@ -103,7 +101,6 @@
 								</td> -->
 							</tr>
 						<?php
-
 							$total  += $nominal;
 						} ?>
 						<tr>
@@ -122,6 +119,7 @@
 
 <!-- Modal -->
 
+<!-- Modal Pencairan -->
 <div class="modal fade" id="pencairanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
@@ -132,7 +130,6 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<?= form_open(base_url('admin/pengajuan/periode')); ?>
 				<div class="form-group row">
 					<input type="hidden" id="id_penerbitan_pengajuan_field" name="id_penerbitan_pengajuan">
 					<label for="inputEmail3" class="col-sm-2 col-form-label">Petugas</label>
@@ -140,7 +137,6 @@
 						<input type="text" name="petugas" class="form-control">
 					</div>
 				</div>
-				<?= form_close(); ?>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -149,6 +145,7 @@
 		</div>
 	</div>
 </div>
+<!-- Modal Pencairan -->
 
 <div class="modal fade" id="confirm-modal" tabindex="-1" aria-labelledby="confirm-modalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -170,31 +167,7 @@
 		</div>
 	</div>
 </div>
-
-
-<div class="modal fade" id="confirm-delete">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Perhatian</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Tutuo">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<p>Yakin ingin menghapus data ini?&hellip;</p>
-			</div>
-			<div class="modal-footer justify-content-between">
-				<button type="button" class="btn btn-dark" data-dismiss="modal">Batal</button>
-				<a class="btn btn-danger btn-ok">Hapus</a>
-			</div>
-		</div>
-		<!-- /.modal-content -->
-	</div>
-	<!-- /.modal-dialog -->
-</div>
 <?= form_close(); ?>
-
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
