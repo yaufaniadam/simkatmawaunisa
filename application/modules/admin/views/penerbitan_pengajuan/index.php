@@ -1,4 +1,3 @@
-<?= form_open(base_url('admin/periode/bulan')); ?>
 <div class="row">
 	<div class="col-12">
 		<div class="card card-success card-outline">
@@ -16,8 +15,6 @@
 						<?php } ?>
 					</div>
 				</div>
-
-
 			</div>
 
 			<div class="card-body">
@@ -87,9 +84,11 @@
 									</td>
 								<?php } ?>
 								<td>
-									<button type="button" class="btn btn-primary btn-pencairan" data-toggle="modal" data-target="#pencairanModal" id="<?= $pengajuan['id_penerbitan_pengajuan']; ?>">
-										cairkan
-									</button>
+									<?php if ($pengajuan['status_pencairan'] != 1) { ?>
+										<button type="button" class="btn btn-primary btn-pencairan" data-toggle="modal" data-target="#pencairanModal" id="<?= $pengajuan['id_penerbitan_pengajuan']; ?>">
+											cairkan
+										</button>
+									<?php } ?>
 								</td>
 							</tr>
 						<?php
@@ -121,25 +120,37 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+			<?php echo form_open(base_url('admin/periode/pencairan_reward')) ?>
 			<div class="modal-body">
 				<div class="form-group row">
 					<input type="hidden" id="id_penerbitan_pengajuan_field" name="id_penerbitan_pengajuan">
-					<label for="inputEmail3" class="col-sm-2 col-form-label">Petugas</label>
+					<input type="hidden" name="id_periode" value="<?= $id_periode; ?>">
+					<label for="pegawai" class="col-sm-2 col-form-label">Pegawai</label>
+					<div class="col-sm-10 my-2">
+						<input type="text" id="pegawai" name="pegawai" class="form-control">
+					</div>
+					<label for="penerima" class="col-sm-2 col-form-label">Penerima</label>
 					<div class="col-sm-10">
-						<input type="text" name="petugas" class="form-control">
+						<input type="text" id="penerima" name="penerima" class="form-control">
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
+				<input class="btn btn-primary" type="submit" value="Submit">
 			</div>
+			<?= form_close(); ?>
 		</div>
 	</div>
 </div>
 <!-- Modal Pencairan -->
 
+<!-- Modal Penerbitan -->
 <div class="modal fade" id="confirm-modal" tabindex="-1" aria-labelledby="confirm-modalLabel" aria-hidden="true">
+	<?= form_open(base_url('admin/periode/bulan')); ?>
+	<?php foreach ($daftar_pengajuan as $pengajuan) {	?>
+		<input type="hidden" name="pengajuan[]" value="<?= $pengajuan['pengajuan_id']; ?>" id="">
+	<?php } ?>
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -158,8 +169,9 @@
 			</div>
 		</div>
 	</div>
+	<?= form_close(); ?>
 </div>
-<?= form_close(); ?>
+<!-- Modal Penerbitan -->
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">

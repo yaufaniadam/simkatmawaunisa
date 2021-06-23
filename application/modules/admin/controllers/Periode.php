@@ -222,4 +222,23 @@ class Periode extends Admin_Controller
 			redirect(base_url('admin/periode/bulan/' . $id_periode));
 		}
 	}
+
+	public function pencairan_reward()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+
+		$id_penerbitan_pengajuan = $this->input->post("id_penerbitan_pengajuan");
+		$pegawai = $this->input->post("pegawai");
+		$penerima = $this->input->post("penerima");
+
+		$this->db->set([
+			'pegawai' => $pegawai,
+			'penerima' => $penerima,
+			'status_pencairan' => 1,
+			'tanggal_pencairan' => date("Y/m/d")
+		]);
+		$this->db->where('id_penerbitan_pengajuan', $id_penerbitan_pengajuan);
+		$this->db->update('Tr_Penerbitan_Pengajuan');
+		redirect(base_url('admin/periode/bulan/' . $this->input->post('id_periode')));
+	}
 }
