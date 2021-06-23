@@ -644,31 +644,19 @@ class Pengajuan extends Admin_Controller
 			);
 		}
 
-		// // $data_notif = array(
-		// // 	'id_pengajuan' => $insert_id2['id_pengajuan'],
-		// // 	'id_status' => 1,
-		// // 	'kepada' => $_SESSION['user_id'],
-		// // 	'role' => array(3)
-		// // );
+		$data_notif = array(
+			'id_pengajuan' => $insert_id2['id_pengajuan'],
+			'id_status' => 1,
+			'kepada' => $_SESSION['user_id'],
+			'role' => array(3)
+		);
 
-		// $results = $this->notif_model->send_notif($data_notif);
+		$results = $this->notif_model->send_notif($data_notif);
 
-
-		$this->load->library('email');
-
-
-		$this->email->from('yaufani@gmail.com', 'yaufani Adam');
-		$this->email->to('yaufani@gmail.com');
-
-		$this->email->subject('Email Test');
-		$this->email->message('Testing the email class.');
-
-		$this->email->send();
-
-		// if ($results) {
+		if ($results) {
 		$this->session->set_flashdata('msg', 'Berhasil!');
 		redirect(base_url('admin/pengajuan/tambah/' . $insert_id));
-		// }
+		}
 	}
 
 

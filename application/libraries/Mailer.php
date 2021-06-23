@@ -15,33 +15,34 @@ class Mailer
   public function send_mail($data)
   {
 
-    //kirim notifikasi
     $this->_CI->notif_model->send_notif($data);
 
+  
     $mail = new PHPMailer(true); //Argument true in constructor enables exceptions
 
-    $mail->From = $this->get_settings('email');
-    $mail->FromName = $this->get_settings('from_email');
+    $mail->From = 'noreply.simkatmawa@umy.ac.id';  
+    $mail->FromName = "LPKA UMY - SIMKATMAWA";
     //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
     $mail->isSMTP();                                            // Send using SMTP
-    $mail->Host       = 'smtp.gmail.com';                    // Set the SMTP server to send through
+    $mail->Host       = 'pod51003.outlook.com';                    // Set the SMTP server to send through
     $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-    $mail->Username   = $this->get_settings('email');                     // SMTP username
-    $mail->Password   = $this->get_settings('password_email');
+    $mail->Username   = 'noreply.simkatmawa@umy.ac.id';                     // SMTP username
+    $mail->Password   = 'UMYbsi21';
     // $mail->Password   = decrypt_url($this->get_settings('password_email'));
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
     $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
-    $mail->setFrom($this->get_settings('email'), $this->get_settings('from_email'));
+    $mail->setFrom('noreply.simkatmawa@umy.ac.id', 'LPKA UMY - SIMKATMAWA');
     $mail->isHTML(true);
 
+    $mail->addAddress('yaufani@gmail.com');
 
-    // if ($attachment) {
-    // $mail->addAttachment($attachment['dokumen']);
-    // $mail->addAttachment($attachment['presentasi']);
-    // }
+    $mail->Subject = "subject";
+    $mail->Body = "asdasdasd";
 
-    echo '<pre>'; print_r($data); echo '</pre>';
+    $mail->send();
+
+    $mail->ClearAddresses();
 
     $role = $data['role'];
 
@@ -63,7 +64,7 @@ class Mailer
 
           $isi_email = array (
             'penerima' => $user['fullname'],
-            'link' => base_url('admin/surat/detail/'. encrypt_url($data['id_surat'])),
+            'link' => base_url('admin/surat/detail/'),
             'isi'=> $sp['judul_notif'],
             'tabel'=> '
               <table class="datamhs">
@@ -88,6 +89,10 @@ class Mailer
            $mail->Body = $this->email_template($isi_email);
 
         }
+
+        $mail->Subject = "subject";
+        $mail->Body = "asdasdasd";
+
        
         $mail->send();
         $mail->ClearAddresses();

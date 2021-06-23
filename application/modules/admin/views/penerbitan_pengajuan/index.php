@@ -4,7 +4,7 @@
 		<div class="card card-success card-outline">
 			<div class="card-header">
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-6">
 						<p class="mb-0">Nama mahasiswa yang memperoleh reward pada periode ini</p>
 					</div>
 					<div class="col-md-4">
@@ -14,6 +14,9 @@
 								Terbitkan reward periode ini
 							</button>
 						<?php } ?>
+					</div>
+					<div class="col-md-2">					
+						<a href="<?= base_url('admin/periode/export_excel/' . $id_periode); ?>" class="btn btn-success"><i class="fas fa-file-excel"></i> Export ke Excel</a>				
 					</div>
 				</div>
 

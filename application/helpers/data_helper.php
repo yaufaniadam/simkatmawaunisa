@@ -572,3 +572,41 @@ function get_file($id)
 	$CI = &get_instance();
 	return	$media = $CI->db->select("*")->from('Tr_Media')->where(array('id' => $id))->get()->row_array();
 }
+
+function getUsersbyRole($role, $prodi)
+{
+
+	$CI = &get_instance();
+
+	if ($prodi) {
+		return  $CI->db->select('*')->from('users')->where(array('role' => $role, 'prodi' => $prodi))->get()->result_array();
+	} else {
+		return  $CI->db->select('*')->from('users')->where(array('role' => $role))->get()->result_array();
+	}
+}
+
+
+function konversiAngkaKeHuruf($angka)
+{
+
+    $huruf = array(
+        1 =>   'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P'
+    );
+
+    return  $huruf[$angka];
+}
