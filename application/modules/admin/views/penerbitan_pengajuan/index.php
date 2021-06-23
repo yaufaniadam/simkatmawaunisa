@@ -88,11 +88,13 @@
 										<?= form_close(); ?>
 									</td>
 								<?php } ?>
-								<td>
-									<button type="button" class="btn btn-primary btn-pencairan" data-toggle="modal" data-target="#pencairanModal" id="<?= $pengajuan['id_penerbitan_pengajuan']; ?>">
-										cairkan
-									</button>
-								</td>
+								<?php if ($pengajuan['status_id'] === 10) { ?>
+									<td>								
+										<button type="button" class="btn btn-primary btn-pencairan" data-toggle="modal" data-target="#pencairanModal" id="<?= $pengajuan['id_penerbitan_pengajuan']; ?>">
+											cairkan
+										</button>
+									</td>
+								<?php } ?>
 
 								<!-- <td>
 									<button type="button" data-toggle="modal" id="<?/*= $pengajuan['id_penerbitan_pengajuan']; */ ?>" class="btn btn-primary btn-sm btn-reward" data-target="#exampleModal">
