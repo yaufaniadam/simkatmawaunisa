@@ -333,27 +333,6 @@ class Pengajuan extends Admin_Controller
 					);
 			}
 
-			if ($this->input->post('rev2') == 6) {
-				$role = array(3, 2);
-			} else if ($this->input->post('rev2') == 4) {
-				$role = array(3, 2);
-			} else if ($this->input->post('rev2') == 7) {
-				$role = array(3, 6);
-			}
-
-			//buat notifikasi
-			$this_pengajuan = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_array();
-			$data_for_notif = [
-				'pengirim' => $_SESSION['userid'],
-				'penerima' => $this_pengajuan['nim'],
-				'id_pengajuan' => $pengajuan_id,
-				'role' => [3],
-				'id_status_notif' => $this->input->post('rev2'),
-			];
-			$this->notif_model->send_notif($data_for_notif);
-
-			// if ($result) {
-			//	$this->session->set_flashdata('msg', 'Pengajuan diperiksa oleh TU!');
 			redirect(base_url('admin/pengajuan/detail/' . $pengajuan_id));
 			// }
 		} else {

@@ -14,6 +14,7 @@ class Periode extends Admin_Controller
 		$this->load->model('pengajuan_model', 'pengajuan_model');
 		$this->load->model('notif/Notif_model', 'notif_model');
 		$this->load->library('excel');
+		$this->load->library('mailer');
 	}
 
 	public function index($status = '')
@@ -93,15 +94,33 @@ class Periode extends Admin_Controller
 					]
 				)->row_array();
 
-				$data_for_notif = [
-					'pengirim' => $_SESSION['user_id'],
-					'penerima' => $penerima[$i],
-					'id_pengajuan' => $this_pengajuan['id_pengajuan'],
-					'role' => [3],
-					'id_status_notif' => 10,
-				];
+				// $data_for_notif = [
+				// 	'pengirim' => $_SESSION['user_id'],
+				// 	'penerima' => $penerima[$i],
+				// 	'id_pengajuan' => $this_pengajuan['id_pengajuan'],
+				// 	'role' => [3],
+				// 	'id_status_notif' => 10,
+				// ];
 
-				$this->notif_model->send_notif($data_for_notif);
+				// $this->notif_model->send_notif($data_for_notif);
+
+					//data utk kirim email & notif ke pegawai
+					$data_for_notif = [
+						'STUDENTID' => $penerima[$i],
+						'STUDENTNAME' => $penerima[$i],
+						'penerima' => '',
+						'id_pengajuan' => $pengajuan[$i],
+						'judul_pengajuan' => $data['title'],
+						'role' => [3],
+						'link' => base_url('admin/pengajuan/detail/'. $pengajuan[$i]),
+						'subjek' => 'Ada Pengajuan Prestasi Baru dari ' . $pengajuan[$i],
+						'isi' => 'Ada Pengajuan Prestasi Baru dari <strong>' . $pengajuan[$i] . '</strong> kategori <strong>' . $data['title'] . '</strong> yang perlu diperiksa.',
+						'id_status_notif' => 10,
+					];
+	
+					//sendmail & notif
+					$this->mailer->send_mail($data_for_notif);			
+
 			}
 			// die();
 

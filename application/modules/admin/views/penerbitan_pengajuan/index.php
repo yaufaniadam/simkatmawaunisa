@@ -7,16 +7,16 @@
 					<div class="col-md-6">
 						<p class="mb-0">Nama mahasiswa yang memperoleh reward pada periode ini</p>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-6 text-right">
 						<?php if ($status_periode == 0) { ?>
 							<input type="hidden" name="id_periode" value="<?= $id_periode; ?>">
-							<button type="button" class="btn btn-sm btn-success mb-2 float-right" <?= (count($daftar_pengajuan) > 0) ? '' : 'disabled'; ?> data-toggle="modal" data-target="#confirm-modal">
+							<button type="button" class="btn btn-sm btn-success" <?= (count($daftar_pengajuan) > 0) ? '' : 'disabled'; ?> data-toggle="modal" data-target="#confirm-modal"> <i class="fas fa-paper-plane"></i> 
 								Terbitkan reward periode ini
 							</button>
 						<?php } ?>
-					</div>
-					<div class="col-md-2">					
-						<a href="<?= base_url('admin/periode/export_excel/' . $id_periode); ?>" class="btn btn-success"><i class="fas fa-file-excel"></i> Export ke Excel</a>				
+				
+									
+						<a href="<?= base_url('admin/periode/export_excel/' . $id_periode); ?>" class="btn btn-warning btn-sm"><i class="fas fa-file-excel"></i> Export ke Excel</a>				
 					</div>
 				</div>
 

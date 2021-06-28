@@ -490,18 +490,24 @@ class Pengajuan extends Mahasiswa_Controller
 					}
 				}
 
+				//data utk kirim email & notif ke pegawai
 				$data_for_notif = [
-					'pengirim' => '',
+					'STUDENTID' => $data_user['STUDENTID'],
+					'STUDENTNAME' => $data_user['FULLNAME'],
 					'penerima' => '',
 					'id_pengajuan' => $pengajuan_id,
+					'judul_pengajuan' => $data['title'],
 					'role' => [2],
+					'link' => base_url('admin/pengajuan/detail/'. $pengajuan_id),
+					'subjek' => 'Ada Pengajuan Prestasi Baru dari ' . $data_user['FULLNAME'],
+					'isi' => 'Ada Pengajuan Prestasi Baru dari <strong>' . $data_user['FULLNAME'] . '</strong> kategori <strong>' . $data['title'] . '</strong> yang perlu diperiksa.',
 					'id_status_notif' => 3,
 				];
 
 				//sendmail & notif
 				$this->mailer->send_mail($data_for_notif);			
 			
-				//redirect(base_url('mahasiswa/pengajuan/tambah/' . $pengajuan_id));
+				redirect(base_url('mahasiswa/pengajuan/tambah/' . $pengajuan_id));
 			}
 		} else {
 			$data['view'] = 'pengajuan/tambah';

@@ -17,10 +17,9 @@ class Mailer
 
     $this->_CI->notif_model->send_notif($data);
 
-  
     $mail = new PHPMailer(true); //Argument true in constructor enables exceptions
 
-    $mail->From = 'noreply.simkatmawa@umy.ac.id';  
+    $mail->From = 'noreply.simkatmawa@umy.ac.id';
     $mail->FromName = "LPKA UMY - SIMKATMAWA";
     //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
     $mail->isSMTP();                                            // Send using SMTP
@@ -35,105 +34,55 @@ class Mailer
     $mail->setFrom('noreply.simkatmawa@umy.ac.id', 'LPKA UMY - SIMKATMAWA');
     $mail->isHTML(true);
 
-    $mail->addAddress('yaufani@gmail.com');
-
-    $mail->Subject = "subject";
-    $mail->Body = "asdasdasd";
-
-    $mail->send();
-
-    $mail->ClearAddresses();
-
     $role = $data['role'];
 
     foreach ($role as $role) {
-      if ($role != 3) {
 
-        if ($role === 5) { //dir pasca
-          $users = getUsersbyRole($role, '');
-        } else {
-          $users = getUsersbyRole($role, $_SESSION['id_prodi']);
-        }
+      $mail->Subject = $data['subjek'];
 
+      if ($role == 2) {
+        $users = getUsersbyRole($role, '');
+
+        $studentid = $data['STUDENTID'];
+        //ambil email mahasiswa berdasarkan nim
+
+        // $email = '';
         foreach ($users as $user) {
-          $mail->addAddress($user['email']);
-          // echo $user['email'];
 
-          $sp = $this->_CI->notif_model->get_messages($data['id_status'], $role);
-          $subject = $sp['judul_notif'];
-
-          $isi_email = array (
+          $isi_email = array(
             'penerima' => $user['fullname'],
-            'link' => base_url('admin/surat/detail/'),
-            'isi'=> $sp['judul_notif'],
-            'tabel'=> '
-              <table class="datamhs">
-                <tr>
-                  <td><strong>Perihal</strong></td>
-                  <td>Surat Permohonan Cuti Kuliah</td>
-                </tr>
-                <tr>
-                  <td><strong>Nama</strong></td>
-                  <td>' . getUserbyId($data['kepada'])['fullname'] . ' (' . getUserbyId($data['kepada'])['username']  . ')</td>
-                </tr>
-                <tr>
-                  <td><strong>Prodi</strong></td>
-                  <td>' . getProdibyId(getUserbyId($data['kepada'])['id_prodi'])['prodi'] . '</td>
-                </tr>                                     
-              </table>'
+            'link' => $data['link'],
+            'isi' => $data['isi'],
           );
 
-          // $isi_email = "asdsad";
-  
-           $mail->Subject = $subject;
-           $mail->Body = $this->email_template($isi_email);
-
+          $mail->Body = $this->email_template($isi_email);
+          $mail->addAddress($user['email']);
+          $mail->send();
+          $mail->ClearAddresses();
         }
+      } elseif ($role == 3) {
 
-        $mail->Subject = "subject";
-        $mail->Body = "asdasdasd";
+        $mail->Subject = $data['subjek'];
 
-       
-        $mail->send();
-        $mail->ClearAddresses();
+        $sp = $this->_CI->notif_model->get_messages($data['id_status_notif'], $role);
+        // $subject = $sp['judul_notif'];
 
-      } else {
+        $mail->addAddress('yaufani@gmail.com');
 
-      //  echo getUserbyId($data['kepada'])['email'];
-        $mail->addAddress(getUserbyId($data['kepada'])['email']);
+        $mail->Subject = "Pengajuan Baru";
 
-        $sp = $this->_CI->notif_model->get_messages($data['id_status'], $role);
-
-        $subject = $sp['judul_notif'];
-        $isi_email = array (
-          'penerima' => getUserbyId($data['kepada'])['fullname'],
-          'link' => base_url('mahasiswa/surat/tambah/'. encrypt_url($data['id_surat'])),
-          'isi'=> $sp['judul_notif'],         
-          'tabel'=> '
-            <table class="datamhs">
-              <tr>
-                <td><strong>Perihal</strong></td>
-                <td>Surat Permohonan Cuti Kuliah</td>
-              </tr>
-              <tr>
-                <td><strong>Nama</strong></td>
-                <td>' . getUserbyId($data['kepada'])['fullname'] . ' (' . getUserbyId($data['kepada'])['username']  . ')</td>
-              </tr>
-              <tr>
-                <td><strong>Prodi</strong></td>
-                <td>' . getProdibyId(getUserbyId($data['kepada'])['id_prodi'])['prodi'] . '</td>
-              </tr>                                     
-            </table>'
+        $isi_email = array(
+          'penerima' => $data['STUDENTNAME'],
+          'link' => $data['link'],
+          'isi' => $data['isi'],
         );
-
-        echo '<pre>'; print_r($isi_email); echo '</pre>';
-
-        $mail->Subject = $subject;
         $mail->Body = $this->email_template($isi_email);
 
         $mail->send();
 
         $mail->ClearAddresses();
+      } else {
+        echo "admin";
       }
     }
   }
@@ -176,10 +125,10 @@ class Mailer
 
     </head>
 
-    <body class="clean-body" style="margin: 0;padding: 0;padding-top:50px;-webkit-text-size-adjust: 100%;background-color: #054833">
+    <body class="clean-body" style="margin: 0;padding: 0;padding-top:50px;-webkit-text-size-adjust: 100%;background-color: #17714b">
       <!--[if IE]><div class="ie-container"><![endif]-->
       <!--[if mso]><div class="mso-container"><![endif]-->
-      <table style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #054833;width:100%" cellpadding="0" cellspacing="0">
+      <table style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #17714b;width:100%" cellpadding="0" cellspacing="0">
         <tbody>
           <tr style="vertical-align: top">
             <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
@@ -207,7 +156,7 @@ class Mailer
                                     <tr>
                                       <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                        <img align="center" border="0" src="http://solusidesain.net/imgppsumy/header-email2.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" />
+                                        <img align="center" border="0" src="http://solusidesain.net/imgppsumy/header-email-simkatmawa.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" />
 
                                       </td>
                                     </tr>
@@ -251,17 +200,15 @@ class Mailer
                                   <div style="color: #3d3030; line-height: 140%; word-wrap: break-word;padding:10px 40px;">
                                     <h3>Salam, ' . $data['penerima'] . '</h3>
                                   
-                                    <p>' . $data['isi'] . '</p>
-                                    <hr>
-
-                                    ' . $data['tabel'] . '
+                                    ' . $data['isi'] . '
+                                   
                                     
                                   </div>
                                   <div style="margin-top:30px; margin-bottom:30px; text-align:center;">
                                     <a href="' . $data['link'] . '" style="display:inline-block; background:#a81616; padding:10px 20px; color:white; text-decoration: none; border-radius:20px;">Klik di sini untuk melihat</a>
                                   </div>
                                   <div style="margin-top:20px; margin-bottom:0px; text-align:center; ">
-                                    <a style="color:#777777" href="http://pascasarjana.umy.ac.id">Pascasarjana UMY</a> 
+                                    <a style="color:#777777" href="http://simkatmawa.umy.ac.id">Simkatmawa UMY</a> 
                                   </div>
                                 </td>
                               </tr>
@@ -301,7 +248,7 @@ class Mailer
                                     <tr>
                                       <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                        <img align="center" border="0" src="http://solusidesain.net/imgppsumy/footer-email.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" />
+                                        <img align="center" border="0" src="http://solusidesain.net/imgppsumy/footer-email-simkatmawa.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 600px;" width="600" />
 
                                       </td>
                                     </tr>
@@ -342,8 +289,8 @@ class Mailer
                               <tr>
                                 <td style="overflow-wrap:break-word;word-break:break-word;padding:19px 10px 10px;font-family:georgia,palatino;" align="left">
 
-                                  <div style="color: #7f87a7; line-height: 140%; text-align: center; word-wrap: break-word;">
-                                    <p style="font-size: 14px; line-height: 140%;">&copy; 2021 Program Pascasarjana UMY</p>
+                                  <div style="color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word;">
+                                    <p style="font-size: 14px; line-height: 140%;">Copyright 2021 LPKA UMY</p>
                                   </div>
 
                                 </td>
