@@ -1,4 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
+
+use PHPMailer\PHPMailer\PHPMailer;
+
 class Pengajuan extends Mahasiswa_Controller
 {
 	public function __construct()
@@ -8,6 +11,7 @@ class Pengajuan extends Mahasiswa_Controller
 		$this->load->model('pengajuan_model', 'pengajuan_model');
 		$this->load->model('notif/Notif_model', 'notif_model');
 		$this->load->helper('formulir');
+		$this->load->library('mailer');
 	}
 
 	public function detail($id_surat = 0)
@@ -486,64 +490,23 @@ class Pengajuan extends Mahasiswa_Controller
 					}
 				}
 
+				//data utk kirim email & notif ke pegawai
 				$data_for_notif = [
-					'pengirim' => '',
+					'STUDENTID' => $data_user['STUDENTID'],
+					'STUDENTNAME' => $data_user['FULLNAME'],
 					'penerima' => '',
 					'id_pengajuan' => $pengajuan_id,
+					'judul_pengajuan' => $data['title'],
 					'role' => [2],
+					'link' => base_url('admin/pengajuan/detail/'. $pengajuan_id),
+					'subjek' => 'Ada Pengajuan Prestasi Baru dari ' . $data_user['FULLNAME'],
+					'isi' => 'Ada Pengajuan Prestasi Baru dari <strong>' . $data_user['FULLNAME'] . '</strong> kategori <strong>' . $data['title'] . '</strong> yang perlu diperiksa.',
 					'id_status_notif' => 3,
 				];
 
-				$this->notif_model->send_notif($data_for_notif);
-
-				$controller = &get_instance();
-
-				$controller->load->helper('path');
-
-				// Configure email library
-
-				$config = array();
-				$config['useragent']            = "CodeIgniter";
-				$config['mailpath']             = "/usr/bin/sendmail"; // or "/usr/sbin/sendmail"
-				$config['protocol']             = "smtp";
-				$config['smtp_host']            = "ssl://smtp.googlemail.com";
-				$config['smtp_port']            = "465";
-				$config['smtp_timeout'] 		= '30';
-				// $config['smtp_user']    		= "naumanahmedcs@gmail.com";
-				// $config['smtp_pass']    		= "WWWdua3582154#";
-				$config['smtp_user']    		= "admin@mcvupdate.com";
-				$config['smtp_pass']    		= "rumahsakit";
-				$config['mailtype'] 			= 'html';
-				$config['charset']  			= 'utf-8';
-				$config['newline']  			= "\r\n";
-				$config['wordwrap'] 			= TRUE;
-
-				$controller->load->library('email');
-
-				$controller->email->initialize($config);
-
-				$controller->email->from('no-reply@adminlite.com', 'Admin Lite');
-
-				$controller->email->to("waskitodamar17@gmail.com");
-
-				$controller->email->subject("");
-
-				$controller->email->message("");
-
-				if ("" != '') {
-					$controller->email->cc("");
-				}
-
-				if ("" != '') {
-					$controller->email->attach(base_url() . "uploads/invoices/" . "");
-				}
-
-				if ($controller->email->send()) {
-					return "success";
-				} else {
-					return "error";
-				}
-
+				//sendmail & notif
+				$this->mailer->send_mail($data_for_notif);			
+			
 				redirect(base_url('mahasiswa/pengajuan/tambah/' . $pengajuan_id));
 			}
 		} else {

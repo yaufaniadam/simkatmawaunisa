@@ -3,16 +3,19 @@
 		<div class="card card-success card-outline">
 			<div class="card-header">
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-6">
 						<p class="mb-0">Nama mahasiswa yang memperoleh reward pada periode ini</p>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-6 text-right">
 						<?php if ($status_periode == 0) { ?>
 							<input type="hidden" name="id_periode" value="<?= $id_periode; ?>">
-							<button type="button" class="btn btn-sm btn-success mb-2 float-right" <?= (count($daftar_pengajuan) > 0) ? '' : 'disabled'; ?> data-toggle="modal" data-target="#confirm-modal">
+							<button type="button" class="btn btn-sm btn-success" <?= (count($daftar_pengajuan) > 0) ? '' : 'disabled'; ?> data-toggle="modal" data-target="#confirm-modal"> <i class="fas fa-paper-plane"></i> 
 								Terbitkan reward periode ini
 							</button>
 						<?php } ?>
+				
+									
+						<a href="<?= base_url('admin/periode/export_excel/' . $id_periode); ?>" class="btn btn-warning btn-sm"><i class="fas fa-file-excel"></i> Export ke Excel</a>				
 					</div>
 				</div>
 			</div>
@@ -83,13 +86,19 @@
 										<?= form_close(); ?>
 									</td>
 								<?php } ?>
-								<td>
-									<?php if ($pengajuan['status_pencairan'] != 1) { ?>
+								<?php if ($pengajuan['status_id'] === 10) { ?>
+									<td>								
 										<button type="button" class="btn btn-primary btn-pencairan" data-toggle="modal" data-target="#pencairanModal" id="<?= $pengajuan['id_penerbitan_pengajuan']; ?>">
 											cairkan
 										</button>
-									<?php } ?>
-								</td>
+									</td>
+								<?php } ?>
+
+								<!-- <td>
+									<button type="button" data-toggle="modal" id="<?/*= $pengajuan['id_penerbitan_pengajuan']; */ ?>" class="btn btn-primary btn-sm btn-reward" data-target="#exampleModal">
+										edit reward
+									</button>
+								</td> -->
 							</tr>
 						<?php
 							$total  += $nominal;

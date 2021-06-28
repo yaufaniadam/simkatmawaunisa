@@ -59,4 +59,10 @@ class Notif_model extends CI_Model
 		$status = $this->db->get_where('Tr_Pengajuan_Status', array('id_status' => $id_status))->row_array();
 		return $status['status_pengajuan_id'];
 	}
+
+	public function get_messages($role, $id_status)
+	{
+		$status = $this->db->get_where('Mstr_Status_Pesan', array('id_status' => $id_status, 'role' => $role))->row_array();
+		return $status;
+	}
 }

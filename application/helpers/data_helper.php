@@ -1,21 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-// print_r tool
-
 function get_jumlah_pengajuan_perbulan($no_urut)
 {
 	$CI = &get_instance();
-
-	// $CI->db->query(
-	// 	"SELECT * FROM Tr_Pengajuan_Status ps
-	// 	LEFT JOIN Tr_Pengajuan p ON p.pengajuan_id = ps.pengajuan_id
-	// 	LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
-	// 	WHERE ps.status_id = 2 
-	// 	-- AND m.DEPARTMENT_ID = '1'
-	// 	AND FORMAT (ps.date, 'MMMM') = '$nama_bulan'
-	// 	AND FORMAT (ps.date, 'yyyy') = YEAR(getdate())
-	// 	AND m.DEPARTMENT_ID = '$prodi_user'"
-	// 	// . $_SESSION['role'] == 5 ? "AND m.DEPARTMENT_ID = '$prodi_user'" : ""
-	// )->num_rows();
 
 	$no = (int)$no_urut;
 
@@ -96,13 +82,6 @@ function get_nama_bulan($no_urut)
 function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
 {
 	$CI = &get_instance();
-
-	// return $CI->db->query(
-	// 	"SELECT * FROM Tr_Pengajuan p 
-	// 	LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
-	// 	-- WHERE m.DEPARTMENT_ID = '1'
-	// 	WHERE p.Jenis_Pengajuan_Id = '$jenis_pengajuan_id'"
-	// )->num_rows();
 
 	if ($_SESSION['role'] == 5) {
 
@@ -238,50 +217,6 @@ function getUserPhoto($id)
 	return $CI->db->get_where('profil', array('id_user' => $id))->row_array()['photo'];
 }
 
-function countSurat()
-{
-	$CI = &get_instance();
-	// if ($CI->session->userdata('role') == 1) {
-	// 	$prodi = '';
-	// 	$in_status = "3,4,5,6,7,8";
-	// } else {
-	// 	$prodi = "AND p.id_prodi = '" . $CI->session->userdata('id_prodi') . "'";
-	// 	if ($CI->session->userdata('role') == 2) { // TU
-	// 		$in_status = "3,4,5,6,7";
-	// 	} else if ($CI->session->userdata('role') == 5) {
-	// 		$in_status = "3,4,5,6,7";
-	// 	} else if ($CI->session->userdata('role') == 6) {
-	// 		$in_status = "3,4,5,6,7";
-	// 	}
-	// }
-	//WHERE ss.id_surat NOT IN (SELECT ss2.id_surat FROM surat_status ss2 WHERE ss2.id_status IN ($in_status)) AND ss.id_status!='1' $prodi
-
-	// if ($CI->session->userdata('role') == 1) {
-	// 	$status = "id_status = 9";
-	// 	$prodi = '';
-	// } else if ($CI->session->userdata('role') == 2) {
-	// 	$status = "(id_status = 2 OR id_status = 5)";
-	// 	$prodi = "AND u.id_prodi = '" . $CI->session->userdata('id_prodi') . "'";
-	// }
-
-	// $query = $CI->db->query("SELECT COUNT(*) as JUMLAH
-	// 	FROM surat_status ss
-	// 	LEFT JOIN surat s ON s.id = ss.id_surat
-	// 	LEFT JOIN users u ON u.id = s.id_mahasiswa
-	// 	WHERE $status $prodi		
-	//     ");
-	// $result = $query->row_array();
-
-	// return $result['JUMLAH'];
-
-	//return 1;
-}
-//menampilkan kategori keterangan surat
-// function kat_keterangan_surat($id)
-// {
-// 	$CI = &get_instance();
-// 	return $CI->db->get_where('kat_keterangan_surat', array('id' => $id))->row_array();
-// }
 
 function badge_status($status)
 {
@@ -322,18 +257,6 @@ function get_dokumen_syarat($id_surat)
 
 	return $dokumen;
 
-
-
-	// $value = $CI->db->select("value")->from('keterangan_surat')->where(array('id_kat_keterangan_surat' => $id))->get()->row_array()['value'];
-
-	// if ($image == true) {
-
-	// 	$media = $CI->db->select("file")->from('media')->where(array('id' => $value))->get()->row_array()['file'];
-
-	// 	return $media;
-	// } else {
-	// 	return $value;
-	// }
 }
 
 // fungsi ini memeriksa apakah mhs udah pernah buat surat, jika sudah maka tidak diperkenankan membuat lagi sampai surat tersebut selesai
@@ -403,7 +326,6 @@ function cek_sudah_buat_surat($id_mahasiswa, $id_kategori_surat, $min_semester)
 	return $diperbolehkan;
 }
 
-
 function tampil_notif()
 {
 
@@ -430,16 +352,7 @@ function tampil_notif()
 		$where = ["n.role" => 6];
 	}
 
-	// $notif = $CI->db->query("SELECT n.*, n.id as notif_id, sp.judul_notif, DATE_FORMAT(n.tanggal, '%H:%i') as time,  DATE_FORMAT(n.tanggal, '%d %M') as date_full, sp.badge, sp.icon, s.id_kategori_surat, ks.kategori_surat, u.fullname
-	// FROM notif n 	
-	// LEFT JOIN status_pesan sp ON sp.id = n.id_status_pesan
-	// LEFT JOIN surat s ON s.id = n.id_surat
-	// LEFT JOIN kategori_surat ks ON s.id_kategori_surat = ks.id
-	// LEFT JOIN users u ON n.kepada = u.id
-	// WHERE  $where AND n.status = 0 	
-	// ORDER BY id DESC");
 
-	// ,FORMAT (ps.date, 'hh:mm:ss ') as time
 	$notif = $CI->db
 		->select("*")
 		->from('Tr_Notif n')
@@ -451,11 +364,6 @@ function tampil_notif()
 		->where($where)
 		->where(['n.status' => 0])
 		->get();
-
-	// print_r($_SESSION);
-	// echo '<pre>';
-	// print_r($notif->result_array());
-	// echo '</pre>';
 
 ?>
 	<!-- Nav Item - Alerts -->
@@ -571,4 +479,42 @@ function get_file($id)
 {
 	$CI = &get_instance();
 	return	$media = $CI->db->select("*")->from('Tr_Media')->where(array('id' => $id))->get()->row_array();
+}
+
+function getUsersbyRole($role, $prodi)
+{
+
+	$CI = &get_instance();
+
+	if ($prodi) {
+		return  $CI->db->select('*')->from('users')->where(array('role' => $role, 'prodi' => $prodi))->get()->result_array();
+	} else {
+		return  $CI->db->select('*')->from('users')->where(array('role' => $role))->get()->result_array();
+	}
+}
+
+
+function konversiAngkaKeHuruf($angka)
+{
+
+    $huruf = array(
+        1 =>   'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P'
+    );
+
+    return  $huruf[$angka];
 }
