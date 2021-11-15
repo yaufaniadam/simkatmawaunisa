@@ -46,7 +46,7 @@ class Pengajuan_model extends CI_Model
 	public function get_pengajuan($role)
 	{
 
-		if ($this->session->userdata('role') == 1 ) {
+		if ($this->session->userdata('role') == 1) {
 			$prodi = '';
 		} else {
 			$prodi = "AND u.id_prodi = '" . $this->session->userdata('id_prodi') . "'";
@@ -292,8 +292,6 @@ class Pengajuan_model extends CI_Model
 				'urutan' => $key
 			];
 
-
-
 			// menambahkan field yang belum ada
 			$datafield_exist = $this->db->query(
 				"SELECT field_id FROM Tr_Pengajuan_Field 
@@ -390,10 +388,21 @@ class Pengajuan_model extends CI_Model
 		return $result = $query->result_array();
 	}
 
-	public function getAllFieldsPengajuan()
+	public function getAllFieldsPengajuan($jenis_pengajuan_id, $aktif)
 	{
-		$query = $this->db->query("SELECT * FROM Mstr_Fields");
+		$query = $this->db->query(
+			"SELECT * FROM Mstr_Fields
+		LEFT JOIN Tr_Pengajuan_Field ON Tr_Pengajuan_Field.field_id = Mstr_Fields.field_id 
+			WHERE Tr_Pengajuan_Field.Jenis_Pengajuan_Id =" . $jenis_pengajuan_id .
+				" AND Tr_Pengajuan_Field.terpakai=" . $aktif
+		);
+
 		return $result = $query->result_array();
+	}
+
+	public function edit_form_field($data, $id)
+	{
+		return $this->db->update('Mstr_Fields', $data, array('field_id' => $id));
 	}
 
 	public function edit_jenis_pengajuan($data, $id)
@@ -401,13 +410,14 @@ class Pengajuan_model extends CI_Model
 		return $this->db->update('Mstr_Jenis_Pengajuan', $data, array('Jenis_Pengajuan_Id' => $id));
 	}
 
-	public function get_status_pengajuan_perbulan($status, $tahun) {
+	public function get_status_pengajuan_perbulan($status, $tahun)
+	{
 		if ($_SESSION['role'] == 5) {
 			$where = 'AND ';
 		} else {
 			$where = '';
 		}
-		
+
 		//mengambil data keseluruhan pengajuan berdsarkan status
 		return $this->db->query("SELECT COUNT(status_pengajuan_id) jumlah, 
 		MONTH(date) bulan 

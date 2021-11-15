@@ -330,7 +330,21 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
-	<?php } elseif ($fields['type'] == 'textarea') {
+	
+	<?php } elseif ($fields['type'] == 'url') {
+		$check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
+	?>
+
+		<fieldset>
+			<input type="url" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
+		</fieldset>
+		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+
+	<?php } 
+	
+	
+	elseif ($fields['type'] == 'textarea') {
 		$check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
 	?>
 		<fieldset>
@@ -906,14 +920,4 @@ function get_file_name($file_dir = 0)
 	echo $file_name[2];
 }
 
-function get_meta_name($key)
-{
-	$CI = &get_instance();
-	$name = $CI->db->select("kat_keterangan_surat")
-		->from('kat_keterangan_surat')
-		->where(array('key' => $key))
-		->get()
-		->row_array()['kat_keterangan_surat'];
 
-	return $name;
-}
