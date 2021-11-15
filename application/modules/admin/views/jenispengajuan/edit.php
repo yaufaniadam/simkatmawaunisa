@@ -329,15 +329,15 @@ $selected_kat = array_column($result, 'field_id');
 						</div>
 					</div>
 					<div class="form-group">
-						<!-- <input type="submit" name="submit" value="Edit Nominal Reward" class="btn btn-success btn-block simpan_nominal"> -->
-
-						<button type="submit" class="form-control btn btn-success" style="cursor:pointer">
+						<input type="submit" name="submit" value="Simpan Nominal Reward" class="btn btn-success btn-block simpan">
+<!-- 
+						<button type="submit" class="form-control btn btn-success simpan" style="cursor:pointer">
 							<span class="loading d-none">
 								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
 								<span class="sr-only">Loading...</span>
 							</span>
 							Simpan Nominal
-						</button>
+						</button> -->
 						<p class="mt-1 sukses_simpan text-success text-center"><i class="fas fa-check-circle"></i> Berhasil disimpan</p>
 
 					</div>
@@ -419,6 +419,7 @@ $selected_kat = array_column($result, 'field_id');
 
 									console.log(res)
 									$('#nominal_reward').find('.invalid-feedback').hide();
+									$('.simpan').next('.sukses_simpan').fadeIn().delay(500).fadeOut();
 									$('#nominal_reward').find("input, select").removeClass('is-invalid');
 								}
 							},
