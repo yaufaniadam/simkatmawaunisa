@@ -330,7 +330,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
-	
+
 	<?php } elseif ($fields['type'] == 'url') {
 		$check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
 	?>
@@ -341,10 +341,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
-	<?php } 
-	
-	
-	elseif ($fields['type'] == 'textarea') {
+	<?php } elseif ($fields['type'] == 'textarea') {
 		$check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
 	?>
 		<fieldset>
@@ -631,13 +628,17 @@ function generate_keterangan_surat($field_id, $id_surat, $pengajuan_status)
 			</div>
 
 		<?php }
-	} elseif ($fields['type'] == 'text') { ?>
+	} elseif (($fields['type'] == 'text') || ($fields['type'] == 'url')) { ?>
 
 		<input type="text" class="form-control mb-2  <?= (($fields['verifikasi'] == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" id="input-<?= $id; ?>" disabled value="<?= $fields['value'];  ?>" />
 
 		<?php if ((($pengajuan_status == 2 && $fields['verifikasi'] == 0) || ($pengajuan_status == 5 && $fields['verifikasi'] == 0))
 			&& $CI->session->userdata('role') == 2
 		) { ?>
+
+			<div class="mb-2">			
+				<input class="form-control field-field" type="text" value="" name="catatan[<?= $id; ?>]" placeholder="Beri Catatan "/>
+			</div>
 
 			<div class="d-inline">
 				<input type="hidden" name="verifikasi[<?= $id; ?>]" value="0" />
@@ -919,5 +920,3 @@ function get_file_name($file_dir = 0)
 	$file_name = explode("/", $file_dir);
 	echo $file_name[2];
 }
-
-

@@ -20,7 +20,7 @@
 								<?php //print_r($query) 
 								?>
 							</pre> -->
-							<?php
+							<?php 
 							foreach ($query as $pengajuan) {  ?>
 								<tr class="<? ($pengajuan['status_id'] == 2) ? 'proses' : ''; ?> <?= ($pengajuan['status_id'] == 4) ? 'perlu-revisi' : ''; ?>">
 									<td> <a class="judul" href="<?= base_url('mahasiswa/pengajuan/tambah/' . $pengajuan['pengajuan_id']); ?>"><?= get_meta_value('judul', $pengajuan['pengajuan_id'], false) ?></a>

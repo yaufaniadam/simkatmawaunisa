@@ -321,22 +321,27 @@ function get_meta_value($key, $id_pengajuan, $file)
 		->where(array("mf.key" => $key, 'fv.pengajuan_id' => $id_pengajuan))
 		->get();
 
+
+
 	if ($value->num_rows() > 0) {
+
 		if ($file == true) {
 			$media = $CI->db->select("*")->from('Tr_Media')->where(array('id' => $value->row_array()['value']))->get()->row_array();
 			$filename = explode('/dokumen/', $media['file']);
-			return array(
+			$value = array(
 				'file_id' => $media['id'],
 				'file' => $media['file'],
 				'thumb' => $media['thumb'],
 				'filename' => $filename[1],
 			);
 		} else {
-			return $value->row_array()['value'];
+			$value = $value->row_array()['value'];
 		}
 	} else {
-		return 'Lengkapi data';
+		$value = "Not found";
 	}
+
+	return $value;
 }
 function get_file($id)
 {

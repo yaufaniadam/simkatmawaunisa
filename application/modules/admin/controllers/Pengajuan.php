@@ -288,7 +288,6 @@ class Pengajuan extends Admin_Controller
 
 		$pengajuan = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id);
 
-
 		$data['pengajuan'] = $pengajuan;
 		$data['timeline'] = $this->db->query(
 			"SELECT 
