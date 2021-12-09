@@ -330,13 +330,12 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
-
 	<?php } elseif ($fields['type'] == 'url') {
 		$check = field_value_checker($field_value, $id, $verifikasi, $pengajuan_status, false);
 	?>
 
 		<fieldset>
-			<input type="url" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
+			<input type="url" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> placeholder="http://"/>
 		</fieldset>
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
@@ -405,7 +404,9 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 		<script>
 			$(function() {
-				$("#input-<?= $id; ?>").datepicker();
+				$("#input-<?= $id; ?>").datepicker({
+					dateFormat: "d MM yy"
+				});
 			});
 		</script>
 	<?php } elseif ($fields['type'] == 'number') {

@@ -54,8 +54,9 @@ class Pengajuan_model extends CI_Model
 
 		if ($role == '') {
 			$id_status = ' AND ps.status_id NOT IN (1)';
+			
 		} else if ($role == 1) {
-			$id_status = "AND ps.status_id =  9";
+			$id_status = "AND ps.status_id =  2";
 		} else if ($role == 2) {
 			$id_status = "AND (ps.status_id =  2 OR ps.status_id = 5 OR ps.status_id = 7)";
 		} else if ($role == 5) {
@@ -76,7 +77,7 @@ class Pengajuan_model extends CI_Model
 			LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN Mstr_Department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			WHERE ps.status_id = (SELECT MAX(status_id) FROM Tr_Pengajuan_Status ps WHERE ps.pengajuan_id = p.pengajuan_id) 
-			$id_status"
+			$id_status AND NOT ps.status_id=20"
 		);
 		return $result = $query->result_array();
 	}

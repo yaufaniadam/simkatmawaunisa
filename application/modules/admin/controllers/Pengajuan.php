@@ -701,4 +701,18 @@ class Pengajuan extends Admin_Controller
 		$this->db->where('id_penerbitan_pengajuan', $id_penerbitan_pengajuan);
 		$this->db->update('Tr_Penerbitan_Pengajuan', $data);
 	}
+
+	public function hapus($id)
+	{
+	
+		$hapus = $this->db->set('status_id', '20')
+					->set('date', date('Y-m-d h:m:s'))
+					->set('pengajuan_id', $id)
+					->set('pic', $this->session->userdata('user_id'))
+					->insert('Tr_Pengajuan_Status');
+
+		$this->session->set_flashdata('msg', 'Pengajuan berhasil dihapus!');
+		redirect(base_url('admin/pengajuan/index'));
+	}
+
 }

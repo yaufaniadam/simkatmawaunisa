@@ -50,7 +50,7 @@ class Pengajuan extends Mahasiswa_Controller
 			WHERE p.nim = $nim
 			AND ps.status_pengajuan_id = (SELECT MAX(status_pengajuan_id) 
 													FROM Tr_Pengajuan_Status  
-													WHERE pengajuan_id = p.pengajuan_id)"
+													WHERE pengajuan_id = p.pengajuan_id ) AND NOT ps.status_id=20"
 		)->result_array();
 
 		// print_r($data);
@@ -721,4 +721,18 @@ class Pengajuan extends Mahasiswa_Controller
 			return false;
 		}
 	}
+
+	public function hapus($id)
+	{
+	
+		$hapus = $this->db->set('status_id', '20')
+					->set('date', date('Y-m-d h:m:s'))
+					->set('pengajuan_id', $id)
+					->set('pic', $this->session->userdata('studentid'))
+					->insert('Tr_Pengajuan_Status');
+
+		$this->session->set_flashdata('msg', 'Pengajuan berhasil dihapus!');
+		redirect(base_url('mahasiswa/pengajuan/pengajuan_saya'));
+	}
+
 }
