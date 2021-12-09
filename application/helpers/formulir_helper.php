@@ -230,7 +230,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				 */
 				$('#drag-and-drop-zone-<?= $id; ?>').dmUploader({ //
 					url: '<?= base_url($fungsi_upload); ?>/doupload',
-					maxFileSize: 3000000, // 3 Megs 
+					maxFileSize: 5000000, // 5 Mega
 					extFilter: ['jpg', 'jpeg', 'png', 'pdf'],
 					onDragEnter: function() {
 						// Happens when dragging something over the DnD area
@@ -594,6 +594,17 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				<?php foreach ($tingkat_prestasi as $tingkat_prestasi) { ?>
 					<option value="<?= $tingkat_prestasi->Tingkat_Prestasi_Id; ?>"><?= $tingkat_prestasi->Tingkat_Prestasi; ?></option>
 				<?php } ?>
+			</select>
+		</fieldset>
+	
+	<?php } elseif ($fields['type'] == 'select_nasional_internasional') { ?>
+	
+		<fieldset>
+			<select name="<?= $fields['key']; ?>" class="custom-select">
+			
+					<option value="nasional">Nasional</option>
+					<option value="internasional">Internasional</option>
+				
 			</select>
 		</fieldset>
 	<?php } ?>

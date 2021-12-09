@@ -176,8 +176,11 @@ $selected_kat = array_column($result, 'field_id');
 															<option value='sem' <?= ($result['type'] == 'sem') ? 'selected="selected"' : ''; ?>>Semester</option>
 															<option value='ta' <?= ($result['type'] == 'ta') ? 'selected="selected"' : ''; ?>>Tahun Akademik</option>
 															<option value='date' <?= ($result['type'] == 'date') ? 'selected="selected"' : ''; ?>>Tanggal</option>
+															<option value='date_range' <?= ($result['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option>
 															<option value='url' <?= ($result['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
 															<option value='file' <?= ($result['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
+															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan Prestasi</option>
+															<option value='select_nasional_internasional' <?= ($result['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option>
 														</select>
 													</div>
 
@@ -256,8 +259,12 @@ $selected_kat = array_column($result, 'field_id');
 															<option value='sem' <?= ($field['type'] == 'sem') ? 'selected="selected"' : ''; ?>>Semester</option>
 															<option value='ta' <?= ($field['type'] == 'ta') ? 'selected="selected"' : ''; ?>>Tahun Akademik</option>
 															<option value='date' <?= ($field['type'] == 'date') ? 'selected="selected"' : ''; ?>>Tanggal</option>
-															<option value='url' <?= ($field['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
-															<option value='file' <?= ($field['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
+															<option value='date_range' <?= ($result['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option>
+															<option value='url' <?= ($result['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
+															<option value='file' <?= ($result['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
+															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan Prestasi</option>
+															<option value='select_nasional_internasional' <?= ($result['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option>
+															
 														</select>
 													</div>
 
