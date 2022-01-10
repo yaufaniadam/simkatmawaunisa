@@ -18,6 +18,68 @@ function call_scripts()
 	<script type="text/javascript" src="<?= base_url() ?>/public/plugins/daterangepicker/daterangepicker.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+	<script>
+		//aktifkan fungsi edit pada field 
+
+			$('.edit-field').on('click', function(e) {
+				e.preventDefault();
+		
+				
+				var field_id = $(this).parent().prev().attr('id');
+				var isDisabled = $('#' + field_id).prop('disabled');
+				console.log(isDisabled);
+
+				if(isDisabled === true) {
+					$('#' + field_id).removeAttr('disabled');
+					$(this).removeClass('btn-warning')
+					$(this).children('i').removeClass('fa-edit')
+					$(this).children('i').addClass('fa-window-close')
+					$(this).addClass('btn-danger')
+					$(this).children('span').text('Batal')
+					$(this).prev('a.simpan').removeClass('d-none');
+					$(this).prev('a.simpan').addClass('d-inline');
+				} else {
+					$('#' + field_id).attr('disabled','true')
+					$(this).removeClass('btn-danger')
+					$(this).children('i').removeClass('fa-window-close')
+					$(this).children('i').addClass('fa-edit')
+					$(this).addClass('btn-warning')
+					$(this).children('span').text('Edit')
+					$(this).prev('a.simpan').removeClass('d-inline');
+					$(this).prev('a.simpan').addClass('d-none');
+				}
+
+			});
+			$('a.simpan').on('click', function(e) {
+				e.preventDefault();
+				var href = "<?= base_url('admin/pengajuan/editfield/' ); ?>";
+				var valfield = $(this).parent().prev().val();
+
+				$.ajax({
+					url: href,
+					type: "POST",
+					cache: false,
+					data: {
+						id: $(this).attr("data-id"),
+						valfield: valfield,
+						pengajuan_id :  $(this).attr("data-pengajuan")
+					},
+					success: function(dataResult) {
+
+						console.log('sukses')
+
+					
+						var dataResult = JSON.parse(dataResult);
+						
+						console.log(dataResult)
+							
+						}
+					});		
+			});
+	</script>
+	
+
 	<?php
 }
 
@@ -630,22 +692,28 @@ function generate_keterangan_surat($field_id, $id_surat, $pengajuan_status)
 		->where(array('fv.pengajuan_id' => $id_surat))
 		->get();
 
-		if($field->num_rows() > 0) {
-			echo "ada";
-		} else {
-			echo "gada";
-		}
+		
 
 		$fields= $field->row_array();
 
 	if ($fields['type'] == 'textarea') { ?>
 
-		<textarea class="form-control mb-2" id="input-<?= $id; ?>" ><?= $fields['value'];  ?></textarea>
+		<textarea class="form-control mb-2" id="input-<?= $id; ?>" disabled ><?= $fields['value'];  ?></textarea>
 
 		<?php if ((($pengajuan_status == 2 && $fields['verifikasi'] == 0) || ($pengajuan_status == 5 && $fields['verifikasi'] == 0))
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) { ?>
+		
+			<span class="d-block mb-2">
+					<a href="" class="btn btn-success simpan btn-sm d-none" data-id="<?= $id; ?>" data-pengajuan="<?= $id_surat; ?>"><i class="fas fa-save"></i> Simpan</a>
+					<a href="" class="btn btn-warning btn-sm edit-field"><i class="fas fa-edit"></i> <span>Edit</span></a>					
+			</span> 
+
+			<div class="mb-2">			
+				<input class="form-control field-field" type="text" value="" name="catatan[<?= $id; ?>]" placeholder="Beri Catatan "/>
+			</div>
 			<div class="d-inline">
+				
 				<input type="hidden" name="verifikasi[<?= $id; ?>]" value="0" />
 				<label class="switch">
 					<input type="checkbox" class="verifikasi" name="verifikasi[<?= $id; ?>]" value="1" <?= ($fields['verifikasi'] == 1) ? 'checked' : ''; ?> />
@@ -659,16 +727,23 @@ function generate_keterangan_surat($field_id, $id_surat, $pengajuan_status)
 		<?php }
 	} elseif (($fields['type'] == 'text') || ($fields['type'] == 'url') || ($fields['type'] == 'judul')) { ?>
 
-		<input type="text" class="form-control mb-2  <?= (($fields['verifikasi'] == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" id="input-<?= $id; ?>" value="<?= $fields['value'];  ?>" />
+		<input type="text" class="form-control mb-2  <?= (($fields['verifikasi'] == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" id="input-<?= $id; ?>" value="<?= $fields['value'];  ?>" disabled />
 
 		<?php if ((($pengajuan_status == 2 && $fields['verifikasi'] == 0) || ($pengajuan_status == 5 && $fields['verifikasi'] == 0))
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) { ?>
 
+				<span class="d-block mb-2">
+					<a href="" class="btn btn-success simpan btn-sm d-none" data-id="<?= $id; ?>"><i class="fas fa-save"></i> Simpan</a>
+					<a href="" class="btn btn-warning btn-sm edit-field"><i class="fas fa-edit"></i> <span>Edit</span></a>					
+				</span> 
+
 			<div class="mb-2">			
 				<input class="form-control field-field" type="text" value="" name="catatan[<?= $id; ?>]" placeholder="Beri Catatan "/>
 			</div>
-
+			<span>
+					<a href="" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+				</span> 
 			<div class="d-inline">
 				<input type="hidden" name="verifikasi[<?= $id; ?>]" value="0" />
 				<label class="switch">
@@ -884,7 +959,6 @@ function generate_keterangan_surat($field_id, $id_surat, $pengajuan_status)
 
 		<?php } ?>
 	<?php } elseif ($fields['type'] == 'date') { ?>
-asdasd
 		<input type="text" class="form-control <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($fields['verifikasi'] == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" value="<?= (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $fields['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]"  />
 		<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
@@ -938,6 +1012,7 @@ asdasd
 	</div>
 
 	<script>
+		
 		$("a.opener").click(function(event) {
 			var $gbr = $(this).attr('data-href');
 			console.log($gbr);

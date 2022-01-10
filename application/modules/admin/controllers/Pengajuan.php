@@ -364,6 +364,19 @@ class Pengajuan extends Admin_Controller
 		}
 	}
 
+	public function editfield() {
+
+		$id = 	$this->input->post('id');
+		$pengajuan_id = 	$this->input->post('pengajuan_id');
+		$data = [
+			"id" => $id,
+			"pengajuan_id" => $pengajuan_id,
+			"valfield" => $this->input->post('valfield')
+		];
+
+
+		echo json_encode($data);
+	}
 	public function selesai()
 	{
 		if ($this->input->post('submit')) {
