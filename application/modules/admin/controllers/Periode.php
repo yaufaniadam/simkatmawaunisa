@@ -367,11 +367,13 @@ public function export_excel($id_periode = 0)
 			$id_periode = $this->input->post("id_periode");
 
 			$this->db->delete('Tr_Penerbitan_Pengajuan', array('id_penerbitan_pengajuan' => $id_penerbitan_pengajuan));
-			$this->session->set_flashdata('msg', 'Data berhasil dihapus!');
-
 			$this->db->delete('Tr_Pengajuan_Status', array('pengajuan_id' => $id_pengajuan, 'status_id' => 9));
+
+			$this->session->set_flashdata('msg', 'Data berhasil dihapus!');
 			redirect(base_url('admin/periode/bulan/' . $id_periode));
 		}
+
+		
 	}
 
 	public function pencairan_reward()

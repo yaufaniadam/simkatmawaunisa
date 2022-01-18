@@ -321,8 +321,6 @@ function get_meta_value($key, $id_pengajuan, $file)
 		->where(array("mf.key" => $key, 'fv.pengajuan_id' => $id_pengajuan))
 		->get();
 
-
-
 	if ($value->num_rows() > 0) {
 
 		if ($file == true) {
@@ -412,7 +410,11 @@ function get_nominal_byorder($id_pengajuan, $order) {
 		"order" => $order
 	])->get()->row_array();
 
-	return $nominal['nominal'];
+	if( $nominal ) {
+		return $nominal['nominal'];
+	} else {
+		return 0;
+	}
 
 
 }

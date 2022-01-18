@@ -47,7 +47,7 @@ class Jenispengajuan extends Admin_Controller
 				if ($result) {
 
 					$insdata_penghargaan = [
-						"order" => 0,
+						"order" => NULL,
 						"Jenis_Pengajuan_Id" => $id,
 					];
 					$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $insdata_penghargaan);
@@ -147,6 +147,7 @@ class Jenispengajuan extends Admin_Controller
 	//tambah field baru
 	public function tambah_field($id_kat)
 	{
+
 		//cek id terakhir
 		$query =  $this->db->query('SELECT TOP 1 field_id FROM Mstr_Fields
 		ORDER BY field_id DESC')->row_array();
@@ -278,6 +279,55 @@ class Jenispengajuan extends Admin_Controller
 
 			if ($tipe_reward == 2) {
 
+				// buat masukin nominal reward ke table
+				//cek nominal1 awal, ada atau tidak
+				$null_exist = $this->db->select('nominal')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where([
+					"Jenis_Pengajuan_Id" => $id,
+					"order" => 0
+				])->get()->result_array();
+
+				// echo "tipe reward 2";
+
+				if ($null_exist) {
+
+					// echo "ada null";
+				
+					// jika ada order yang NULL maka ubah dulu null ke 0
+					$this->db->where([
+						"Jenis_Pengajuan_Id" => $id,
+						"order" => 0
+					]);
+
+					$updata_penghargaan = [
+						"order" => 0
+					];
+
+					$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $updata_penghargaan);
+
+					$insdata_penghargaan = [
+						"order" => 1,
+						"Jenis_Pengajuan_Id" => $id,
+					];
+					$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $insdata_penghargaan);
+
+					//setelah itu baru insert sesuai foreach
+
+					foreach ($new_nominal as $key => $value) {
+						$this->db->where([
+							"Jenis_Pengajuan_Id" => $id,
+							"order" => $key
+						]);
+						$data_nominal = [
+							"nominal" => $value
+						];
+
+						$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_nominal);
+					} 
+			
+				} else {
+
+					// echo "ga ada null lalu cek value";
+
 					//cek order awal apkah ada yg nilainya 1
 					$nominal_exist = $this->db->select('nominal')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where([
 						"Jenis_Pengajuan_Id" => $id,
@@ -286,7 +336,8 @@ class Jenispengajuan extends Admin_Controller
 
 					if ($nominal_exist) {
 
-										
+						// echo " ga ada value";
+					
 						foreach ($new_nominal as $key => $value) {
 							$this->db->where([
 								"Jenis_Pengajuan_Id" => $id,
@@ -301,7 +352,8 @@ class Jenispengajuan extends Admin_Controller
 
 					} else {
 
-					
+						// echo "ada value";
+
 						$insdata_penghargaan = [
 							"order" => 1,
 							"Jenis_Pengajuan_Id" => $id,
@@ -320,29 +372,33 @@ class Jenispengajuan extends Admin_Controller
 							$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_nominal);
 						}
 					}
-				
+				}
 			} else {
 
 				$new_nominal = $this->input->post('nominal1');
 
 				$data_penghargaan = [
-					"nominal" => $new_nominal,
-					"order" => 0,
+					"nominal" => $new_nominal				
 				];
 			}
 
 			if ($tipe_reward == 1 || $tipe_reward == 3) {
 
+				echo "opsi 3";
+
+				// $this->db->where(array(
+				// 	'Jenis_Pengajuan_Id' => $id, 
+				// 	'order'=>'0'
+				// ));
+
+				// $this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_penghargaan);
+				$query = $this->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')
+				->where(['Jenis_Pengajuan_Id' => $id, 
+				'order'=>'0'])->get()->result_array();
+				;
+
+				print_r($query);
 				
-
-				$this->db->where(array(
-					'Jenis_Pengajuan_Id' => $id, 
-					'order'=>'0'
-				));
-
-				$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_penghargaan);
-				
-
 			}
 
 			echo json_encode(array("status" => "sukses"));

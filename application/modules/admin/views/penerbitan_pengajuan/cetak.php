@@ -67,7 +67,7 @@ header("Expires: 0");
 									<td>
 										<?php foreach ($pengajuan['file'] as $file) { ?>
 											<p class="">
-												<a class="p-2 badge badge-primary badge-pill" href="<?= $file['file']; ?>"><?= $file['filename']; ?></a>
+												<a class="p-2 badge badge-primary badge-pill" href="<?= base_url($file['file']); ?>"><?= $file['filename']; ?></a>
 											</p>
 										<?php } ?>
 									</td>
