@@ -8,8 +8,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
+	<link rel="icon" href="<?= base_url() ?>public/dist/img/favicon.ico" type="image/x-icon" />
 
-	<title>Login SIMKATMAWA UMY</title>
+	<title>Login SIMKATMAWA UNISA</title>
 
 	<!-- Custom fonts for this template-->
 	<link href="<?= base_url() ?>/public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -20,7 +21,7 @@
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-login">
 
 	<div class="container">
 
@@ -67,7 +68,7 @@
 
 
 									<div class="form-group">
-										<input type="username" name="username" class="form-control form-control-user" id="username" aria-describedby="username" placeholder="<?= (!$ref) ? "Email UMY" : "Username"; ?>">
+										<input type="username" name="username" class="form-control form-control-user" id="username" aria-describedby="username" placeholder="<?= (!$ref) ? "Email Anda" : "Username"; ?>">
 									</div>
 									<div class="form-group">
 										<input type="password" name="password" class="form-control form-control-user" id="password" placeholder="Password">

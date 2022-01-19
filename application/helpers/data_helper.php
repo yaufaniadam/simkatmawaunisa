@@ -309,7 +309,7 @@ function tampil_notif()
 function check_child($id)
 {
 	$CI = &get_instance();
-	$query = $CI->db->query("SELECT * FROM dbo.Mstr_Jenis_Pengajuan where parent='$id'");
+	$query = $CI->db->query("SELECT * FROM Mstr_Jenis_Pengajuan where parent='$id'");
 	return $query;
 }
 

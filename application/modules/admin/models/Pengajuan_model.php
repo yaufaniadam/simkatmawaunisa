@@ -240,7 +240,7 @@ class Pengajuan_model extends CI_Model
 
 	public function get_jenis_pengajuan()
 	{
-		$query = $this->db->query("SELECT * FROM dbo.Mstr_Jenis_Pengajuan");
+		$query = $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan");
 
 		return $result = $query->result_array();
 	}
@@ -250,12 +250,12 @@ class Pengajuan_model extends CI_Model
 
 		// $query1 = $this->db->query("SELECT 
 		// * 
-		// FROM dbo.Mstr_Jenis_Pengajuan jp
+		// FROM Mstr_Jenis_Pengajuan jp
 		// LEFT JOIN Mstr_Penghargaan_Rekognisi_Mahasiswa reward ON reward.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 		// where jp.Jenis_Pengajuan_Id='$id'");
 
 		$query1 = $this->db->select("*,jp.Jenis_pengajuan_Id as jpi")
-			->from('dbo.Mstr_Jenis_Pengajuan jp')
+			->from('Mstr_Jenis_Pengajuan jp')
 			->join("Mstr_Penghargaan_Rekognisi_Mahasiswa reward", "reward.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id", "LEFT")
 			->where([
 				'jp.Jenis_Pengajuan_Id' => $id

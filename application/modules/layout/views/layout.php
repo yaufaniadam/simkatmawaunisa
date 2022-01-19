@@ -10,7 +10,9 @@
 	<meta name="author" content="Program Pascasarjana UMY">
 	<meta name="robots" content="noindex, nofollow">
 
-	<title><?= (isset($title)) ? $title : 'SIMKATMAWA UMY'; ?></title>
+	<title><?= (isset($title)) ? $title : 'SIMKATMAWA UNISA'; ?></title>
+
+	<link rel="icon" href="<?= base_url() ?>public/dist/img/favicon.ico" type="image/x-icon" />
 
 	<!-- Custom fonts for this template-->
 	<link href="<?= base_url() ?>public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
