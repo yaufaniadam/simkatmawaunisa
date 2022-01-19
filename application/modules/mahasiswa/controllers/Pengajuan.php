@@ -143,7 +143,7 @@ class Pengajuan extends Mahasiswa_Controller
 		$this->db->set('pengajuan_id', $insert_id)
 			->set('status_id', 1)
 			->set('pic', $data_user['STUDENTID'])
-			->set('date', date('Y-m-d h:m:s'))
+			->set('date', 'getdate()', FALSE)
 			->insert('Tr_Pengajuan_Status');
 
 		// //ambil id surat berdasarkan last id status surat
@@ -174,10 +174,6 @@ class Pengajuan extends Mahasiswa_Controller
 
 		$this->session->set_flashdata('msg', 'Berhasil!');
 		redirect(base_url('mahasiswa/pengajuan/tambah/' . $insert_id));
-
-		// foreach ($field_id as $ad) {
-		// 	print_r($ad['field_id']);
-		// }
 
 	}
 
@@ -482,7 +478,7 @@ class Pengajuan extends Mahasiswa_Controller
 					$insert = $this->db->set('pengajuan_id', $pengajuan_id)
 						->set('status_id', $next_status)
 						->set('pic', $data_user['STUDENTID'])
-						->set('date', date('Y-m-d h:m:s'))
+						->set('date', 'getdate()', FALSE)
 						->insert('Tr_Pengajuan_Status');
 				}
 
@@ -510,15 +506,16 @@ class Pengajuan extends Mahasiswa_Controller
 				//data utk kirim email & notif ke pegawai
 				$data_for_notif = [
 					'STUDENTID' => $data_user['STUDENTID'],
+					'pengirim' => $data_user['STUDENTID'],
 					'STUDENTNAME' => $data_user['FULLNAME'],
 					'penerima' => '2',
 					'id_pengajuan' => $pengajuan_id,
 					'judul_pengajuan' => $data['title'],
-					'role' => [2],
+					'role' => [1,2],
 					'link' => base_url('admin/pengajuan/detail/' . $pengajuan_id),
 					'subjek' => 'Ada Pengajuan Prestasi Baru dari ' . $data_user['FULLNAME'],
 					'isi' => 'Ada Pengajuan Prestasi Baru dari <strong>' . $data_user['FULLNAME'] . '</strong> kategori <strong>' . $data['title'] . '</strong> yang perlu diperiksa.',
-					'id_status_notif' => 3,
+					'id_status_notif' => 2,
 				];
 
 				//sendmail & notif
@@ -731,7 +728,7 @@ class Pengajuan extends Mahasiswa_Controller
 	{
 
 		$hapus = $this->db->set('status_id', '20')
-			->set('date', date('Y-m-d h:m:s'))
+			->set('date', 'getdate()', FALSE)
 			->set('pengajuan_id', $id)
 			->set('pic', $this->session->userdata('studentid'))
 			->insert('Tr_Pengajuan_Status');

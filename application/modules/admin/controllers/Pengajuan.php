@@ -9,6 +9,7 @@ class Pengajuan extends Admin_Controller
 		$this->load->model('pengajuan_model', 'pengajuan_model');
 		$this->load->model('data_pengajuan_model', 'data_pengajuan_model');
 		$this->load->model('notif/Notif_model', 'notif_model');
+		$this->load->library('mailer');
 	}
 
 	public function index($role = 0)
@@ -16,16 +17,13 @@ class Pengajuan extends Admin_Controller
 		$data['query'] = $this->pengajuan_model->get_pengajuan($role);
 		$data['title'] = 'Semua Pengajuan';
 		$data['view'] = 'pengajuan/index';
+		$data['menu'] = 'pengajuan';
 		$this->load->view('layout/layout', $data);
 	}
 
 	public function verified()
 	{
 		if ($this->input->post('submit')) {
-
-			// echo "<pre>";
-			// 	print_r($this->input->post());
-			// echo "</pre>";
 
 			$this->form_validation->set_rules(
 				'periode_id',
@@ -47,16 +45,13 @@ class Pengajuan extends Admin_Controller
 				$data['view'] = 'pengajuan/verified';
 				$data['verified'] = true;
 				$data['daftar_periode'] = $this->periode_model->getPeriode('0');
+				$data['menu'] = 'verified';
 				$this->load->view('layout/layout', $data);
 			} else {
 
 				$daftar_pengajuan_id = $this->input->post('pengajuan_id[]');
 				$periode_id = $this->input->post('periode_id');
 
-
-				echo "<pre>daftar pengajuan";
-				print_r($daftar_pengajuan_id);
-				echo "</pre>";
 
 				foreach ($daftar_pengajuan_id as $pengajuan_id) {
 
@@ -85,19 +80,12 @@ class Pengajuan extends Admin_Controller
 						]
 					)->row_object()->fixed;
 
-				
-
 					if ($tipe_reward == 1) {
 
 						$nominal = $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						])->row_object()->nominal;
 
-						echo "<pre>";
-						print_r($nominal);
-						echo "</pre>";
-
-						echo $tipe_reward;
 
 						$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 
@@ -113,8 +101,7 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 
-						// // print_r($data);
-						// // die();
+			
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
@@ -124,7 +111,7 @@ class Pengajuan extends Admin_Controller
 
 
 					} elseif ($tipe_reward == 2) {
-						echo $tipe_reward;
+			
 
 						$anggota = get_meta_value('anggota', $pengajuan_id,false);
 						$anggota = explode(',', $anggota);		
@@ -147,58 +134,6 @@ class Pengajuan extends Admin_Controller
 
 						}
 
-
-
-						// if ($is_field_anggota_exist > 0) {
-						// 	$result = $this->db->get_where('Tr_Field_Value', ['pengajuan_id' => $pengajuan_id, 'field_id' => 77])->row_object()->value;
-						// 	$anggota = explode(',', $result);
-
-						// 	foreach ($anggota as $mahasiswa) {
-						// 		$urutan = array_search($mahasiswa, $anggota);
-						// 		$data = [
-						// 			'id_periode' => $periode_id,
-						// 			'id_pengajuan' => $pengajuan_id,
-						// 			'pic' => $_SESSION['user_id'],
-						// 			'STUDENTID' => $mahasiswa,
-						// 			'nominal' => $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
-						// 				'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
-						// 				'order' => ($urutan >= 2 ? 1 : $urutan)
-						// 			])->row_object()->nominal
-						// 			//	'prodi' => getProdiByNIM($mahasiswa)
-						// 		];
-						// 		$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
-						// 	}
-
-						// 	// die();
-
-						// 	$this->db->set('status_id', 9)
-						// 		->set('pic', $this->session->userdata('user_id'))
-						// 		->set('date', 'getdate()', FALSE)
-						// 		->set('pengajuan_id', $pengajuan_id)
-						// 		->insert('Tr_Pengajuan_Status');
-						// } else {
-						// 	$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
-						// 	$data = [
-						// 		'id_periode' => $periode_id,
-						// 		'id_pengajuan' => $pengajuan_id,
-						// 		'pic' => $_SESSION['user_id'],
-						// 		'STUDENTID' => $nim,
-						// 		'nominal' => $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
-						// 			'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
-						// 		])->row_object()->nominal
-						// 	];
-						// 	$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
-
-						// 	// print_r($data);
-						// 	// die();
-
-						// 	$this->db->set('status_id', 9)
-						// 		->set('pic', $this->session->userdata('user_id'))
-						// 		->set('date', 'getdate()', FALSE)
-						// 		->set('pengajuan_id', $pengajuan_id)
-						// 		->insert('Tr_Pengajuan_Status');
-						// }
-
 						$this->db->set('status_id', 9)
 								->set('pic', $this->session->userdata('user_id'))
 								->set('date', 'getdate()', FALSE)
@@ -212,7 +147,6 @@ class Pengajuan extends Admin_Controller
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						])->row_object()->nominal;
 
-						print_r($nominal);
 					
 						$anggota = get_meta_value('anggota', $pengajuan_id,false);
 						$anggota = explode(',', $anggota);					
@@ -242,8 +176,6 @@ class Pengajuan extends Admin_Controller
 
 						$biaya = get_meta_value('biaya', $pengajuan_id,false);
 
-						print_r($biaya);
-
 						$data = [
 							'id_periode' => $periode_id,
 							'id_pengajuan' => $pengajuan_id,
@@ -262,7 +194,7 @@ class Pengajuan extends Admin_Controller
 					} 
 				}
 
-				// redirect(base_url('admin/periode/bulan/' . $periode_id));
+				redirect(base_url('admin/periode/bulan/' . $periode_id));
 			}
 		} else {
 			$data['query'] = $this->pengajuan_model->getVerifiedPengajuan();
@@ -270,6 +202,7 @@ class Pengajuan extends Admin_Controller
 			$data['view'] = 'pengajuan/verified';
 			$data['verified'] = true;
 			$data['daftar_periode'] = $this->periode_model->getPeriode('0');
+			$data['menu'] = 'verified';
 			$this->load->view('layout/layout', $data);
 		}
 	}
@@ -390,6 +323,7 @@ class Pengajuan extends Admin_Controller
 
 		$data['title'] = 'Semua Pengajuan';
 		$data['view'] = 'pengajuan/arsip';
+		$data['menu'] = 'arsip';
 		$this->load->view('layout/layout', $data);
 	}
 
@@ -446,21 +380,14 @@ class Pengajuan extends Admin_Controller
 			$verifikasi = $this->input->post('verifikasi'); //ambil nilai 
 			$catatan = $this->input->post('catatan'); //ambil nilai 
 			$pengajuan_id = $this->input->post('pengajuan_id');
-			$id_notif = $this->input->post('id_notif');
+			$status_pengajuan = $this->input->post('rev2');
 			//set status
-			$this->db->set('status_id', $this->input->post('rev2'))
+			$this->db->set('status_id', $status_pengajuan)
 				->set('pic', $this->session->userdata('user_id'))
 				->set('date', 'getdate()', FALSE)
 				->set('pengajuan_id', $pengajuan_id)
 				->insert('Tr_Pengajuan_Status');
 
-
-			echo '<pre>';
-			print_r($verifikasi);
-			echo '</pre>';
-			echo '<pre>';
-			print_r($catatan);
-			echo '</pre>';
 
 			foreach ($verifikasi as $id => $value_verifikasi) {
 				$this->db->where(array('field_id' => $id, 'pengajuan_id' => $pengajuan_id))
@@ -484,9 +411,28 @@ class Pengajuan extends Admin_Controller
 					);
 			}
 
+			if($status_pengajuan == 4) {
+
+				//data utk kirim email & notif ke pegawai
+				$data_for_notif = [
+		
+					'pengirim' => $_SESSION['user_id'],
+					'penerima' => $this->input->post('user_id'),
+					'id_pengajuan' => $pengajuan_id,
+					'role' => [3],
+					'link' => base_url('admin/pengajuan/detail/' . $pengajuan_id),
+					'subjek' => 'Revisi Pengajuan prestasi',
+					'isi' => 'Mohon periksa kembali pengajuan Saudara.',
+					'id_status_notif' => 4,
+				];
+
+				//sendmail & notif
+				$this->mailer->send_mail($data_for_notif);
+
+			}
 
 			redirect(base_url('admin/pengajuan/detail/' . $pengajuan_id));
-			// }
+			
 		} else {
 			$data['title'] = 'Forbidden';
 			$data['view'] = 'restricted';
@@ -862,11 +808,10 @@ class Pengajuan extends Admin_Controller
 		$this->db->update('Tr_Penerbitan_Pengajuan', $data);
 	}
 
-	public function hapus($id)
-	{
+	public function hapus($id)	{
 
 		$hapus = $this->db->set('status_id', '20')
-			->set('date', date('Y-m-d h:m:s'))
+			->set('date', 'getdate()', FALSE)
 			->set('pengajuan_id', $id)
 			->set('pic', $this->session->userdata('user_id'))
 			->insert('Tr_Pengajuan_Status');

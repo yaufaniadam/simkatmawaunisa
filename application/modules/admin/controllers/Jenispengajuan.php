@@ -14,6 +14,7 @@ class Jenispengajuan extends Admin_Controller
 		$data['jenis_pengajuan'] = $this->pengajuan_model->get_jenis_pengajuan();
 		$data['title'] = 'Jenis Pengajuan';
 		$data['view'] = 'jenispengajuan/index';
+		$data['menu'] = 'jenispengajuan';
 		$this->load->view('layout/layout', $data);
 	}
 
@@ -33,6 +34,7 @@ class Jenispengajuan extends Admin_Controller
 			//	$data['all_fields'] = $this->pengajuan_model->getAllFieldsPengajuan();
 				$data['title'] = 'Tambah Jenis Pengajuan';
 				$data['view'] = 'jenispengajuan/tambah';
+				$data['menu'] = 'jenispengajuan';
 				$this->load->view('layout/layout', $data);
 			} else {
 
@@ -60,6 +62,7 @@ class Jenispengajuan extends Admin_Controller
 		//	$data['all_fields'] = $this->pengajuan_model->getAllFieldsPengajuan();
 			$data['title'] = 'Tambah Jenis Pengajuan';
 			$data['view'] = 'jenispengajuan/tambah';
+			$data['menu'] = 'jenispengajuan';
 			$this->load->view('layout/layout', $data);
 		}
 	}
@@ -100,6 +103,7 @@ class Jenispengajuan extends Admin_Controller
 				// $data['fields_pengajuan'] = $this->pengajuan_model->getAllFieldsPengajuan(getAllFieldsPengajuan($id, 1);
 
 				$data['view'] = 'jenispengajuan/edit';
+				$data['menu'] = 'jenispengajuan';
 				$this->load->view('layout/layout', $data);
 			} else {
 
@@ -140,6 +144,7 @@ class Jenispengajuan extends Admin_Controller
 
 			$data['title'] = 'Edit Jenis Pengajuan';
 			$data['view'] = 'jenispengajuan/edit';
+			$data['menu'] = 'jenispengajuan';
 			$this->load->view('layout/layout', $data);
 		}
 	}

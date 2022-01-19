@@ -26,7 +26,7 @@
 			</div>
 		<?php }
 
-		if (($pengajuan['status_id'] == 2 || $pengajuan['status_id'] == 5) && $this->session->userdata('role') == 1) {
+		if (($pengajuan['status_id'] == 2 || $pengajuan['status_id'] == 5) && (($this->session->userdata('role') == 1) || ($this->session->userdata('role') == 2) )) {
 		
 			echo form_open('admin/pengajuan/verifikasi');
 		}

@@ -235,6 +235,10 @@ function tampil_notif()
 		->where(['n.status' => 0])
 		->get();
 
+		echo "<pre>";
+		print_r($notif->result_array());
+		echo "</pre>";
+
 ?>
 	<!-- Nav Item - Alerts -->
 	<li class="nav-item dropdown no-arrow mx-1">
@@ -254,6 +258,7 @@ function tampil_notif()
 			</h6>
 
 			<?php
+					
 			if ($notif_count > 0) {
 				foreach ($notif->result_array() as $notif) {
 			?>
@@ -277,20 +282,21 @@ function tampil_notif()
 						<span class="text-gray-500">Belum ada notifikasi</span>
 					</div>
 				</a>
-			<?php	}	?>
+			<?php	} 	?>
 
-			<a class="dropdown-item text-center medium text-gray-500" href="#<? //= base_url('notif'); 
-																																				?>">Lihat semua Notifikasi</a>
+			<a class="dropdown-item text-center medium text-gray-500" href="<?= base_url('notif'); ?>">Lihat semua Notifikasi</a>
 		</div>
 	</li>
 	<script type="text/javascript">
 		$(".notif").click(function() {
+
 			var nid = this.id
 			var pid = this.name
+
 			$.ajax({
 				url: "<?= base_url('notif/read_notif/'); ?>" + nid,
 				success: function() {
-					<?php if ($_SESSION['role'] == 2) { ?>
+					<?php if (($_SESSION['role'] == 1) || ($_SESSION['role'] == 2)) { ?>
 						window.location.href = "<?= base_url('admin/pengajuan/detail/'); ?>" + pid
 					<?php } elseif ($_SESSION['role'] == 3) { ?>
 						window.location.href = "<?= base_url('mahasiswa/pengajuan/tambah/'); ?>" + pid
