@@ -98,7 +98,7 @@ function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
 			->from('tr_penerbitan_pengajuan pp')
 			->join('v_mahasiswa m', "m.STUDENTID=pp.STUDENTID")
 			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where([
 				"jp.Jenis_Pengajuan_Id" => $jenis_pengajuan_id,
 				"m.DEPARTMENT_ID" => $prodi_user
@@ -109,7 +109,7 @@ function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
 		return $CI->db->select('*')
 			->from('tr_penerbitan_pengajuan pp')
 			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where([
 				'jp.Jenis_Pengajuan_Id' => $jenis_pengajuan_id
 
@@ -228,7 +228,7 @@ function tampil_notif()
 		->from('tr_notif n')
 		->join('mstr_status_pesan sp', 'sp.status_pesan_id = n.id_status_notif')
 		->join('tr_pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
-		->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
+		->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
 		->join('v_mahasiswa m', 'm.STUDENTID=p.nim')
 		->order_by('id_notif', 'DESC')
 		->where($where)
@@ -309,7 +309,7 @@ function tampil_notif()
 function check_child($id)
 {
 	$CI = &get_instance();
-	$query = $CI->db->query("SELECT * FROM Mstr_Jenis_Pengajuan where parent='$id'");
+	$query = $CI->db->query("SELECT * FROM mstr_jenis_pengajuan where parent='$id'");
 	return $query;
 }
 

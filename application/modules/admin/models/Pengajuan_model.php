@@ -13,7 +13,7 @@ class Pengajuan_model extends CI_Model
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			WHERE ps.status_id = (SELECT MAX(status_id) FROM tr_pengajuan_status ps WHERE ps.pengajuan_id = p.pengajuan_id) 
@@ -33,7 +33,7 @@ class Pengajuan_model extends CI_Model
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN tr_penerbitan_pengajuan pp ON pp.id_pengajuan = p.pengajuan_id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = pp.STUDENTID
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
@@ -73,7 +73,7 @@ class Pengajuan_model extends CI_Model
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			WHERE ps.status_id = (SELECT MAX(status_id) FROM tr_pengajuan_status ps WHERE ps.pengajuan_id = p.pengajuan_id) 
@@ -168,7 +168,7 @@ class Pengajuan_model extends CI_Model
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			-- LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
@@ -209,7 +209,7 @@ class Pengajuan_model extends CI_Model
 		return $this->db->query(
 			"SELECT *
 			FROM tr_pengajuan p
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
+			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
@@ -240,7 +240,7 @@ class Pengajuan_model extends CI_Model
 
 	public function get_jenis_pengajuan()
 	{
-		$query = $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan");
+		$query = $this->db->query("SELECT * FROM mstr_jenis_pengajuan");
 
 		return $result = $query->result_array();
 	}
@@ -250,12 +250,12 @@ class Pengajuan_model extends CI_Model
 
 		// $query1 = $this->db->query("SELECT 
 		// * 
-		// FROM Mstr_Jenis_Pengajuan jp
+		// FROM mstr_jenis_pengajuan jp
 		// LEFT JOIN mstr_penghargaan_rekognisi_mahasiswa reward ON reward.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 		// where jp.Jenis_Pengajuan_Id='$id'");
 
 		$query1 = $this->db->select("*,jp.Jenis_pengajuan_Id as jpi")
-			->from('Mstr_Jenis_Pengajuan jp')
+			->from('mstr_jenis_pengajuan jp')
 			->join("mstr_penghargaan_rekognisi_mahasiswa reward", "reward.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id", "LEFT")
 			->where([
 				'jp.Jenis_Pengajuan_Id' => $id
@@ -361,7 +361,7 @@ class Pengajuan_model extends CI_Model
 
 	public function tambah_jenis_pengajuan($data)
 	{
-		return $this->db->insert('Mstr_Jenis_Pengajuan', $data);
+		return $this->db->insert('mstr_jenis_pengajuan', $data);
 	}
 
 	public function get_pengajuan_status($id_pengajuan)
@@ -417,7 +417,7 @@ class Pengajuan_model extends CI_Model
 
 	public function edit_jenis_pengajuan($data, $id)
 	{
-		return $this->db->update('Mstr_Jenis_Pengajuan', $data, array('Jenis_Pengajuan_Id' => $id));
+		return $this->db->update('mstr_jenis_pengajuan', $data, array('Jenis_Pengajuan_Id' => $id));
 	}
 
 	public function get_status_pengajuan_perbulan($status, $tahun)

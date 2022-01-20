@@ -192,7 +192,7 @@ public function export_excel($id_periode = 0)
 
 		$queryp = $this->db->select('*')
 			->from('tr_pengajuan p')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id', 'left')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id', 'left')
 			->where([
 				'p.pengajuan_id' => $prestasi->id_pengajuan
 			])
@@ -224,7 +224,7 @@ public function export_excel($id_periode = 0)
 		// $query = $this->db->select('*')
 		// 	->from('tr_penerbitan_pengajuan pp')
 		// 	->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-		// 	->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+		// 	->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 		// 	->join('mstr_penghargaan_rekognisi_mahasiswa prm', 'prm.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
 		// 	->where([
 		// 		'pp.id_penerbitan_pengajuan' => $id_prestasi
@@ -283,7 +283,7 @@ public function export_excel($id_periode = 0)
 	public function ngambil_field_file($pengajuan_id)
 	{
 		$data = $this->db->select('*')->from("tr_pengajuan p")
-			->join("Mstr_Jenis_Pengajuan jp", "jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id", "left")
+			->join("mstr_jenis_pengajuan jp", "jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id", "left")
 			->join("tr_pengajuan_field pf", "pf.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id", "left")
 			->join("mstr_fields mf", "mf.field_id=pf.field_id", "left")
 			// ->join("tr_field_value fv", "fv.field_id=pf.field_id", "left")

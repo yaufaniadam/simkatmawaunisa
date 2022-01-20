@@ -74,9 +74,9 @@ class Pengajuan_model extends CI_Model
 	{
 		if ($id == 0) {
 		} else {
-			$query = $this->db->query("SELECT * FROM Mstr_Jenis_pengajuan WHERE Jenis_Pengajuan_Id =$id");
+			$query = $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE Jenis_Pengajuan_Id =$id");
 
-			$isparent = $this->db->query("SELECT *  FROM Mstr_Jenis_pengajuan WHERE parent =$id");
+			$isparent = $this->db->query("SELECT *  FROM mstr_jenis_pengajuan WHERE parent =$id");
 
 			if ($isparent->num_rows() > 0) {
 				$result =  $isparent->result_array();
@@ -90,18 +90,18 @@ class Pengajuan_model extends CI_Model
 
 	public function rekognisi()
 	{
-		return $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan WHERE parent = 1")->result_array();
+		return $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE parent = 1")->result_array();
 	}
 	public function prestasi()
 	{
-		return $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan WHERE parent = 2")->result_array();
+		return $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE parent = 2")->result_array();
 	}
 
 	public function get_detail_pengajuan($pengajuan_id)
 	{
 		return $this->db->query(
 			"SELECT *, jp.jenis_pengajuan FROM tr_pengajuan p
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
+			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
 			LEFT JOIN v_mahasiswa m ON p.nim = m.STUDENTID
@@ -140,7 +140,7 @@ class Pengajuan_model extends CI_Model
 			s.badge,
 			FORMAT (ps.date, 'hh:mm:ss ') as time
 			FROM tr_pengajuan p 
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_jenis_pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
@@ -174,7 +174,7 @@ class Pengajuan_model extends CI_Model
 			LEFT JOIN tr_pengajuan_status ON tr_pengajuan_status.id_pengajuan = tr_pengajuan.pengajuan_id
 			LEFT JOIN mstr_fields ON mstr_fields.field_id = tr_pengajuan_field.field_id
 			LEFT JOIN tr_status ON tr_status.status_id = tr_pengajuan_status.id_status
-			LEFT JOIN Mstr_Jenis_Pengajuan ON Mstr_Jenis_Pengajuan.Jenis_Pengajuan_Id = tr_pengajuan.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_jenis_pengajuan ON mstr_jenis_pengajuan.Jenis_Pengajuan_Id = tr_pengajuan.Jenis_Pengajuan_Id
 			WHERE tr_pengajuan.pengajuan_id = $pengajuan_id AND tr_pengajuan_field.terpakai = 1"
 		)->result_array();
 	}

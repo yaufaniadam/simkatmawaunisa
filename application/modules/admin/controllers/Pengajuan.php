@@ -74,7 +74,7 @@ class Pengajuan extends Admin_Controller
 					// 4. Berdasarkan biaya yang dikeluarkan oleh mahasiswa (id = 0)
 
 					$tipe_reward = $this->db->get_where(
-						'Mstr_Jenis_Pengajuan',
+						'mstr_jenis_pengajuan',
 						[
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id
 						]
@@ -219,7 +219,7 @@ class Pengajuan extends Admin_Controller
 
 		$queryp = $this->db->select('*')
 			->from('tr_pengajuan p')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id', 'left')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id', 'left')
 			->where([
 				'p.pengajuan_id' => $prestasi->id_pengajuan
 			])
@@ -262,7 +262,7 @@ class Pengajuan extends Admin_Controller
 			$this->db->select('*')
 			->from('tr_penerbitan_pengajuan pp')
 			->join('tr_pengajuan p', 'pp.id_pengajuan = p.pengajuan_id', 'left')
-			->join('Mstr_Jenis_Pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
+			->join('mstr_jenis_pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
 			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_periode_penerbitan per', 'per.id_periode = pp.id_periode')
 			->where(['m.DEPARTMENT_ID' => $prodi, 'per.status' => 1])
@@ -280,7 +280,7 @@ class Pengajuan extends Admin_Controller
 			->from('tr_penerbitan_pengajuan pp')
 			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where(
 				[
 					'pp.id_penerbitan_pengajuan' => $id_penerbitan_pengajuan
@@ -303,7 +303,7 @@ class Pengajuan extends Admin_Controller
 	public function arsip($DEPARTMENT_ID = 0, $ID_JENIS_PENGAJUAN = 0)
 	{
 		$department_data = $this->db->query("SELECT * FROM mstr_department")->result_array();
-		$kategori_data = $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan WHERE Jenis_Pengajuan_Id != 12")->result_array();
+		$kategori_data = $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE Jenis_Pengajuan_Id != 12")->result_array();
 
 		$data['query'] = $this->pengajuan_model->get_arsip_pengajuan($DEPARTMENT_ID, $ID_JENIS_PENGAJUAN);
 		$data['departments'] = $department_data;
@@ -317,7 +317,7 @@ class Pengajuan extends Admin_Controller
 
 		$data['button_text_2'] = $ID_JENIS_PENGAJUAN == 0 ? 'Semua Kategori' : $this->db->query(
 			"SELECT Jenis_Pengajuan 
-			FROM Mstr_Jenis_Pengajuan 
+			FROM mstr_jenis_pengajuan 
 			WHERE Jenis_Pengajuan_Id = $ID_JENIS_PENGAJUAN"
 		)->row_object()->Jenis_Pengajuan;
 
@@ -350,7 +350,7 @@ class Pengajuan extends Admin_Controller
 		)->result_array();
 
 		$data['fields'] = $this->db->query(
-			"SELECT * FROM Mstr_Jenis_Pengajuan jp 
+			"SELECT * FROM mstr_jenis_pengajuan jp 
 			LEFT JOIN tr_pengajuan_field pf ON pf.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 			LEFT JOIN mstr_fields f ON f.field_id = pf.field_id
 			WHERE jp.Jenis_Pengajuan_Id = $jenis_pengajuan_id

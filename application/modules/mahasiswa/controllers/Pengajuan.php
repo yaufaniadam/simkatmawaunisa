@@ -44,7 +44,7 @@ class Pengajuan extends Mahasiswa_Controller
 			FORMAT (ps.date, 'dd/MM/yyyy ') as date,
 			FORMAT (ps.date, 'hh:mm:ss ') as time
 			FROM tr_pengajuan p 
-			LEFT JOIN Mstr_Jenis_Pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_jenis_pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
@@ -67,7 +67,7 @@ class Pengajuan extends Mahasiswa_Controller
 			$this->db->select('*')
 			->from('tr_penerbitan_pengajuan pp')
 			->join('tr_pengajuan p', 'pp.id_pengajuan = p.pengajuan_id', 'left')
-			->join('Mstr_Jenis_Pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
+			->join('mstr_jenis_pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
 			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_periode_penerbitan per', 'per.id_periode = pp.id_periode')
 			->where(['pp.STUDENTID' => $user_nim, 'per.status' => 1])
@@ -85,7 +85,7 @@ class Pengajuan extends Mahasiswa_Controller
 			->from('tr_penerbitan_pengajuan pp')
 			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where(
 				[
 					'pp.id_penerbitan_pengajuan' => $id_penerbitan_pengajuan
@@ -151,9 +151,9 @@ class Pengajuan extends Mahasiswa_Controller
 
 
 		$field_id = $this->db->query(
-			"SELECT tr_pengajuan_field.field_id  FROM Mstr_Jenis_Pengajuan
-			LEFT JOIN tr_pengajuan_field ON tr_pengajuan_field.Jenis_Pengajuan_Id = Mstr_Jenis_Pengajuan.Jenis_Pengajuan_Id
-			WHERE Mstr_Jenis_Pengajuan.Jenis_Pengajuan_Id = $id AND tr_pengajuan_field.terpakai = 1"
+			"SELECT tr_pengajuan_field.field_id  FROM mstr_jenis_pengajuan
+			LEFT JOIN tr_pengajuan_field ON tr_pengajuan_field.Jenis_Pengajuan_Id = mstr_jenis_pengajuan.Jenis_Pengajuan_Id
+			WHERE mstr_jenis_pengajuan.Jenis_Pengajuan_Id = $id AND tr_pengajuan_field.terpakai = 1"
 		)->result_array();
 
 		// echo '<pre>'; print_r($field_id); echo '</pre>';

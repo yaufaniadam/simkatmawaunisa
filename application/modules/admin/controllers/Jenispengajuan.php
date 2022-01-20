@@ -273,8 +273,8 @@ class Jenispengajuan extends Admin_Controller
 			echo json_encode(array("status" => "Error", "error" => $error));
 
 		} else {
-			//ubah jenis nominal (column:fixed) pada tabel Mstr_Jenis_Pengajuan
-			$this->db->update('Mstr_Jenis_Pengajuan', ["fixed" => $tipe_reward], array('Jenis_Pengajuan_Id' => $id));
+			//ubah jenis nominal (column:fixed) pada tabel mstr_jenis_pengajuan
+			$this->db->update('mstr_jenis_pengajuan', ["fixed" => $tipe_reward], array('Jenis_Pengajuan_Id' => $id));
 
 			$new_nominal = array(
 				"0" => $this->input->post('nominal1'),
@@ -389,7 +389,7 @@ class Jenispengajuan extends Admin_Controller
 	public function nominal_penghargaan()
 	{
 		$penghargaan = $this->db->select('*')
-			->from('Mstr_Jenis_Pengajuan jp')
+			->from('mstr_jenis_pengajuan jp')
 			->join('mstr_penghargaan_rekognisi_mahasiswa penghargaan', 'penghargaan.Jenis_Pengajuan_Id=jp.Jenis_Pengajuan_Id')
 			->where([
 				'parent' => 12
