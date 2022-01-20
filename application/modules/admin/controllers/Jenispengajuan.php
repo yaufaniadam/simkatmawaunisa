@@ -153,8 +153,8 @@ class Jenispengajuan extends Admin_Controller
 	public function tambah_field($id_kat)
 	{
 		//cek id terakhir
-		$query =  $this->db->query('SELECT TOP 1 field_id FROM mstr_fields
-		ORDER BY field_id DESC')->row_array();
+		$query =  $this->db->query('SELECT field_id FROM mstr_fields
+		ORDER BY field_id DESC LIMIT 1')->row_array();
 
 		$data = [
 			"field" => "Nama Field " . $query['field_id'],
