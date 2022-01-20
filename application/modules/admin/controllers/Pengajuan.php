@@ -532,8 +532,7 @@ class Pengajuan extends Admin_Controller
 
 					$result = $this->notif_model->send_notif($data_notif);
 
-					$this->session->set_flashdata('msg', 'Surat sudah diberi persetujuan oleh Direktur Pascasarjana!');
-					redirect(base_url('admin/pengajuan/detail/' . $id_pengajuan));
+				
 				}
 			} elseif ($this->session->userdata('role') == 6 && $this->session->userdata('id_prodi') == $this->input->post('prodi')) { // kaprodi
 				$id_pengajuan = $this->input->post('id_pengajuan');

@@ -18,18 +18,18 @@ class Mailer
     // $mail = new PHPMailer(true); //Argument true in constructor enables exceptions
 
     // $mail->From = 'noreply.simkatmawa@umy.ac.id';
-    // $mail->FromName = "LPKA UMY - SIMKATMAWA";
+    // $mail->FromName = "BKA UNISA- SIMKATMAWA";
     // //$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
     // $mail->isSMTP();                                            // Send using SMTP
     // $mail->Host       = 'pod51003.outlook.com';                    // Set the SMTP server to send through
     // $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
     // $mail->Username   = 'noreply.simkatmawa@umy.ac.id';                     // SMTP username
-    // $mail->Password   = 'UMYbsi21';
+    // $mail->Password   = 'UNISAbsi21';
     // // $mail->Password   = decrypt_url($this->get_settings('password_email'));
     // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
     // $mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
-    // $mail->setFrom('noreply.simkatmawa@umy.ac.id', 'LPKA UMY - SIMKATMAWA');
+    // $mail->setFrom('noreply.simkatmawa@umy.ac.id', 'BKA UNISA- SIMKATMAWA');
     // $mail->isHTML(true);
 
     // $role = $data['role'];
@@ -206,7 +206,7 @@ class Mailer
                                     <a href="' . $data['link'] . '" style="display:inline-block; background:#a81616; padding:10px 20px; color:white; text-decoration: none; border-radius:20px;">Klik di sini untuk melihat</a>
                                   </div>
                                   <div style="margin-top:20px; margin-bottom:0px; text-align:center; ">
-                                    <a style="color:#777777" href="http://simkatmawa.umy.ac.id">Simkatmawa UMY</a> 
+                                    <a style="color:#777777" href="http://simkatmawa.umy.ac.id">Simkatmawa UNISA</a> 
                                   </div>
                                 </td>
                               </tr>
@@ -288,7 +288,7 @@ class Mailer
                                 <td style="overflow-wrap:break-word;word-break:break-word;padding:19px 10px 10px;font-family:georgia,palatino;" align="left">
 
                                   <div style="color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word;">
-                                    <p style="font-size: 14px; line-height: 140%;">Copyright 2021 LPKA UMY</p>
+                                    <p style="font-size: 14px; line-height: 140%;">Copyright 2021 BKA UNISA</p>
                                   </div>
 
                                 </td>

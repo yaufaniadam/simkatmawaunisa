@@ -1,6 +1,7 @@
 ##
 ## PHPExcel
-##
+##
+
 ## Copyright (c) 2006 - 2013 PHPExcel
 ##
 ## This library is free software; you can redistribute it and/or
@@ -125,7 +126,7 @@ IMPRODUCT		= IMPRODUCT			##	Zwraca wartość iloczynu liczb zespolonych.
 IMREAL			= IMREAL			##	Zwraca wartość części rzeczywistej liczby zespolonej.
 IMSIN			= IMSIN				##	Zwraca wartość sinusa liczby zespolonej.
 IMSQRT			= IMSQRT			##	Zwraca wartość pierwiastka kwadratowego z liczby zespolonej.
-IMSUB			= IMSUB				##	Zwraca wartość różnicy dwóch liczb zespolonych.
+IMSUB			= IMSUB				##	Zwraca wartość rUNISAcy dwóch liczb zespolonych.
 IMSUM			= IMSUM				##	Zwraca wartość sumy liczb zespolonych.
 OCT2BIN			= OCT2BIN			##	Konwertuje liczbę w postaci ósemkowej na liczbę w postaci dwójkowej.
 OCT2DEC			= OCT2DEC			##	Konwertuje liczbę w postaci ósemkowej na liczbę w postaci dziesiętnej.
@@ -177,7 +178,7 @@ PRICEMAT		= PRICEMAT			##	Zwraca cenę za 100 zł wartości nominalnej papieru w
 PV			= PV				##	Zwraca wartość bieżącą lokaty.
 RATE			= RATE				##	Zwraca wysokość stopy procentowej w okresie raty rocznej.
 RECEIVED		= RECEIVED			##	Zwraca wartość kapitału otrzymanego przy wykupie papieru wartościowego całkowicie ulokowanego.
-SLN			= SLN				##	Zwraca amortyzację środka trwałego za jeden okres metodą liniową.
+SLN			= SLN				##	Zwraca amortyzację środka trwałego za jeden okres metodą UNISAową.
 SYD			= SYD				##	Zwraca amortyzację środka trwałego za dany okres metodą sumy cyfr lat amortyzacji.
 TBILLEQ			= TBILLEQ			##	Zwraca rentowność ekwiwalentu obligacji dla bonu skarbowego.
 TBILLPRICE		= TBILLPRICE			##	Zwraca cenę za 100 zł wartości nominalnej bonu skarbowego.
@@ -297,7 +298,7 @@ SIN			= SIN				##	Zwraca sinus danego kąta.
 SINH			= SINH				##	Zwraca sinus hiperboliczny liczby.
 SQRT			= PIERWIASTEK			##	Zwraca dodatni pierwiastek kwadratowy.
 SQRTPI			= SQRTPI			##	Zwraca pierwiastek kwadratowy iloczynu (liczba * Pi).
-SUBTOTAL		= SUMY.POŚREDNIE		##	Zwraca sumę częściową listy lub bazy danych.
+SUBTOTAL		= SUNISA.POŚREDNIE		##	Zwraca sumę częściową listy lub bazy danych.
 SUM			= SUMA				##	Dodaje argumenty.
 SUMIF			= SUMA.JEŻELI			##	Dodaje komórki określone przez podane kryterium.
 SUMIFS			= SUMA.WARUNKÓW			##	Dodaje komórki w zakresie, które spełniają wiele kryteriów.

@@ -651,12 +651,12 @@ class Pengajuan extends Mahasiswa_Controller
 
 		// $mpdf->SetHTMLHeader('
 		// <div style="text-align: left; margin-left:2cm">
-		// 		<img width="390" height="" src="' . base_url() . '/public/dist/img/logokop-lpka.jpg" />
+		// 		<img width="390" height="" src="' . base_url() . '/public/dist/img/logokop-BKA.jpg" />
 		// </div>');
 		// $mpdf->SetHTMLFooter('
 
 		// <div style="text-align:center; background:red;">
-		// 	<img width="" height="" src="' . base_url() . '/public/dist/img/footerkop-lpka.jpg" />
+		// 	<img width="" height="" src="' . base_url() . '/public/dist/img/footerkop-BKA.jpg" />
 		// </div>');
 
 		// $mpdf->WriteHTML($view);
@@ -696,7 +696,7 @@ class Pengajuan extends Mahasiswa_Controller
 		$pattern = "/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i";
 		if ($str != '') {
 			if (!preg_match($pattern, $str)) {
-				$this->form_validation->set_message('url_check', 'Format URL tidak valid. Contoh format URL yang benar: http://umy.ac.id atau https://umy.ac.id');
+				$this->form_validation->set_message('url_check', 'Format URL tidak valid. Contoh format URL yang benar: http://unisa.ac.id atau https://unisa.ac.id');
 				return false;
 			} else {
 				return true;
@@ -713,7 +713,7 @@ class Pengajuan extends Mahasiswa_Controller
 		$pattern = "/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*(?:\.[A-Z0-9][A-Z0-9_-]*)+):?(\d+)?\/?/i";
 		if ($str != '') {
 			if (!preg_match($pattern, $str)) {
-				$this->form_validation->set_message('url_check_notrequired', 'Format URL tidak valid. Contoh format URL yang benar: http://umy.ac.id atau https://umy.ac.id');
+				$this->form_validation->set_message('url_check_notrequired', 'Format URL tidak valid. Contoh format URL yang benar: http://unisa.ac.id atau https://unisa.ac.id');
 				return false;
 			} else {
 				return true;

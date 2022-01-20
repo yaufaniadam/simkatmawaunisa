@@ -390,7 +390,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
 
 				<div class="bg-white p-3 rounded-sm">
-					<strong>Catatan dari LPKA:</strong><hr>
+					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
 					<?php echo ($catatan !='') ?  $catatan : ''; ?>
 				</div>				
@@ -531,7 +531,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
 				<div class="bg-white p-3 rounded-sm">
-					<strong>Catatan dari LPKA:</strong><hr>
+					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
 					<?php echo ($catatan !='') ?  $catatan : ''; ?>
 				</div>				
@@ -554,7 +554,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
 				<div class="bg-white p-3 rounded-sm">
-					<strong>Catatan dari LPKA:</strong><hr>
+					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
 					<?php echo ($catatan !='') ?  $catatan : ''; ?>
 				</div>				
@@ -581,7 +581,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
 				<div class="bg-white p-3 rounded-sm">
-					<strong>Catatan dari LPKA:</strong><hr>
+					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
 					<?php echo ($catatan !='') ?  $catatan : ''; ?>
 				</div>				
@@ -603,7 +603,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
 				<div class="bg-white p-3 rounded-sm">
-					<strong>Catatan dari LPKA:</strong><hr>
+					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
 					<?php echo ($catatan !='') ?  $catatan : ''; ?>
 				</div>				

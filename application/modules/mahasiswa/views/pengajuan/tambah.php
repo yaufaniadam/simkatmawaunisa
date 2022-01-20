@@ -17,7 +17,7 @@
 							<div class="d-flex align-items-center mt-4">
 								<div>
 									<h3>Selamat!</h3>
-									<p>Pengajuan prestasi Anda dinyatakan lolos seleksi dan berhak memperoleh penghargaan dari UMY.</p>
+									<p>Pengajuan prestasi Anda dinyatakan lolos seleksi dan berhak memperoleh penghargaan dari UNISA.</p>
 									<!-- <p> <a href="" class="badge bg-success" style="color:#fff;">Klik</a> untuk informasi lebih lanjut.</p> -->
 								</div>
 							</div>
