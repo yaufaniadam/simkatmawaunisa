@@ -165,7 +165,7 @@ function profPic($id, $w)
 {
 	if ($id) {
 		$year = substr($id, 0, 4);
-		$pic = '<div style="width:' . $w . 'px;height:' . $w . 'px; background:url(https://krs.umy.ac.id/FotoMhs/' . $year . '/' . $id . '.jpg) center top no-repeat; background-size:100%;" class="img-profile rounded-circle"></div>';
+		$pic = '<div style="width:' . $w . 'px;height:' . $w . 'px; background:url(' . base_url() . 'public/dist/img/mhswi.png) center top no-repeat; background-size:100%;" class="img-profile rounded-circle"></div>';
 	} else {
 		$pic = '<div style="width:' . $w . 'px;height:' . $w . 'px; background:url(https://source.unsplash.com/QAB-WJcbgJk/60x60) center top no-repeat; background-size:100%;" class="img-profile rounded-circle"></div>';
 	}
