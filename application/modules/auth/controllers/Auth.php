@@ -77,7 +77,7 @@ class Auth extends CI_Controller
 					if ($ceknum == 0) {
 					
 						$result = $this->db->query(
-							"SELECT * from V_Mahasiswa m
+							"SELECT * from v_mahasiswa m
 						LEFT JOIN Mstr_Department d on d.DEPARTMENT_ID = m.DEPARTMENT_ID
 						WHERE email ='$email' "
 						)->row_array();
