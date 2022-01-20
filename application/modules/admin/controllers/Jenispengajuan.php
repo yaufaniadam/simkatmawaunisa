@@ -52,7 +52,7 @@ class Jenispengajuan extends Admin_Controller
 						"order" => 0,
 						"Jenis_Pengajuan_Id" => $id,
 					];
-					$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $insdata_penghargaan);
+					$this->db->insert('mstr_penghargaan_rekognisi_mahasiswa', $insdata_penghargaan);
 
 					$this->session->set_flashdata('msg', 'Kategori Pengajuan berhasil ditambah!');
 					redirect(base_url('admin/jenispengajuan/edit/' . $id));
@@ -153,7 +153,7 @@ class Jenispengajuan extends Admin_Controller
 	public function tambah_field($id_kat)
 	{
 		//cek id terakhir
-		$query =  $this->db->query('SELECT TOP 1 field_id FROM Mstr_Fields
+		$query =  $this->db->query('SELECT TOP 1 field_id FROM mstr_fields
 		ORDER BY field_id DESC')->row_array();
 
 		$data = [
@@ -161,7 +161,7 @@ class Jenispengajuan extends Admin_Controller
 			"key" => "key_" . $query['field_id'],
 		];
 
-		$this->db->insert('Mstr_Fields', $data);
+		$this->db->insert('mstr_fields', $data);
 		$last_id = $this->db->insert_id();
 		if ($last_id) {
 
@@ -171,7 +171,7 @@ class Jenispengajuan extends Admin_Controller
 				"terpakai" => 0,
 			];
 
-			$this->db->insert('Tr_Pengajuan_Field', $data);
+			$this->db->insert('tr_pengajuan_field', $data);
 
 			echo json_encode(array("status" => "Sukses"));
 		}
@@ -284,7 +284,7 @@ class Jenispengajuan extends Admin_Controller
 			if ($tipe_reward == 2) {
 
 					//cek order awal apkah ada yg nilainya 1
-					$nominal_exist = $this->db->select('nominal')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where([
+					$nominal_exist = $this->db->select('nominal')->from('mstr_penghargaan_rekognisi_mahasiswa')->where([
 						"Jenis_Pengajuan_Id" => $id,
 						"order" => 1
 					])->get()->result_array();
@@ -301,7 +301,7 @@ class Jenispengajuan extends Admin_Controller
 								"nominal" => $value
 							];
 
-							$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_nominal);
+							$this->db->update('mstr_penghargaan_rekognisi_mahasiswa', $data_nominal);
 						}
 
 					} else {
@@ -312,7 +312,7 @@ class Jenispengajuan extends Admin_Controller
 							"Jenis_Pengajuan_Id" => $id,
 						];
 
-						$this->db->insert('Mstr_Penghargaan_Rekognisi_Mahasiswa', $insdata_penghargaan);
+						$this->db->insert('mstr_penghargaan_rekognisi_mahasiswa', $insdata_penghargaan);
 						foreach ($new_nominal as $key => $value) {
 							$this->db->where([
 								"Jenis_Pengajuan_Id" => $id,
@@ -322,7 +322,7 @@ class Jenispengajuan extends Admin_Controller
 								"nominal" => $value
 							];
 
-							$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_nominal);
+							$this->db->update('mstr_penghargaan_rekognisi_mahasiswa', $data_nominal);
 						}
 					}
 				
@@ -345,7 +345,7 @@ class Jenispengajuan extends Admin_Controller
 					'order'=>'0'
 				));
 
-				$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_penghargaan);
+				$this->db->update('mstr_penghargaan_rekognisi_mahasiswa', $data_penghargaan);
 				
 
 			}
@@ -390,7 +390,7 @@ class Jenispengajuan extends Admin_Controller
 	{
 		$penghargaan = $this->db->select('*')
 			->from('Mstr_Jenis_Pengajuan jp')
-			->join('Mstr_Penghargaan_Rekognisi_Mahasiswa penghargaan', 'penghargaan.Jenis_Pengajuan_Id=jp.Jenis_Pengajuan_Id')
+			->join('mstr_penghargaan_rekognisi_mahasiswa penghargaan', 'penghargaan.Jenis_Pengajuan_Id=jp.Jenis_Pengajuan_Id')
 			->where([
 				'parent' => 12
 			])

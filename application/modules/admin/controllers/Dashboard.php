@@ -18,7 +18,7 @@ class Dashboard extends Admin_Controller
 			"SELECT 
 			DISTINCT(jp.Jenis_Pengajuan),
 			jp.Jenis_Pengajuan_Id
-			FROM Tr_Pengajuan p 
+			FROM tr_pengajuan p 
 			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id"
 		)->result_array();
 		$data['title'] = 'Dashboard';
@@ -35,7 +35,7 @@ class Dashboard extends Admin_Controller
 		// 	"SELECT 
 		// 	DISTINCT(jp.Jenis_Pengajuan),
 		// 	jp.Jenis_Pengajuan_Id
-		// 	FROM Tr_Pengajuan p 
+		// 	FROM tr_pengajuan p 
 		// 	LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id"
 		// )->result_array();
 		$data['title'] = 'Dashboard';
