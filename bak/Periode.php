@@ -124,7 +124,7 @@ class Periode extends Admin_Controller
 			foreach ($pengajuan as $pengajuan) {
 				$this->db->set('status_id', 10)
 					->set('pic', $this->session->userdata('user_id'))
-					->set('date', 'getdate()', FALSE)
+					->set('date', 'NOW()', FALSE)
 					->set('pengajuan_id', $pengajuan['id_pengajuan'])
 					->insert('Tr_Pengajuan_Status');
 			}

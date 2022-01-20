@@ -105,7 +105,7 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
-							->set('date', 'getdate()', FALSE)
+							->set('date', 'NOW()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('Tr_Pengajuan_Status');
 
@@ -136,7 +136,7 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->set('status_id', 9)
 								->set('pic', $this->session->userdata('user_id'))
-								->set('date', 'getdate()', FALSE)
+								->set('date', 'NOW()', FALSE)
 								->set('pengajuan_id', $pengajuan_id)
 								->insert('Tr_Pengajuan_Status');
 
@@ -166,7 +166,7 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
-							->set('date', 'getdate()', FALSE)
+							->set('date', 'NOW()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('Tr_Pengajuan_Status');
 
@@ -188,7 +188,7 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
-							->set('date', 'getdate()', FALSE)
+							->set('date', 'NOW()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('Tr_Pengajuan_Status');
 					} 
@@ -384,7 +384,7 @@ class Pengajuan extends Admin_Controller
 			//set status
 			$this->db->set('status_id', $status_pengajuan)
 				->set('pic', $this->session->userdata('user_id'))
-				->set('date', 'getdate()', FALSE)
+				->set('date', 'NOW()', FALSE)
 				->set('pengajuan_id', $pengajuan_id)
 				->insert('Tr_Pengajuan_Status');
 
@@ -474,7 +474,7 @@ class Pengajuan extends Admin_Controller
 			//set status
 			$this->db->set('status_id', 10)
 				->set('pic', $this->session->userdata('user_id'))
-				->set('date', 'getdate()', FALSE)
+				->set('date', 'NOW()', FALSE)
 				->set('pengajuan_id', $pengajuan_id)
 				->insert('Tr_Pengajuan_Status');
 
@@ -811,7 +811,7 @@ class Pengajuan extends Admin_Controller
 	public function hapus($id)	{
 
 		$hapus = $this->db->set('status_id', '20')
-			->set('date', 'getdate()', FALSE)
+			->set('date', 'NOW()', FALSE)
 			->set('pengajuan_id', $id)
 			->set('pic', $this->session->userdata('user_id'))
 			->insert('Tr_Pengajuan_Status');

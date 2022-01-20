@@ -346,7 +346,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 			<!-- pad akondisi default (data value kosong), form dNd muncul, listing tidak muncul -->
 			<br>
 	
-			<input type="text" class="id-dokumen-<?= $id; ?> form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
+			<input type="hidden" class="id-dokumen-<?= $id; ?> form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
 
 			<div class="tampilUploader">
 				<div id="drag-and-drop-zone-<?= $id; ?>" class="dm-uploader p-3 <?= $form; ?> <?= $error; ?>">

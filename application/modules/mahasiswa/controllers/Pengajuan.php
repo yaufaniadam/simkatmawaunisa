@@ -143,7 +143,7 @@ class Pengajuan extends Mahasiswa_Controller
 		$this->db->set('pengajuan_id', $insert_id)
 			->set('status_id', 1)
 			->set('pic', $data_user['STUDENTID'])
-			->set('date', 'getdate()', FALSE)
+			->set('date', 'NOW()', FALSE)
 			->insert('Tr_Pengajuan_Status');
 
 		// //ambil id surat berdasarkan last id status surat
@@ -478,7 +478,7 @@ class Pengajuan extends Mahasiswa_Controller
 					$insert = $this->db->set('pengajuan_id', $pengajuan_id)
 						->set('status_id', $next_status)
 						->set('pic', $data_user['STUDENTID'])
-						->set('date', 'getdate()', FALSE)
+						->set('date', 'NOW()', FALSE)
 						->insert('Tr_Pengajuan_Status');
 				}
 
@@ -728,7 +728,7 @@ class Pengajuan extends Mahasiswa_Controller
 	{
 
 		$hapus = $this->db->set('status_id', '20')
-			->set('date', 'getdate()', FALSE)
+			->set('date', 'NOW()', FALSE)
 			->set('pengajuan_id', $id)
 			->set('pic', $this->session->userdata('studentid'))
 			->insert('Tr_Pengajuan_Status');

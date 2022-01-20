@@ -188,7 +188,7 @@ class Pengajuan_model extends CI_Model
 			distinct(MONTH(ps.date)) AS bulan 
 			FROM Tr_Pengajuan_Status ps
 			WHERE ps.status_id = 2 
-			-- AND FORMAT (ps.date, 'yyyy') = YEAR(getdate())
+			-- AND FORMAT (ps.date, 'yyyy') = YEAR(NOW())
 			ORDER BY bulan ASC
 			"
 		)->result_array();
@@ -199,7 +199,7 @@ class Pengajuan_model extends CI_Model
 		// LEFT JOIN Tr_Pengajuan p ON p.pengajuan_id = ps.pengajuan_id
 		// LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
 		// WHERE ps.status_id = 2 
-		// AND FORMAT (ps.date, 'yyyy') = YEAR(getdate())
+		// AND FORMAT (ps.date, 'yyyy') = YEAR(NOW())
 		// AND m.DEPARTMENT_ID = '1'
 		// ORDER BY bulan DESC
 	}
