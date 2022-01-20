@@ -206,7 +206,7 @@ class Mailer
                                     <a href="' . $data['link'] . '" style="display:inline-block; background:#a81616; padding:10px 20px; color:white; text-decoration: none; border-radius:20px;">Klik di sini untuk melihat</a>
                                   </div>
                                   <div style="margin-top:20px; margin-bottom:0px; text-align:center; ">
-                                    <a style="color:#777777" href="http://simkatmawa.umy.ac.id">Simkatmawa UNISA</a> 
+                                    <a style="color:#777777" href="http://simkatmawa.unisa.ac.id">Simkatmawa UNISA</a> 
                                   </div>
                                 </td>
                               </tr>
