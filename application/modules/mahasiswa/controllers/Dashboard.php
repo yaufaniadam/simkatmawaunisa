@@ -10,28 +10,28 @@ class Dashboard extends Mahasiswa_Controller
 
 	public function index()
 	{
-		$notif = $this->db
-			->select(
-				"*,
-				DATENAME(month,n.tanggal_masuk) as bulan_masuk_surat,
-				FORMAT (n.tanggal_masuk, 'dd') as tanggal_masuk_surat",
-			)
-			->from('Tr_Notif n')
-			->join('Mstr_Status_Pesan sp', 'sp.status_pesan_id = n.id_status_notif')
-			->join('Tr_Pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
-			->join('V_Mahasiswa m', 'm.STUDENTID=p.nim')
-			->limit(10)
-			->order_by('id_notif', 'DESC')
-			->where(
-				[
-					// 'n.status' => null,
-					// 'n.status' => 0,
-					'n.role' => 3,
-					'n.penerima' => $_SESSION['studentid']
-				]
-			)
-			->get();
+		// $notif = $this->db
+		// 	->select(
+		// 		"*,
+		// 		MONTH(month,n.tanggal_masuk) as bulan_masuk_surat,
+		// 		FORMAT (n.tanggal_masuk, 'dd') as tanggal_masuk_surat",
+		// 	)
+		// 	->from('Tr_Notif n')
+		// 	->join('Mstr_Status_Pesan sp', 'sp.status_pesan_id = n.id_status_notif')
+		// 	->join('Tr_Pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
+		// 	->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
+		// 	->join('V_Mahasiswa m', 'm.STUDENTID=p.nim')
+		// 	->limit(10)
+		// 	->order_by('id_notif', 'DESC')
+		// 	->where(
+		// 		[
+		// 			// 'n.status' => null,
+		// 			// 'n.status' => 0,
+		// 			'n.role' => 3,
+		// 			'n.penerima' => $_SESSION['studentid']
+		// 		]
+		// 	)
+		// 	->get();
 
 		$pengajuan_saya = $this->db
 			->get_where(
@@ -42,6 +42,8 @@ class Dashboard extends Mahasiswa_Controller
 			)->num_rows();
 
 		// $is_field_anggota_exist = $this->db->get_where('Tr_Pengajuan_Field', ['field_id' => 77])->num_rows();
+
+		// echo '<pre>'; print_r($pengajuan_saya); echo '</pre>';
 
 		$prestasi_saya = $this->db
 			->select('*')
@@ -55,9 +57,11 @@ class Dashboard extends Mahasiswa_Controller
 			)->get()
 			->num_rows();
 
+			// echo '<pre>'; print_r($prestasi_saya); echo '</pre>';
+
 		$data['pengajuan_saya'] = $pengajuan_saya;
 		$data['prestasi_saya'] = $prestasi_saya;
-		$data['notif'] = $notif->result_array();
+		// $data['notif'] = $notif->result_array();
 		$data['title'] = 'Dashboard';
 		$data['view'] = 'dashboard/index';
 		$this->load->view('layout/layout', $data);

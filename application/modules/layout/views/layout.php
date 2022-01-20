@@ -67,7 +67,7 @@
 			<footer class="sticky-footer bg-white">
 				<div class="container my-auto">
 					<div class="copyright text-center my-auto">
-						<span>Copyright &copy; 2020 <a href="http://lpka.umy.ac.id">LPKA UMY</a>.
+						<span>Copyright &copy; 2021 <a href="http://unisa.ac.id">Unisa Yogyakarta</a>.
 							All rights reserved.</span>
 					</div>
 				</div>

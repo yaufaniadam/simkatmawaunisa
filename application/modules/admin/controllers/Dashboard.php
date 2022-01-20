@@ -11,18 +11,18 @@ class Dashboard extends Admin_Controller
 
 	public function index()
 	{
-		// $data['pengajuan_perlu_diproses'] = $this->pengajuan_model->pengajuan_perlu_diproses();
-		// $data['pengajuan_selesai'] = $this->pengajuan_model->pengajuan_selesai();
-		// $data['nama_bulan'] = $this->pengajuan_model->getbulan();
-		// $data['jenis_pengajuan'] = $this->db->query(
-		// 	"SELECT 
-		// 	DISTINCT(jp.Jenis_Pengajuan),
-		// 	jp.Jenis_Pengajuan_Id
-		// 	FROM Tr_Pengajuan p 
-		// 	LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id"
-		// )->result_array();
+		$data['pengajuan_perlu_diproses'] = $this->pengajuan_model->pengajuan_perlu_diproses();
+		$data['pengajuan_selesai'] = $this->pengajuan_model->pengajuan_selesai();
+		$data['nama_bulan'] = $this->pengajuan_model->getbulan();
+		$data['jenis_pengajuan'] = $this->db->query(
+			"SELECT 
+			DISTINCT(jp.Jenis_Pengajuan),
+			jp.Jenis_Pengajuan_Id
+			FROM Tr_Pengajuan p 
+			LEFT JOIN Mstr_Jenis_Pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id"
+		)->result_array();
 		$data['title'] = 'Dashboard';
-		$data['view'] = 'blank';
+		$data['view'] = 'dashboard/index';
 		$data['menu'] = 'dashboard';
 		$this->load->view('layout/layout', $data);
 	}

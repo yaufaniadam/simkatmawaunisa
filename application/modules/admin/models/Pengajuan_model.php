@@ -188,7 +188,7 @@ class Pengajuan_model extends CI_Model
 			distinct(MONTH(ps.date)) AS bulan 
 			FROM Tr_Pengajuan_Status ps
 			WHERE ps.status_id = 2 
-			AND FORMAT (ps.date, 'yyyy') = YEAR(getdate())
+			-- AND FORMAT (ps.date, 'yyyy') = YEAR(getdate())
 			ORDER BY bulan ASC
 			"
 		)->result_array();

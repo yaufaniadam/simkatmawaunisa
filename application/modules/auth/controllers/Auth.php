@@ -68,15 +68,14 @@ class Auth extends CI_Controller
 						'content' => $params
 					));
 					$context = stream_context_create($body);
-					$link = file_get_contents('https://sso.umy.ac.id/api/Authentication/Login', false, $context);
+					$link = file_get_contents(base_url(). '/sso/index/', false, $context);
 					$json = json_decode($link);
 
-					$ceknum = $json->{'code'};
+					$ceknum = $json->{'status_code'};
 
 					// jika login benar
 					if ($ceknum == 0) {
-						// cek user ke tabel Mhs (SQLSERVER UMY)
-
+					
 						$result = $this->db->query(
 							"SELECT * from V_Mahasiswa m
 						LEFT JOIN Mstr_Department d on d.DEPARTMENT_ID = m.DEPARTMENT_ID
