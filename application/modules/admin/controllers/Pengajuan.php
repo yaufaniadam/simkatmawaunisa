@@ -340,8 +340,8 @@ class Pengajuan extends Admin_Controller
 		$data['timeline'] = $this->db->query(
 			"SELECT 
 			*,
-			FORMAT (ps.date, 'dd/MM/yyyy') as date,
-			FORMAT (ps.date, 'hh:mm:ss') as time 
+			date_format(ps.date, '%d %M %Y ') as date,
+			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan_status ps
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
 			WHERE ps.pengajuan_id = $pengajuan_id

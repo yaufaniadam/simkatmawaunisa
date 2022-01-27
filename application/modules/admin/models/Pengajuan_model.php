@@ -9,7 +9,7 @@ class Pengajuan_model extends CI_Model
 			"SELECT 
 			*,
 			date_format(ps.date, '%d %M %Y ') as date,
-			date_format(ps.date, '%H:%i) as time
+			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
@@ -29,7 +29,7 @@ class Pengajuan_model extends CI_Model
 			*,
 			pp.STUDENTID AS mhs_id,
 			date_format(ps.date, '%d %M %Y ') as date,
-			date_format(ps.date, '%H:%i) as time
+			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
@@ -69,7 +69,7 @@ class Pengajuan_model extends CI_Model
 			"SELECT 
 			*,
 			date_format(ps.date, '%d %M %Y ') as date,
-			date_format(ps.date, '%H:%i) as time
+			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
@@ -164,7 +164,7 @@ class Pengajuan_model extends CI_Model
 			"SELECT 
 			*,
 			date_format(ps.date, '%d %M %Y ') as date,
-			date_format(ps.date, '%H:%i) as time
+			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id

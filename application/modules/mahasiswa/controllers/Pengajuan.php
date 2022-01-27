@@ -41,8 +41,8 @@ class Pengajuan extends Mahasiswa_Controller
 			s.status,
 			s.status_id,
 			s.badge,
-			FORMAT (ps.date, 'dd/MM/yyyy ') as date,
-			FORMAT (ps.date, 'hh:mm:ss ') as time
+			date_format(ps.date, '%d %M %Y ') as date,
+			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p 
 			LEFT JOIN mstr_jenis_pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
@@ -391,8 +391,8 @@ class Pengajuan extends Mahasiswa_Controller
 		$data['timeline'] = $this->db->query(
 			"SELECT 
 			*,
-			FORMAT (ps.date, 'dd/MM') as date,
-			FORMAT (ps.date, 'hh:mm:ss') as time 
+			date_format(ps.date, '%d %M %Y ') as date,
+			date_format(ps.date, '%H:%i') as time 
 			FROM tr_pengajuan_status ps
 			LEFT JOIN tr_status s ON s.status_id = ps.status_id
 			WHERE ps.pengajuan_id = $pengajuan->pengajuan_id

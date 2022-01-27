@@ -34,12 +34,13 @@ class Dashboard extends Mahasiswa_Controller
 		// 	->get();
 
 		$pengajuan_saya = $this->db
-			->get_where(
-				'tr_pengajuan',
-				[
-					'nim' => $_SESSION['studentid']
-				]
-			)->num_rows();
+			->select('*')->from('tr_pengajuan p')
+			->join('tr_pengajuan_status ps','ps.pengajuan_id=p.pengajuan_id')
+			->where([
+				'p.nim' => $_SESSION['studentid'],								
+				])
+			->where_not_in('ps.status_id', [1,20])
+			->get()->num_rows();
 
 		// $is_field_anggota_exist = $this->db->get_where('tr_pengajuan_field', ['field_id' => 77])->num_rows();
 
