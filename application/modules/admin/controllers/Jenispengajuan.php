@@ -419,6 +419,7 @@ class Jenispengajuan extends Admin_Controller
 		}
 	}
 
+
 	public function edit_nominal_prestasi($id)
 	{
 	 	$tipe_reward = $this->input->post('tipe_reward');
@@ -434,7 +435,7 @@ class Jenispengajuan extends Admin_Controller
 
 		$this->form_validation->set_rules(
 			'keterangan[]',
-			'Jenis Juara',
+			'Keterangan Juara',
 			'trim|required',
 			array('required' => '%s wajib diisi')
 		);
