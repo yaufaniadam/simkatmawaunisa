@@ -270,7 +270,7 @@ class Jenispengajuan extends Admin_Controller
 	{
 		$data['kategori'] = $this->pengajuan_model->get_jenis_pengajuan_byid($id);
 
-		$data['title'] = 'Edit Nominal reward';
+		$data['title'] = 'Edit Nominal Reward';
 		$data['view'] = 'jenispengajuan/nominal_reward';
 		$data['menu'] = 'jenispengajuan';
 		$this->load->view('layout/layout', $data);
@@ -423,9 +423,7 @@ class Jenispengajuan extends Admin_Controller
 	{
 	 	$tipe_reward = $this->input->post('tipe_reward');
 
-		// echo "<pre>";
-		// 	print_r($this->input->post());
-		// 	echo "</pre>";
+		
 
 		$this->form_validation->set_rules(
 			'tipe_reward',
@@ -462,7 +460,6 @@ class Jenispengajuan extends Admin_Controller
 		} else {
 			//ubah jenis nominal (column:fixed) pada tabel Mstr_Jenis_Pengajuan
 			 $this->db->update('Mstr_Jenis_Pengajuan', ["fixed" => $tipe_reward], array('Jenis_Pengajuan_Id' => $id));
-
 			
 			$keterangan = $this->input->post('keterangan');
 			$nominal = $this->input->post('nominal');
@@ -489,13 +486,27 @@ class Jenispengajuan extends Admin_Controller
 				
 				//cek max valuenya brp, yg diinsert adalah data dgn value yg lebih besar dari max value
 				//sedangkan yg diupdate adalah data yg sama/kurang dari max value
-				//caranya? hehe mbuh
+				//caranya? pecah pake array slice,
 
-				echo $max_val;
+				$start = array_slice($data, 0, $max_val+1); // data yg sudah ada
+				$end = array_slice($data, $max_val+1); // data baru
+			
+				foreach ($start as $key => $val) {
+					$this->db->where([
+						"Jenis_Pengajuan_Id" => $id,
+						"order" => $key
+					]);
+					$data_nominal = [
+						"nominal" => $val['nominal'],
+						"keterangan" => $val['keterangan'],
+					];
 
-				echo "<pre>";
-				print_r($data);
-				echo "</pre>";
+					$this->db->update('Mstr_Penghargaan_Rekognisi_Mahasiswa', $data_nominal);
+				}
+
+				if(!empty($end)) {
+					$this->db->insert_batch('Mstr_Penghargaan_Rekognisi_Mahasiswa', $end);
+				} 
 
 			} else {
 		
@@ -503,7 +514,7 @@ class Jenispengajuan extends Admin_Controller
 			}
 
 
-			// echo json_encode(array("status" => "sukses"));
+			echo json_encode(array("status" => "sukses"));
 		}
 	}
 

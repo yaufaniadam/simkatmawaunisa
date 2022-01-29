@@ -95,7 +95,7 @@ class Pengajuan_model extends CI_Model
 	
 	public function prestasi($id)
 	{
-		return $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan WHERE parent = '$id' ORDER BY Jenis_Pengajuan ASC")->result_array();
+		return $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan WHERE parent = '$id' AND aktif = '1' ORDER BY Jenis_Pengajuan ASC")->result_array();
 	}
 
 	public function get_detail_pengajuan($pengajuan_id)

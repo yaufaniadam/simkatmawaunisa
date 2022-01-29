@@ -49,10 +49,12 @@ class Pengajuan extends Admin_Controller
 				$this->load->view('layout/layout', $data);
 			} else {
 
+				//ambil semua pengajuan dari tabel verified
 				$daftar_pengajuan_id = $this->input->post('pengajuan_id[]');
 				$periode_id = $this->input->post('periode_id');
 
 
+				//lalu diforeach
 				foreach ($daftar_pengajuan_id as $pengajuan_id) {
 
 					$queryp = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object();
@@ -73,12 +75,15 @@ class Pengajuan extends Admin_Controller
 					// 3. Kelompok (Reward diberikan kepada kelompok, bukan kepada tiap anggota) (id = 3)
 					// 4. Berdasarkan biaya yang dikeluarkan oleh mahasiswa (id = 0)
 
-					$tipe_reward = $this->db->get_where(
+					$jenis_pengajuan = $this->db->get_where(
 						'Mstr_Jenis_Pengajuan',
 						[
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id
 						]
-					)->row_object()->fixed;
+					)->row_object();
+
+					$tipe_reward = 	$jenis_pengajuan->fixed;
+
 
 					if ($tipe_reward == 1) {
 
@@ -101,57 +106,52 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 
-			
+
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('Tr_Pengajuan_Status');
-
-
 					} elseif ($tipe_reward == 2) {
-			
 
-						$anggota = get_meta_value('anggota', $pengajuan_id,false);
-						$anggota = explode(',', $anggota);		
-						
+
+						$anggota = get_meta_value_by_type_field('select_anggota', $pengajuan_id, false);
+						$anggota = explode(',', $anggota);
+
 						$nominal = $this->db->select('nominal')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where([
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						])->get()->result_array();
 
-						foreach($anggota as $key=>$anggota) {
+						foreach ($anggota as $key => $anggota) {
 
 							$data = [
 								'id_periode' => $periode_id,
 								'id_pengajuan' => $pengajuan_id,
 								'pic' => $_SESSION['user_id'],
 								'STUDENTID' => $anggota,
-								'nominal' => ($key < 1) ? $nominal[0]['nominal'] :$nominal[1]['nominal']
+								'nominal' => ($key < 1) ? $nominal[0]['nominal'] : $nominal[1]['nominal']
 							];
-							
-							$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 
+							$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 						}
 
 						$this->db->set('status_id', 9)
-								->set('pic', $this->session->userdata('user_id'))
-								->set('date', 'getdate()', FALSE)
-								->set('pengajuan_id', $pengajuan_id)
-								->insert('Tr_Pengajuan_Status');
-
-
+							->set('pic', $this->session->userdata('user_id'))
+							->set('date', 'getdate()', FALSE)
+							->set('pengajuan_id', $pengajuan_id)
+							->insert('Tr_Pengajuan_Status');
 					} elseif ($tipe_reward == 3) {
 
 						$nominal = $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						])->row_object()->nominal;
 
-					
-						$anggota = get_meta_value('anggota', $pengajuan_id,false);
-						$anggota = explode(',', $anggota);					
 
-						foreach($anggota as $key=>$anggota) {
+						$anggota = get_meta_value_by_type_field('select_anggota', $pengajuan_id, false);
+						$anggota = explode(',', $anggota);
+
+						foreach ($anggota as $key => $anggota) {
 
 							// echo $anggota;
 							$data = [
@@ -169,12 +169,11 @@ class Pengajuan extends Admin_Controller
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('Tr_Pengajuan_Status');
-
 					} elseif ($tipe_reward == 4) {
 
 						$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 
-						$biaya = get_meta_value('biaya', $pengajuan_id,false);
+						$biaya = get_meta_value_by_type_field('biaya', $pengajuan_id, false);
 
 						$data = [
 							'id_periode' => $periode_id,
@@ -184,41 +183,75 @@ class Pengajuan extends Admin_Controller
 							//ambil value dari field biaya
 							'nominal' => $biaya,
 						];
-						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);				
+						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('Tr_Pengajuan_Status');
-					
 					} elseif ($tipe_reward == 5) {
 
-						echo "tipe reward 5";
+						//ambil data kategori pengajuan
+						$id_jenis_pengajuan = $jenis_pengajuan->Jenis_Pengajuan_Id;
+						
+						// ambil nominal jumlah reward yang sesuai, dengan cara mengambil data capaian prestasi yg diraih
+						$capaian_prestasi = get_meta_value_by_type_field('select_prestasi', $pengajuan_id, false);
 
-						// $nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
+						// lalu cocokkan dengan $capaian_prestasi dengan jumlah nominal di tabel Mstr_Penghargaan_Rekognisi_Mahasiswa
+						$nominal = $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa',[
+							'Penghargaan_Rekognisi_Mahasiswa_Id' => $capaian_prestasi,
+						])->row_object()->nominal;
 
-						// $biaya = get_meta_value('biaya', $pengajuan_id,false);
+						//cek tipe jumlah anggota, apakah kelompok, beregu atau individu
+						$jumlah_anggota = $jenis_pengajuan->jumlah_anggota;
+						
 
-						// $data = [
-						// 	'id_periode' => $periode_id,
-						// 	'id_pengajuan' => $pengajuan_id,
-						// 	'pic' => $_SESSION['user_id'],
-						// 	'STUDENTID' => $nim,
-						// 	//ambil value dari field biaya
-						// 	'nominal' => $biaya,
-						// ];
-						// $this->db->insert('Tr_Penerbitan_Pengajuan', $data);				
+						//jika individu, maka diambil nim mhs yng mengajukan
+						if ($jumlah_anggota == 'individu') {
+							$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 
-						// $this->db->set('status_id', 9)
-						// 	->set('pic', $this->session->userdata('user_id'))
-						// 	->set('date', 'getdate()', FALSE)
-						// 	->set('pengajuan_id', $pengajuan_id)
-						// 	->insert('Tr_Pengajuan_Status');
-					} 
+							$data = [
+								'id_periode' => $periode_id,
+								'id_pengajuan' => $pengajuan_id,
+								'pic' => $_SESSION['user_id'],
+								'STUDENTID' => $nim,
+								//ambil value dari field biaya
+								'nominal' => $nominal,
+							];
+							$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+
+							//jika selain idnvidu berarti beregu /kelompok, 
+						} else {
+							//maka ambil data anggota kelompok menggunakan type field
+							$anggota = get_meta_value_by_type_field('select_mahasiswa', $pengajuan_id, false);
+							//data diexplode utk dimasukkan ke tabel 'Tr_Penerbitan_Pengajuan'
+							$anggota = explode(',', $anggota);
+
+							foreach ($anggota as $key => $anggota) {
+
+								// echo $anggota;
+								$data = [
+									'id_periode' => $periode_id,
+									'id_pengajuan' => $pengajuan_id,
+									'pic' => $_SESSION['user_id'],
+									'STUDENTID' => $anggota,
+									'nominal' => ($key < 1) ? $nominal : '0'
+								];
+								$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+							}
+	
+						}
+
+						$this->db->set('status_id', 9)
+							->set('pic', $this->session->userdata('user_id'))
+							->set('date', 'getdate()', FALSE)
+							->set('pengajuan_id', $pengajuan_id)
+							->insert('Tr_Pengajuan_Status');
+					}
 				}
 
-				// redirect(base_url('admin/periode/bulan/' . $periode_id));
+				redirect(base_url('admin/periode/bulan/' . $periode_id));
 			}
 		} else {
 			$data['query'] = $this->pengajuan_model->getVerifiedPengajuan();
@@ -435,11 +468,11 @@ class Pengajuan extends Admin_Controller
 					);
 			}
 
-			if($status_pengajuan == 4) {
+			if ($status_pengajuan == 4) {
 
 				//data utk kirim email & notif ke pegawai
 				$data_for_notif = [
-		
+
 					'pengirim' => $_SESSION['user_id'],
 					'penerima' => $this->input->post('user_id'),
 					'id_pengajuan' => $pengajuan_id,
@@ -452,11 +485,9 @@ class Pengajuan extends Admin_Controller
 
 				//sendmail & notif
 				$this->mailer->send_mail($data_for_notif);
-
 			}
 
 			redirect(base_url('admin/pengajuan/detail/' . $pengajuan_id));
-			
 		} else {
 			$data['title'] = 'Forbidden';
 			$data['view'] = 'restricted';
@@ -832,7 +863,8 @@ class Pengajuan extends Admin_Controller
 		$this->db->update('Tr_Penerbitan_Pengajuan', $data);
 	}
 
-	public function hapus($id)	{
+	public function hapus($id)
+	{
 
 		$hapus = $this->db->set('status_id', '20')
 			->set('date', 'getdate()', FALSE)

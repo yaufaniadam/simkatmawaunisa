@@ -204,7 +204,7 @@ function field_value_checker($required, $field_value, $id, $verifikasi, $pengaju
 }
 
 //menampilkan kategori keterangan surat
-function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungsi_upload)
+function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungsi_upload, $jenis_pengajuan_id)
 {
 	$id = $field_id;
 
@@ -337,10 +337,10 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			?>
 
-			<!-- pad akondisi default (data value kosong), form dNd muncul, listing tidak muncul -->
-			<br>
+			<!-- padakondisi default (data value kosong), form dNd muncul, listing tidak muncul -->
+		
 
-			<input type="text" class="id-dokumen-<?= $id; ?> form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
+			<input type="hidden" class="id-dokumen-<?= $id; ?> form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
 
 			<div class="tampilUploader">
 				<div id="drag-and-drop-zone-<?= $id; ?>" class="dm-uploader p-3 <?= $form; ?> <?= $error; ?>">
@@ -890,14 +890,14 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		?>
 			<?php
 			$CI = &get_instance();
-			$capaian_prestasi = $CI->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where(['Jenis_Pengajuan_Id' => '75'])->get()->result_array();
+			$capaian_prestasi = $CI->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
 			?>
 
 			<fieldset>
 				<select class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?>>
 					<option value="">Pilih Prestasi</option>
 					<?php foreach ($capaian_prestasi as $capaian_prestasi) { ?>
-						<option value="<?= $capaian_prestasi['nominal']; ?>" <?php echo (validation_errors()) ? (set_select('dokumen['. $id .']', $capaian_prestasi['nominal'] )) : ($capaian_prestasi['nominal']== $check['value'] ? 'selected' : ''); ?>><?= $capaian_prestasi['keterangan']; ?></option>						
+						<option value="<?= $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id']; ?>" <?php echo (validation_errors()) ? (set_select('dokumen['. $id .']', $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id'] )) : ($capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id']== $check['value'] ? 'selected' : ''); ?>><?= $capaian_prestasi['keterangan']; ?></option>						
 					<?php } ?>
 				</select>
 			</fieldset>
@@ -928,6 +928,28 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
 		} ?>
 
+
+<?php } elseif ($fields['type'] == 'select_pkm') {
+		if ($value != 0) {
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
+		?>
+			<?php
+			$CI = &get_instance();
+			$pkm = $CI->db->select('*')->from('mstr_pimnas')->get()->result_array();
+			?>
+
+			<fieldset>
+				<select class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?>>
+					<option value="">Pilih Kategori PKM</option>
+					<?php foreach ($pkm as $pkm) { ?>
+						<option value="<?= $pkm['id']; ?>" <?php echo (validation_errors()) ? (set_select('dokumen['. $id .']', $pkm['id'] )) : ($pkm['id']== $check['value'] ? 'selected' : ''); ?>><?= $pkm['nama_pkm']; ?></option>						
+					<?php } ?>
+				</select>
+			</fieldset>
+
+			<?php  } else {
+			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
+		} ?>
 
 		<?php } elseif ($fields['type'] == 'select_nasional_internasional') {
 		if ($value != 0) { ?>
@@ -988,7 +1010,7 @@ function data_sesuai($id, $verifikasi, $catatan)
 	<?php
 }
 
-function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
+function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, $jenis_pengajuan_id)
 {
 
 	$id = $field_id;
@@ -1063,16 +1085,44 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 		} ?>
 
 	<?php
-	} elseif ($field['type'] == 'select_prestasi') { ?>
+	} elseif ($field['type'] == 'select_prestasi') { 
+		/* tingkatan prestasi khusus untuk kegiatan kompetisi (ada juaranya), misalnya lomba Pimnas
+		tingkatan prestasi diambilkan dari setting tingkatan prestasi di table 'Mstr_Penghargaan_Rekognisi_Mahasiswa'
+		berdasarkan ID jenis pengajuannya
+		*/
+		?>
 
 		<?php
 			$CI = &get_instance();
-			$capaian_prestasi = $CI->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where(['Jenis_Pengajuan_Id' => '75'])->get()->result_array();
+			$capaian_prestasi = $CI->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
 		?>
 
 		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
 			<?php foreach ($capaian_prestasi as $capaian_prestasi) { ?>
-				<option value="<?= $capaian_prestasi['nominal']; ?>" <?= ($capaian_prestasi['nominal'] == $field_value) ? 'selected' : ''; ?>><?= $capaian_prestasi['keterangan']; ?></option>
+				<option value="<?= $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id']; ?>" <?= ($capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id'] == $field_value) ? 'selected' : ''; ?>><?= $capaian_prestasi['keterangan']; ?></option>
+			<?php } ?>
+		</select>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan);
+		} ?>
+	<?php
+	} elseif ($field['type'] == 'select_pkm') { 
+		
+		?>
+
+		<?php
+			$CI = &get_instance();
+			$pkm = $CI->db->select('*')->from('mstr_pimnas')->get()->result_array();
+			?>
+
+
+		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
+			<?php foreach ($pkm as $pkm) { ?>
+				<option value="<?= $pkm['id']; ?>" <?= ($pkm['id'] == $field_value) ? 'selected' : ''; ?>><?= $pkm['nama_pkm']; ?></option>
 			<?php } ?>
 		</select>
 

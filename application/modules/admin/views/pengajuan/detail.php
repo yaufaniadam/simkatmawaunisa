@@ -57,7 +57,7 @@
 								<?= $field['field'] ?></label>
 							<div class="col-md-7">
 								<?php
-								generate_keterangan_surat($field['field_id'], $pengajuan['pengajuan_id'], $pengajuan['status_id']);
+								generate_keterangan_surat($field['field_id'], $pengajuan['pengajuan_id'], $pengajuan['status_id'], $pengajuan['Jenis_Pengajuan_Id'] );
 								?>
 							</div>
 						</div>

@@ -62,7 +62,7 @@
 							</label>
 
 							<div class="col-md-7">
-								<?php generate_form_field($pengajuan_field['field_id'], $pengajuan_id, $pengajuan_status, 'mahasiswa/pengajuan'); ?>
+								<?php generate_form_field($pengajuan_field['field_id'], $pengajuan_id, $pengajuan_status, 'mahasiswa/pengajuan',$pengajuan->Jenis_Pengajuan_Id ); ?>
 							</div>
 						</div>
 					<?php  }  ?>

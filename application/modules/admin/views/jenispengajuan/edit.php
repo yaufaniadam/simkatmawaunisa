@@ -252,6 +252,7 @@ list($kat, $result, $nominal) = $kategori;
 															<option value='select_prestasi' <?= ($result['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
 															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
 															<option value='select_nasional_internasional' <?= ($result['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option>
+															<option value='select_pkm' <?= ($result['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
 														</select>
 													</div>
 
@@ -345,6 +346,7 @@ list($kat, $result, $nominal) = $kategori;
 															<option value='select_prestasi' <?= ($field['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
 															<option value='select_tingkat' <?= ($field['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
 															<option value='select_nasional_internasional' <?= ($field ['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option>
+															<option value='select_pkm' <?= ($field ['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
 															
 														</select>
 													</div>
