@@ -6,6 +6,7 @@ class Dashboard extends Admin_Controller
 	{
 		parent::__construct();
 		$this->load->model('pengajuan_model');
+		// echo check merged
 	}
 
 	public function index()
@@ -22,6 +23,7 @@ class Dashboard extends Admin_Controller
 		)->result_array();
 		$data['title'] = 'Dashboard';
 		$data['view'] = 'dashboard/index';
+		$data['menu'] = 'dashboard';
 		$this->load->view('layout/layout', $data);
 	}
 	public function dasbor()

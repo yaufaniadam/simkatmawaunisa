@@ -1,7 +1,7 @@
 <?php
 list($kat, $result, $nominal) = $kategori;
 
-$selected_kat = array_column($result, 'field_id');
+
 ?>
 
 <link rel="stylesheet" href="<?= base_url('public/vendor/jquery-ui-1.12.1/jquery-ui.min.css'); ?>">
@@ -35,22 +35,12 @@ $selected_kat = array_column($result, 'field_id');
 		color: red;
 	}
 
-	div.is-invalid,
-	.tipe_reward.is-invalid {
+	div.is-invalid {
 		border: 1px solid #b0272b !important;
 		border-radius: 6px;
 	}
 
-	.tipe_reward li input {
-		float: left;
-		margin-top: 5px;
-	}
 
-	.tipe_reward li span {
-		margin-left: 8px;
-		float: left;
-		width: 92%;
-	}
 </style>
 
 <div class="row">
@@ -75,13 +65,90 @@ $selected_kat = array_column($result, 'field_id');
 
 	</div>
 
-	<div class="col-md-8">
+	<div class="col-md-8 offset-md-2">
+	
+		<?php 
+		 $katid= (isset($_GET['id'])) ? $_GET['id'] : '';
+		 $pos= (isset($_GET['pos'])) ? $_GET['pos'] : '';
 
-		<?php echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi']), 'class="form-horizontal"'); ?>
+		echo form_open_multipart(base_url('admin/jenispengajuan/edit/' . $kat['jpi'] . '?id=' . $katid .'&pos=' . $pos	), 'class="form-horizontal"'); ?>
+
 		<div class="card card-success card-outline">
-			<p class="card-header">Jenis Pengajuan</p>
+			<ul class="nav nav-tabs pt-3 pl-4  bg-perak">
+			<li class="nav-item">
+					<a class="nav-link" href="<?= base_url('admin/jenispengajuan/'); ?>"><i class="fas fa-fw fa-table"></i> Jenis pengajuan</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" href="<?= base_url('admin/jenispengajuan/edit/' . $kat['jpi']); ?>"><i class="fas fa-fw fa-edit"></i> Edit Jenis pengajuan</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link " href="<?= base_url('admin/jenispengajuan/nominal_reward/'  . $kat['jpi'] ); ?>"><i class="fas fa-fw fa-dollar-sign"></i> Nominal Reward</a>
+				</li>			
+			</ul>
+			<!-- <p class="card-header">Jenis Pengajuan</p> -->
 			<div class="card-body box-profile">
 
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="Jenis_Pengajuan" class="control-label">Kategori *</label>
+							<div class="">
+
+							
+								<select name="parent" class="form-control <?= (form_error('parent')) ? 'is-invalid' : ''; ?>" id="parent" onchange="window.location='<?= $kat['jpi']; ?>?id='+this.value+'&pos='+this.selectedIndex;">
+
+									<option value=''>Pilih Kategori</option>
+									<?php							
+									
+									foreach($kategori_jenis_pengajuan as $jp) { ?>
+
+										<option value="<?= $jp['id']; ?>" <?= (validation_errors()) ? (set_select('parent',$jp['id'])): ($kat['parent'] == $jp['id'] ? 'selected': '') ?>><?= $jp['kategori_pengajuan']; ?></option>
+
+									<?php } ?>
+								
+								</select>
+								<span class="invalid-feedback"><?php echo form_error('parent'); ?></span>
+								<?php
+								if(isset($_GET['id']))								{
+									$parent=$_GET['id'];
+								?>
+								<script>
+									var myselect = document.getElementById("parent");
+									myselect.options.selectedIndex = <?php echo $_GET["pos"]; ?>
+								</script>
+								 <?php	}	?>
+
+							
+							</div>
+						</div>
+
+						
+
+					</div>					
+			
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="jumlah_anggota" class="control-label">Jumlah Anggota *</label>
+							<div class="">
+							<select name="jumlah_anggota" class="form-control <?= (form_error('jumlah_anggota')) ? 'is-invalid' : ''; ?>" id="jumlah_anggota">		
+									<option value=''>Pilih Jumlah Anggota</option>							
+									<option value="individu" <?= (validation_errors()) ? (set_select('jumlah_anggota','individu')) : ($kat['jumlah_anggota'] == 'individu' ? 'selected': '') ?>>Individu</option>
+
+									<option value="beregu" <?= (validation_errors()) ? (set_select('jumlah_anggota','beregu')) : ($kat['jumlah_anggota'] == 'beregu' ? 'selected': '') ?>>Beregu</option>
+
+									<option value="kelompok" <?= (validation_errors()) ? (set_select('jumlah_anggota','kelompok')) : ($kat['jumlah_anggota'] == 'kelompok' ? 'selected': '') ?>>Kelompok</option>
+
+								
+								</select>
+								<span class="invalid-feedback"><?php echo form_error('jumlah_anggota'); ?></span>				
+
+							
+							</div>
+						</div>						
+
+					</div>					
+				</div>
+			
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
@@ -142,7 +209,9 @@ $selected_kat = array_column($result, 'field_id');
 												<div class="p-4">
 
 													<div class="mb-2">
-														<input type="checkbox" <?= ($result['required'] == 1) ? 'checked="checked"' : ''; ?> name="required" value="1" />
+														<input type="hidden" name="required" value=" <?= ($result['required'] == 1) ? '1' : '0'; ?>">
+														<input type="checkbox" <?= ($result['required'] == 1) ? 'checked="checked"' : ''; ?> 
+														class="checkp" />										
 														<label for="exampleFormControlInput1" class="form-label">Centang jika field wajib</label>
 													</div>
 
@@ -154,10 +223,7 @@ $selected_kat = array_column($result, 'field_id');
 														<label for="placeholder" class="form-label">Placeholder</label>
 														<input class="form-control" type="text" value="<?= $result['placeholder']; ?>" name="placeholder" />
 													</div>
-													<div class="mb-2">
-														<label for="key" class="form-label">Key (wajib, tanpa spasi, huruf kecil semua)</label>
-														<input class="form-control field-key" type="text" value="<?= $result['key']; ?>" name="key" placeholder="Key sebagai kode identitas field" <?= ($result['type'] == 'judul') ? 'readonly="readonly"' : ''; ?>/>
-													</div>
+													
 													<div class="mb-2">
 														<label for="deskripsi" class="form-label">Deskripsi</label>
 														<textarea class="form-control" name="deskripsi" placeholder="Deskripsi singkat penjelasan field" /><?= $result['deskripsi']; ?></textarea>
@@ -170,19 +236,29 @@ $selected_kat = array_column($result, 'field_id');
 															<option value='text' <?= ($result['type'] == 'text') ? 'selected="selected"' : ''; ?>>Teks singkat</option>
 															<option value='judul' <?= ($result['type'] == 'judul') ? 'selected="selected"' : ''; ?>>Judul</option>
 															<option value='number' <?= ($result['type'] == 'number') ? 'selected="selected"' : ''; ?>>Angka</option>
+															<option value='biaya' <?= ($result['type'] == 'biaya') ? 'selected="selected"' : ''; ?>>Biaya / Uang Rupiah</option>
 															<option value='textarea' <?= ($result['type'] == 'textarea') ? 'selected="selected"' : ''; ?>>Teks panjang</option>
 															<option value='wysiwyg' <?= ($result['type'] == 'wysiwyg') ? 'selected="selected"' : ''; ?>>Teks editor</option>
-															<option value='select_dosen' <?= ($result['type'] == 'select_dosen') ? 'selected="selected"' : ''; ?>>Pilih Dosen</option>
+															<option value='select_pembimbing' <?= ($result['type'] == 'select_pembimbing') ? 'selected="selected"' : ''; ?>>Pilih Dosen</option>
 															<option value='select_mahasiswa' <?= ($result['type'] == 'select_mahasiswa') ? 'selected="selected"' : ''; ?>>Pilih Mahasiswa</option>
 															<option value='sem' <?= ($result['type'] == 'sem') ? 'selected="selected"' : ''; ?>>Semester</option>
 															<option value='ta' <?= ($result['type'] == 'ta') ? 'selected="selected"' : ''; ?>>Tahun Akademik</option>
+															<option value='tahun' <?= ($result['type'] == 'tahun') ? 'selected="selected"' : ''; ?>>Tahun</option>
 															<option value='date' <?= ($result['type'] == 'date') ? 'selected="selected"' : ''; ?>>Tanggal</option>
 															<!-- <option value='date_range' <?= ($result['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option> -->
 															<option value='url' <?= ($result['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
 															<option value='file' <?= ($result['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
-															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan Prestasi</option>
+															
+															<option value='select_prestasi' <?= ($result['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
+															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
 															<option value='select_nasional_internasional' <?= ($result['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option>
+															<option value='select_pkm' <?= ($result['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
 														</select>
+													</div>
+
+													<div class="mb-2">
+														<label for="key" class="form-label">Key (wajib, tanpa spasi, huruf kecil semua)</label>
+														<input class="form-control field-key" type="text" value="<?= $result['key']; ?>" name="key" placeholder="Key sebagai kode identitas field" <?= ($result['type'] == 'judul') ? 'readonly="readonly"' : ''; ?>/>
 													</div>
 
 													<div class="mb-2">
@@ -193,6 +269,7 @@ $selected_kat = array_column($result, 'field_id');
 															</span>
 															Simpan
 														</a>
+														<p class="mt-1 sukses_simpan text-success text-center"><i class="fas fa-check-circle"></i> Berhasil disimpan</p>
 													</div>
 												</div>
 											</div>
@@ -226,7 +303,9 @@ $selected_kat = array_column($result, 'field_id');
 												<div class="p-4">
 
 													<div class="mb-2">
-														<input type="checkbox" <?= ($field['required'] == 1) ? 'checked="checked"' : ''; ?> name="required" value="1" />
+														<input type="hidden" name="required" value=" <?= ($field['required'] == 1) ? '1' : '0'; ?>">
+														<input type="checkbox" <?= ($field['required'] == 1) ? 'checked="checked"' : ''; ?> 
+														class="checkp" />	
 														<label for="exampleFormControlInput1" class="form-label">Centang jika field wajib</label>
 													</div>
 
@@ -238,10 +317,7 @@ $selected_kat = array_column($result, 'field_id');
 														<label for="placeholder" class="form-label">Placeholder</label>
 														<input class="form-control" type="text" value="<?= $field['placeholder']; ?>" name="placeholder" />
 													</div>
-													<div class="mb-2">
-														<label for="key" class="form-label">Key (wajib, tanpa spasi, huruf kecil semua)</label>
-														<input class="form-control field-key" type="text" value="<?= $field['key']; ?>" name="key" placeholder="Key sebagai kode identitas field"  <?= ($field['type'] == 'judul') ? 'readonly="readonly"' : ''; ?>/>
-													</div>
+													
 													<div class="mb-2">
 														<label for="deskripsi" class="form-label">Deskripsi</label>
 														<textarea class="form-control" name="deskripsi" placeholder="Deskripsi singkat penjelasan field" /><?= $field['deskripsi']; ?></textarea>
@@ -254,20 +330,30 @@ $selected_kat = array_column($result, 'field_id');
 															<option value='text' <?= ($field['type'] == 'text') ? 'selected="selected"' : ''; ?>>Teks singkat</option>
 															<option value='judul' <?= ($field['type'] == 'judul') ? 'selected="selected"' : ''; ?>>Judul</option>
 															<option value='number' <?= ($field['type'] == 'number') ? 'selected="selected"' : ''; ?>>Angka</option>
+															<option value='biaya' <?= ($field['type'] == 'biaya') ? 'selected="selected"' : ''; ?>>Biaya / Uang Rupiah</option>
 															<option value='textarea' <?= ($field['type'] == 'textarea') ? 'selected="selected"' : ''; ?>>Teks panjang</option>
 															<option value='wysiwyg' <?= ($field['type'] == 'wysiwyg') ? 'selected="selected"' : ''; ?>>Teks editor</option>
-															<option value='select_dosen' <?= ($field['type'] == 'select_dosen') ? 'selected="selected"' : ''; ?>>Pilih Dosen</option>
+															<option value='select_pembimbing' <?= ($field['type'] == 'select_pembimbing') ? 'selected="selected"' : ''; ?>>Pilih Dosen</option>
 															<option value='select_mahasiswa' <?= ($field['type'] == 'select_mahasiswa') ? 'selected="selected"' : ''; ?>>Pilih Mahasiswa</option>
 															<option value='sem' <?= ($field['type'] == 'sem') ? 'selected="selected"' : ''; ?>>Semester</option>
-															<option value='ta' <?= ($field['type'] == 'ta') ? 'selected="selected"' : ''; ?>>Tahun Akademik</option>
+															<option value='ta' <?= ($field['type'] == 'ta') ? 'selected="selected"' : ''; ?>>Tahun Akademik </option>
+															<option value='tahun' <?= ($field['type'] == 'tahun') ? 'selected="selected"' : ''; ?>>Tahun </option>
+															
 															<option value='date' <?= ($field['type'] == 'date') ? 'selected="selected"' : ''; ?>>Tanggal</option>
-															<!-- <option value='date_range' <?= ($result['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option> -->
-															<option value='url' <?= ($result['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
-															<option value='file' <?= ($result['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
-															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan Prestasi</option>
-															<option value='select_nasional_internasional' <?= ($result['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option>
+															<!-- <option value='date_range' <?= ($field['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option> -->
+															<option value='url' <?= ($field['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
+															<option value='file' <?= ($field['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
+															<option value='select_prestasi' <?= ($field['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
+															<option value='select_tingkat' <?= ($field['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
+															<option value='select_nasional_internasional' <?= ($field ['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option>
+															<option value='select_pkm' <?= ($field ['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
 															
 														</select>
+													</div>
+
+													<div class="mb-2">
+														<label for="key" class="form-label">Key (wajib, tanpa spasi, huruf kecil semua)</label>
+														<input class="form-control field-key" type="text" value="<?= $field['key']; ?>" name="key" placeholder="Key sebagai kode identitas field"  <?= ($field['type'] == 'judul') ? 'readonly="readonly"' : ''; ?>/>
 													</div>
 
 													<div class="mb-2">
@@ -302,168 +388,6 @@ $selected_kat = array_column($result, 'field_id');
 		</div>
 	</div>
 
-	<div class="col-md-4">
-
-		<div class="card card-danger card-outline">
-
-			<p class="card-header">Nominal Reward</p>
-			<div class="card-body box-profile">
-				<form name="nominal_reward" id="nominal_reward" action="<?= base_url('admin/jenispengajuan/edit_nominal/' . $kat['jpi']); ?>">
-					<div class="form-group">
-						<label for="Jenis_Pengajuan" class="control-label">Tipe Nominal Reward</label>
-						<ul class="list-group tipe_reward" id="tipe_reward">
-							<li class="list-group-item"><input type="radio" name="tipe_reward" <?= $kat['fixed'] == 1 ? 'checked="checked"' : ''; ?> value="1"> <span>Individu</span></li>
-							<li class="list-group-item"><input type="radio" name="tipe_reward" <?= $kat['fixed'] == 2 ? 'checked="checked"' : ''; ?> value="2"> <span>Kelompok (Ketua dan anggota memperoleh nominal yang berbeda)</span></li>
-							<li class="list-group-item"><input type="radio" name="tipe_reward" <?= $kat['fixed'] == 3 ? 'checked="checked"' : ''; ?> value="3"> <span>Kelompok (Reward diberikan kepada kelompok, bukan kepada tiap anggota)</span></li>
-							<li class="list-group-item"><input type="radio" name="tipe_reward" <?= $kat['fixed'] == 4 ? 'checked="checked"' : ''; ?> value="4"> <span>Berdasarkan biaya yang dikeluarkan oleh mahasiswa</span></li>
-						</ul>
-
-					</div>
-
-					<div class="form-group" id="nominal">
-						<label for="Jenis_Pengajuan" class="control-label">Nominal (Rp)</label>
-						<div>
-							<div class="input-group mb-2 nominal1">
-								<div class="input-group-prepend">
-									<div class="input-group-text">Ketua Rp</div>
-								</div>
-								<input type="number" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : ($kat['fixed'] == 2 ? get_nominal_byorder($kat['jpi'], 0) : $kat['nominal']);  ?>" name="nominal1" class="form-control">
-							</div>
-							<div class="input-group mb-2 nominal2 ">
-								<div class="input-group-prepend">
-									<div class="input-group-text">Anggota Rp</div>
-								</div>
-								<input type="number" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : ($kat['fixed'] == 2 ? get_nominal_byorder($kat['jpi'], 1)  : '');  ?>" name="nominal2" class="form-control">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<input type="submit" name="submit" value="Simpan Nominal Reward" class="btn btn-success btn-block simpan">
-<!-- 
-						<button type="submit" class="form-control btn btn-success simpan" style="cursor:pointer">
-							<span class="loading d-none">
-								<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-								<span class="sr-only">Loading...</span>
-							</span>
-							Simpan Nominal
-						</button> -->
-						<p class="mt-1 sukses_simpan text-success text-center"><i class="fas fa-check-circle"></i> Berhasil disimpan</p>
-
-					</div>
-				</form>
-
-
-				<script>
-					$(document).ready(function() {
-						
-						$('select[name="type"]').on('change', function() {
-							var val = $(this).val();
-							var typeId = $(this).closest(".ui-state-highlights").attr("id");						
-
-							if(val == 'judul') {
-								$("#" + typeId).find("input[name='key']").attr('readonly', true);
-								$("#" + typeId).find("input[name='key']").val('judul');
-							} else {
-								$("#" + typeId).find("input[name='key']").attr('readonly', false);
-								$("#" + typeId).find("input[name='key']").val('');
-							}						
-						});
-
-						//sembunyikan alert berhasil simpan
-						$('.sukses_simpan').hide();
-
-						var checked = $("input[name='tipe_reward']").is(':checked'),
-							checkedVal = $("input[name='tipe_reward']:checked").val();
-
-						if (checked) {
-							if ((checkedVal == 1) || (checkedVal == 3)) {
-								$('.nominal2').hide();
-								$('.nominal2').prop("disabled", true);
-							} else if (checkedVal == 4) {
-								$('#nominal').hide();
-							}
-						} else {
-							$('#nominal').hide();
-							$('.nominal1').prop("disabled", true);
-							$('.nominal2').prop("disabled", true);
-						}
-
-						$('input:radio[name=tipe_reward]').change(function() {
-
-							if ((this.value == 1) || (this.value == 3)) {
-								$('#nominal').slideDown();
-								$('.nominal1').prop("disabled", false);
-								$('.nominal2').prop("disabled", true);
-								$('.nominal2').hide();
-
-							} else if (this.value == 2) {
-								$('#nominal').slideDown();
-								$('.nominal2').show();
-								$('.nominal1').prop("disabled", false);
-								$('.nominal2').prop("disabled", false);
-
-							} else if (this.value == 4) {
-								$('#nominal').slideUp();
-								$('.nominal1').prop("disabled", true);
-								$('.nominal2').prop("disabled", true);
-							}
-						});
-
-					});
-
-					var frm = $('#nominal_reward');
-
-					$(frm).bind('submit', function(e) {
-						e.preventDefault();
-						$.ajax({
-							url: SITEURL + "admin/jenispengajuan/edit_nominal/" + <?= $kat['jpi']; ?>,
-							data: frm.serialize(),
-							type: "post",
-							// dataType: 'json',
-							success: function(res) {
-								if (res.status == 'Error') {
-									// foreach error keynya
-									Object.keys(res.error).forEach(function(k) {
-										if (res.error[k] !== '') {
-											console.log(k);
-											if (k == 'tipe_reward') {
-												$('#nominal_reward #tipe_reward').next('.invalid-feedback').hide();
-												$('#nominal_reward #tipe_reward').addClass('is-invalid');
-												$('#nominal_reward #tipe_reward').after('<div class="invalid-feedback d-block">' + res.error[k] + '</div>');
-											} else {
-												$('#nominal_reward').find("." + k).next('.invalid-feedback').hide();
-												$('#nominal_reward').find("." + k).addClass('is-invalid');
-												$('#nominal_reward').find("." + k).after('<div class="invalid-feedback">' + res.error[k] + '</div>');
-											}
-										}
-									});
-
-								} else {
-
-									console.log(res)
-									$('#nominal_reward').find('.invalid-feedback').hide();
-									$('.simpan').next('.sukses_simpan').fadeIn().delay(500).fadeOut();
-									$('#nominal_reward').find("input, select").removeClass('is-invalid');
-								}
-							},
-							error: function(data) {
-								console.log('Error:', data);
-							}
-						});
-					});
-
-					// hialngkan eror ketika field diklik
-					$('.form-control').on('keypress', function() {
-						$(this).removeClass('is-invalid');
-					})
-					$('#tipe_reward li').on('click', function() {
-						$('#tipe_reward').removeClass('is-invalid');
-						$('#tipe_reward').next('.invalid-feedback').removeClass('d-block');
-					})
-				</script>
-			</div>
-		</div>
-	</div>
 
 
 	<script src="<?= base_url('public/vendor/jquery-ui-1.12.1/jquery-ui.min.js'); ?>"></script>
@@ -525,12 +449,21 @@ $selected_kat = array_column($result, 'field_id');
 		});
 		$('.checkbox_keterangan_surat:checked').parent('li.list-group-item').addClass('active');
 
-		// Initialize InputMask
-		$('#nominal1').inputmask("99-9999999");
-
-
+	
 		//sembunyikan alert berhasil simpan
 		$('.sukses_simpan').hide();
+
+		//centang required field
+		$('.checkp').on('click' , function(){
+
+			var check  = $(this).is(':checked');
+			if(check === true) {
+				$(this).prev().val(1);
+			} else {
+				$(this).prev().val(0);
+			}
+
+		});
 
 		$('.simpan').on('click', function() {
 			$('.sukses_simpan').hide();

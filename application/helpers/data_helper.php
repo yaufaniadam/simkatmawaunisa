@@ -254,6 +254,7 @@ function tampil_notif()
 			</h6>
 
 			<?php
+					
 			if ($notif_count > 0) {
 				foreach ($notif->result_array() as $notif) {
 			?>
@@ -277,20 +278,21 @@ function tampil_notif()
 						<span class="text-gray-500">Belum ada notifikasi</span>
 					</div>
 				</a>
-			<?php	}	?>
+			<?php	} 	?>
 
-			<a class="dropdown-item text-center medium text-gray-500" href="#<? //= base_url('notif'); 
-																																				?>">Lihat semua Notifikasi</a>
+			<a class="dropdown-item text-center medium text-gray-500" href="<?= base_url('notif'); ?>">Lihat semua Notifikasi</a>
 		</div>
 	</li>
 	<script type="text/javascript">
 		$(".notif").click(function() {
+
 			var nid = this.id
 			var pid = this.name
+
 			$.ajax({
 				url: "<?= base_url('notif/read_notif/'); ?>" + nid,
 				success: function() {
-					<?php if ($_SESSION['role'] == 2) { ?>
+					<?php if (($_SESSION['role'] == 1) || ($_SESSION['role'] == 2)) { ?>
 						window.location.href = "<?= base_url('admin/pengajuan/detail/'); ?>" + pid
 					<?php } elseif ($_SESSION['role'] == 3) { ?>
 						window.location.href = "<?= base_url('mahasiswa/pengajuan/tambah/'); ?>" + pid
@@ -321,7 +323,36 @@ function get_meta_value($key, $id_pengajuan, $file)
 		->where(array("mf.key" => $key, 'fv.pengajuan_id' => $id_pengajuan))
 		->get();
 
+	if ($value->num_rows() > 0) {
 
+		if ($file == true) {
+			$media = $CI->db->select("*")->from('Tr_Media')->where(array('id' => $value->row_array()['value']))->get()->row_array();
+			$filename = explode('/dokumen/', $media['file']);
+			$value = array(
+				'file_id' => $media['id'],
+				'file' => $media['file'],
+				'thumb' => $media['thumb'],
+				'filename' => $filename[1],
+			);
+		} else {
+			$value = $value->row_array()['value'];
+		}
+	} else {
+		$value = "-";
+	}
+
+	return $value;
+}
+
+function get_meta_value_by_type_field($type, $id_pengajuan, $file)
+{
+	$CI = &get_instance();
+
+	$value = $CI->db->select("*")
+		->from('Mstr_Fields mf')
+		->join('Tr_Field_Value fv', 'mf.field_id=fv.field_id', 'left')
+		->where(array("mf.type" => $type, 'fv.pengajuan_id' => $id_pengajuan))
+		->get();
 
 	if ($value->num_rows() > 0) {
 
@@ -338,7 +369,7 @@ function get_meta_value($key, $id_pengajuan, $file)
 			$value = $value->row_array()['value'];
 		}
 	} else {
-		$value = "Not found";
+		$value = "-";
 	}
 
 	return $value;
@@ -412,7 +443,11 @@ function get_nominal_byorder($id_pengajuan, $order) {
 		"order" => $order
 	])->get()->row_array();
 
-	return $nominal['nominal'];
+	if( $nominal ) {
+		return $nominal['nominal'];
+	} else {
+		return 0;
+	}
 
 
 }
