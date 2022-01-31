@@ -167,7 +167,7 @@ class Jenispengajuan extends Admin_Controller
 				"terpakai" => 0,
 			];
 
-			$this->db->insert('tr_pengajuan_field', $data);
+			$this->db->insert('mstr_pengajuan_field', $data);
 
 			echo json_encode(array("status" => "Sukses"));
 		}

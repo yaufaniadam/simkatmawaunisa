@@ -149,7 +149,7 @@ class Periode extends Admin_Controller
 	{
 		$data = $this->db->select('*')->from("tr_pengajuan p")
 			->join("mstr_jenis_pengajuan jp", "jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id", "left")
-			->join("tr_pengajuan_field pf", "pf.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id", "left")
+			->join("mstr_pengajuan_field pf", "pf.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id", "left")
 			->join("mstr_fields mf", "mf.field_id=pf.field_id", "left")
 			// ->join("tr_field_value fv", "fv.field_id=pf.field_id", "left")
 			->where([

@@ -124,8 +124,8 @@ class Pengajuan extends Mahasiswa_Controller
 		);
 
 		//query ini buat apa ya? coba kita cek
-		$field = $this->db->select('*')->from('tr_pengajuan_field')
-			->join('mstr_fields', 'mstr_fields.field_id=tr_pengajuan_field.field_id', 'left')
+		$field = $this->db->select('*')->from('mstr_pengajuan_field')
+			->join('mstr_fields', 'mstr_fields.field_id=mstr_pengajuan_field.field_id', 'left')
 			->where(array('Jenis_Pengajuan_Id' => $id))->get()
 			->result_array();
 
@@ -150,9 +150,9 @@ class Pengajuan extends Mahasiswa_Controller
 
 
 		$field_id = $this->db->query(
-			"SELECT tr_pengajuan_field.field_id  FROM mstr_jenis_pengajuan
-			LEFT JOIN tr_pengajuan_field ON tr_pengajuan_field.Jenis_Pengajuan_Id = mstr_jenis_pengajuan.Jenis_Pengajuan_Id
-			WHERE mstr_jenis_pengajuan.Jenis_Pengajuan_Id = $id AND tr_pengajuan_field.terpakai = 1"
+			"SELECT mstr_pengajuan_field.field_id  FROM mstr_jenis_pengajuan
+			LEFT JOIN mstr_pengajuan_field ON mstr_pengajuan_field.Jenis_Pengajuan_Id = mstr_jenis_pengajuan.Jenis_Pengajuan_Id
+			WHERE mstr_jenis_pengajuan.Jenis_Pengajuan_Id = $id AND mstr_pengajuan_field.terpakai = 1"
 		)->result_array();
 
 		// echo '<pre>'; print_r($field_id); echo '</pre>';
@@ -380,7 +380,7 @@ class Pengajuan extends Mahasiswa_Controller
 		$data['pengajuan'] = $pengajuan;
 
 		$pengajuan_fields = $this->db->query(
-			"SELECT * FROM tr_pengajuan_field pf
+			"SELECT * FROM mstr_pengajuan_field pf
 			LEFT JOIN mstr_fields f ON f.field_id = pf.field_id
 			WHERE pf.Jenis_Pengajuan_Id = $pengajuan->Jenis_Pengajuan_Id
 			AND pf.terpakai = 1

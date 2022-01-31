@@ -90,12 +90,12 @@ class Pengajuan_model extends CI_Model
 
 	public function kategori_pengajuan()
 	{
-		return $this->db->query("SELECT distinct(mj.parent), mkjp.kategori_pengajuan FROM Mstr_Jenis_Pengajuan mj LEFT JOIN mstr_kategori_jenis_pengajuan mkjp ON mkjp.id=mj.parent")->result_array();
+		return $this->db->query("SELECT distinct(mj.parent), mkjp.kategori_pengajuan FROM mstr_jenis_pengajuan mj LEFT JOIN mstr_kategori_jenis_pengajuan mkjp ON mkjp.id=mj.parent WHERE mj.parent <> '' ")->result_array();
 	}
 	
 	public function prestasi($id)
 	{
-		return $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan WHERE parent = $id ORDER BY Jenis_Pengajuan ASC")->result_array();
+		return $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE parent = '$id' AND aktif = '1' ORDER BY Jenis_Pengajuan ASC")->result_array();
 	}
 
 	public function get_detail_pengajuan($pengajuan_id)
@@ -171,12 +171,12 @@ class Pengajuan_model extends CI_Model
 	{
 		return $this->db->query(
 			"SELECT * FROM tr_pengajuan
-			LEFT JOIN tr_pengajuan_field ON tr_pengajuan_field.Jenis_Pengajuan_Id = tr_pengajuan.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_pengajuan_field ON mstr_pengajuan_field.Jenis_Pengajuan_Id = tr_pengajuan.Jenis_Pengajuan_Id
 			LEFT JOIN tr_pengajuan_status ON tr_pengajuan_status.id_pengajuan = tr_pengajuan.pengajuan_id
-			LEFT JOIN mstr_fields ON mstr_fields.field_id = tr_pengajuan_field.field_id
-			LEFT JOIN tr_status ON tr_status.status_id = tr_pengajuan_status.id_status
+			LEFT JOIN mstr_fields ON mstr_fields.field_id = mstr_pengajuan_field.field_id
+			LEFT JOIN mstr_status ON mstr_status.status_id = tr_pengajuan_status.id_status
 			LEFT JOIN mstr_jenis_pengajuan ON mstr_jenis_pengajuan.Jenis_Pengajuan_Id = tr_pengajuan.Jenis_Pengajuan_Id
-			WHERE tr_pengajuan.pengajuan_id = $pengajuan_id AND tr_pengajuan_field.terpakai = 1"
+			WHERE tr_pengajuan.pengajuan_id = $pengajuan_id AND mstr_pengajuan_field.terpakai = 1"
 		)->result_array();
 	}
 

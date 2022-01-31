@@ -10,41 +10,38 @@ class Dashboard extends Mahasiswa_Controller
 
 	public function index()
 	{
-		// $notif = $this->db
-		// 	->select(
-		// 		"*,
-		// 		MONTH(month,n.tanggal_masuk) as bulan_masuk_surat,
-		// 		FORMAT (n.tanggal_masuk, 'dd') as tanggal_masuk_surat",
-		// 	)
-		// 	->from('tr_notif n')
-		// 	->join('mstr_status_pesan sp', 'sp.status_pesan_id = n.id_status_notif')
-		// 	->join('tr_pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
-		// 	->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
-		// 	->join('v_mahasiswa m', 'm.STUDENTID=p.nim')
-		// 	->limit(10)
-		// 	->order_by('id_notif', 'DESC')
-		// 	->where(
-		// 		[
-		// 			// 'n.status' => null,
-		// 			// 'n.status' => 0,
-		// 			'n.role' => 3,
-		// 			'n.penerima' => $_SESSION['studentid']
-		// 		]
-		// 	)
-		// 	->get();
+		$notif = $this->db
+			->select(
+				"*,
+				DATENAME(month,n.tanggal_masuk) as bulan_masuk_surat,
+				FORMAT (n.tanggal_masuk, 'dd') as tanggal_masuk_surat",
+			)
+			->from('tr_notif n')
+			->join('mstr_status_pesan sp', 'sp.status_pesan_id = n.id_status_notif')
+			->join('tr_pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
+			->join('V_Mahasiswa m', 'm.STUDENTID=p.nim')
+			->limit(10)
+			->order_by('id_notif', 'DESC')
+			->where(
+				[
+					// 'n.status' => null,
+					// 'n.status' => 0,
+					'n.role' => 3,
+					'n.penerima' => $_SESSION['studentid']
+				]
+			)
+			->get();
 
 		$pengajuan_saya = $this->db
-			->select('*')->from('tr_pengajuan p')
-			->join('tr_pengajuan_status ps','ps.pengajuan_id=p.pengajuan_id')
-			->where([
-				'p.nim' => $_SESSION['studentid'],								
-				])
-			->where_not_in('ps.status_id', [1,20])
-			->get()->num_rows();
+			->get_where(
+				'tr_pengajuan',
+				[
+					'nim' => $_SESSION['studentid']
+				]
+			)->num_rows();
 
-		// $is_field_anggota_exist = $this->db->get_where('tr_pengajuan_field', ['field_id' => 77])->num_rows();
-
-		// echo '<pre>'; print_r($pengajuan_saya); echo '</pre>';
+		// $is_field_anggota_exist = $this->db->get_where('mstr_pengajuan_field', ['field_id' => 77])->num_rows();
 
 		$prestasi_saya = $this->db
 			->select('*')

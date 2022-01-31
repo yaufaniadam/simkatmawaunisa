@@ -338,7 +338,38 @@ function get_meta_value($key, $id_pengajuan, $file)
 			$value = $value->row_array()['value'];
 		}
 	} else {
-		$value = "Not found";
+		$value = "-";
+	}
+
+	return $value;
+}
+
+function get_meta_value_by_type_field($type, $id_pengajuan, $file)
+{
+	$CI = &get_instance();
+
+	$value = $CI->db->select("*")
+		->from('mstr_fields mf')
+		->join('tr_field_value fv', 'mf.field_id=fv.field_id', 'left')
+		->where(array("mf.type" => $type, 'fv.pengajuan_id' => $id_pengajuan))
+		->get();
+
+	if ($value->num_rows() > 0) {
+
+		if ($file == true) {
+			$media = $CI->db->select("*")->from('tr_media')->where(array('id' => $value->row_array()['value']))->get()->row_array();
+			$filename = explode('/dokumen/', $media['file']);
+			$value = array(
+				'file_id' => $media['id'],
+				'file' => $media['file'],
+				'thumb' => $media['thumb'],
+				'filename' => $filename[1],
+			);
+		} else {
+			$value = $value->row_array()['value'];
+		}
+	} else {
+		$value = "-";
 	}
 
 	return $value;

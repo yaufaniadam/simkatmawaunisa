@@ -28,7 +28,7 @@ function call_scripts()
 
 			var field_id = $(this).parent().prev().attr('id');
 			var isDisabled = $('#' + field_id).prop('disabled');
-			console.log(isDisabled);
+			console.log(field_id);
 
 			if (isDisabled === true) {
 				$('#' + field_id).removeAttr('disabled');
@@ -81,16 +81,10 @@ function call_scripts()
 					$('[data-pengajuan="' + pengajuan_id + '"]').next('a.edit-field').children('span').text('Edit')
 					$('[data-pengajuan="' + pengajuan_id + '"]').parent().prev().prop('disabled', 'disabled')
 
-
 				}
 			});
 		});
-
-
-		
-		
 	</script>
-
 
 	<?php
 }
@@ -146,7 +140,7 @@ function field_value_checker($required, $field_value, $id, $verifikasi, $pengaju
 			//tampilan default, saat value field 0, atau field sudah ada isinya dan menunggu verifikasi
 
 			if ($field_value) {
-				
+
 				//field sudah dicek, tapi perlu direvisi
 				if ($verifikasi == 0 && $pengajuan_status == 4) {
 					$value = $field_value;
@@ -162,8 +156,6 @@ function field_value_checker($required, $field_value, $id, $verifikasi, $pengaju
 				$value = '';
 				$valid = '';
 				$disabled = 'en';
-
-				
 			}
 		}
 	} else {
@@ -210,7 +202,7 @@ function field_value_checker($required, $field_value, $id, $verifikasi, $pengaju
 }
 
 //menampilkan kategori keterangan surat
-function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungsi_upload)
+function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungsi_upload, $jenis_pengajuan_id)
 {
 	$id = $field_id;
 
@@ -218,7 +210,6 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 	$fields = $CI->db->select('mf.*')->from('mstr_fields mf')
 		->where(array('mf.field_id' => $id))
 		->get()->row_array();
-
 
 	$field_key = ($fields) ? $fields['key'] : '';
 
@@ -230,25 +221,27 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 	$verifikasi = ($value) ? $value['verifikasi'] : '';
 	$catatan = ($value) ? $value['catatan'] : '';
 
+	/* 											
+		FILE UPLOADER 					
+	*/
+
 	if ($fields['type'] == 'file') {
 
 		if ($value != 0) {
-	?>
 
-			<?php
 			$image_id = (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $field_value;
 
 			$image = $CI->db->select('*')->from('tr_media')
 				->where(array('id' => $image_id))->get()->row_array();
 
 			if ($image) {
-			//	$thumb = $image['file'];
+				//	$thumb = $image['file'];
 				$image = base_url('public/dist/img/document.png');
-			//	$exploded = explode("/", $thumb);
-			//	$file_name = $exploded[2];
+				//	$exploded = explode("/", $thumb);
+				//	$file_name = $exploded[2];
 			} else {
 				echo $image = '';
-			//	echo  $thumb = '';
+				//	echo  $thumb = '';
 				$file_name = '';
 			}
 
@@ -296,17 +289,17 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				}
 			} else {
 				if (validation_errors()) { // cek adakah eror validasi
-					
+
 					// kondisional di bawah untuk memeriksa, erornya pada field ini ataukah pada field lain	
 					if (set_value('dokumen[' . $id . ']')) {
-				
+
 						$form = 'd-none';
 						$listing = 'd-nones';
 						$error = 'is-invalidss';
 						$change = '';
 					} else {
 						// error di field ini
-				
+
 						$form = '';
 						$listing = 'd-none';
 						$error = '';
@@ -337,15 +330,12 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 						$change = '';
 					}
 				}
-			} 
+			}
 
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 
-			?>
+	?>
 
-			<!-- pad akondisi default (data value kosong), form dNd muncul, listing tidak muncul -->
-			<br>
-	
 			<input type="hidden" class="id-dokumen-<?= $id; ?> form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
 
 			<div class="tampilUploader">
@@ -357,7 +347,6 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 						<input type="file" title='Klik untuk mengunggah' />
 					</div>
 				</div><!-- /uploader -->
-
 
 				<ul class="list-unstyled p-2 d-flex flex-column col" id="files-<?= $id; ?>" style="border:1px solid #ddd; border-radius:4px;">
 					<li class="text-muteds text-center empty"></li>
@@ -392,9 +381,9 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				<div class="bg-white p-3 rounded-sm">
 					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
-					<?php echo ($catatan !='') ?  $catatan : ''; ?>
-				</div>				
-			</div>	
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 
 			<script>
@@ -406,7 +395,6 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				function ui_tampil_eror(message) {
 					console.log(message)
 				}
-				
 
 				$(function() {
 					/*
@@ -416,12 +404,12 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 					 * UI functions ui_* can be located in: demo-ui.js
 					 */
 					var maxfile = 5000000;
-					var maxfile_mb = 5000000/1000000;
+					var maxfile_mb = 5000000 / 1000000;
 					$('#drag-and-drop-zone-<?= $id; ?>').dmUploader({ //
 						url: '<?= base_url($fungsi_upload); ?>/doupload',
 						maxFileSize: maxfile, // 5 Mega
-						extFilter: ['jpg', 'jpeg', 'png', 'pdf','zip'],
-					
+						extFilter: ['jpg', 'jpeg', 'png', 'pdf', 'zip'],
+
 						onDragEnter: function() {
 							// Happens when dragging something over the DnD area
 							this.addClass('active');
@@ -476,7 +464,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 							ui_multi_update_file_status(id, 'warning', message);
 						},
 						onFileExtError: function(id, file) {
-						
+
 							$('#files-<?= $id; ?>').find('li.empty').html('<i class="fas fa-exclamation-triangle"></i> File tidak didukung').removeClass('text-muted').addClass('text-danger');
 						},
 						onFileSizeError: function(id) {
@@ -515,9 +503,13 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		} 
+		
+		/* 											
+			TEXT & JUDUL				
+		*/
 
-		<?php } elseif (($fields['type'] == 'text') || ($fields['type'] == 'judul')) {
+	} elseif (($fields['type'] == 'text') || ($fields['type'] == 'judul')) {
 
 		if ($value != 0) {
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
@@ -529,19 +521,24 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
-			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
 				<div class="bg-white p-3 rounded-sm">
 					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
-					<?php echo ($catatan !='') ?  $catatan : ''; ?>
-				</div>				
-			</div>	
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'url') {
+		/* 											
+			URL 					
+		*/
+
+	} elseif ($fields['type'] == 'url') {
+
 		if ($value != 0) {
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
@@ -549,21 +546,27 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 			<fieldset>
 				<input type="text" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> placeholder="http://" />
 			</fieldset>
-		
+
 			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
-			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
 				<div class="bg-white p-3 rounded-sm">
 					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
-					<?php echo ($catatan !='') ?  $catatan : ''; ?>
-				</div>				
-			</div>	
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
+
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'biaya') {
+		/* 											
+			BIAYA 					
+		*/
+
+	} elseif ($fields['type'] == 'biaya') {
+
 		if ($value != 0) {
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
@@ -579,47 +582,61 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
-			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
 				<div class="bg-white p-3 rounded-sm">
 					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
-					<?php echo ($catatan !='') ?  $catatan : ''; ?>
-				</div>				
-			</div>			
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'textarea') {
+		/* 											
+			TEXTAREA 					
+		*/
+
+	} elseif ($fields['type'] == 'textarea') {
+
 		if ($value != 0) {
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
 			<fieldset>
 				<textarea class="form-control <?= $check['valid']; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?>><?= $check['value'];  ?></textarea>
 			</fieldset>
+
 			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
-			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">			
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
 				<div class="bg-white p-3 rounded-sm">
 					<strong>Catatan dari BKA:</strong><hr>
 					<?= $fields['field'] ?> Perlu direvisi. <br>
-					<?php echo ($catatan !='') ?  $catatan : ''; ?>
-				</div>				
-			</div>	
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'date_ranges') {
+		/* 											
+			DATE RANGE 					
+		*/
+
+	} elseif ($fields['type'] == 'date_ranges') {
+
 		if ($value != 0) {
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
+
 			<fieldset>
 				<input type="text" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
 			</fieldset>
+
+
 			<script type="text/javascript">
 				$(function() {
 
@@ -642,47 +659,86 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				});
 			</script>
 
-			<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-			<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
+		/* 											
+			TAHUN AKADEMIK 					
+		*/
 
-		<?php } elseif ($fields['type'] == 'ta') {
+	} elseif ($fields['type'] == 'ta') {
+
 		if ($value != 0) {
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
-			<select class="form-control <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>">
+
+			<select class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>" <?= $check['disabled'];  ?>>
 				<option value=""> -- Pilih Tahun Akademik -- </option>
 				<?php
 				$cur_year = date("Y");
 				$cur_semester = (date("n") <= 6) ?  $cur_year - 1 : $cur_year;
 				for ($x = $cur_semester; $x <= $cur_year + 1; $x++) {
+
 					$value_select = sprintf("%d / %d", $x, $x + 1); ?>
-					<option value="<?= $value_select; ?>" <?= (validation_errors()) ? set_select('dokumen[' . $id . ']', $value_select) : ""; ?> <?= ($field_value == $value_select) ? "selected" : ""; ?>><?= $x; ?> / <?= $x + 1; ?></option>
-				<?php  }
+
+					<option value="<?= $value_select; ?>" <?php echo (validation_errors()) ? (set_select('dokumen[' . $id . ']', $value_select)) : ($value_select == $check['value'] ? 'selected' : ''); ?>><?= $x; ?> / <?= $x + 1; ?></option>
+
+				<?php  } // endfor
 				?>
 			</select>
-			<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-			<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
 
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'date') {
+		/* 											
+			DATE 					
+		*/
+
+	} elseif ($fields['type'] == 'date') {
 
 		if ($value != 0) {
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
 
 			<fieldset>
-				<input type="text" class="form-control <?= (form_error('dokumen[' . $id . ']')) ? 'is-invalid' : ''; ?> <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>" value="<?= (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $field_value;  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= ($pengajuan_status == 1 && $verifikasi == 0 || $pengajuan_status == 4 && $verifikasi == 0) ? "" : "disabled"; ?> />
+				<input type="text" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
 			</fieldset>
-			<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-			<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
+
 			<script>
 				$(function() {
 					$("#input-<?= $id; ?>").datepicker({
@@ -691,56 +747,131 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				});
 			</script>
 
-
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
-		<?php } elseif ($fields['type'] == 'number') {
+		}
+
+		/* 											
+			NUMBER 					
+		*/
+
+	} elseif ($fields['type'] == 'number') {
+
 		if ($value != 0) {
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
+
 			<fieldset>
 				<input type="number" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> />
 			</fieldset>
 
-			<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-			<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'tahun') {
+		/* 											
+			SEMESTER 					
+		*/
+
+	} elseif ($fields['type'] == 'sem') {
+
 		if ($value != 0) {
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 		?>
+
+			<fieldset>
+				<input type="number" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> min="1" max="10"/>
+			</fieldset>
+
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
+
+		<?php  } else {
+			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
+		}
+
+		/* 											
+			TAHUN 					
+		*/
+
+	} elseif ($fields['type'] == 'tahun') {
+
+		if ($value != 0) {
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
+		?>
+
 			<fieldset>
 				<input type="number" class="form-control <?= $check['valid']; ?>" value="<?= $check['value'];  ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?> min="2015" max="<?php echo date("Y"); ?>" />
 			</fieldset>
 
-			<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-			<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
-
-		<?php } elseif ($fields['type'] == 'select_mahasiswa') {
+		} 
+		/*
+			SELECT MAHASISWA
+		*/		
+	
+	} elseif ($fields['type'] == 'select_mahasiswa') {
 		if ($value != 0) {
-			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
-
+			
 			if (validation_errors()) { // cek adakah eror validasi
 				// kondisional di bawah untuk memeriksa, erornya pada field ini ataukah pada field lain
+
+				echo "ada error";
+
 				if (set_value('dokumen[' . $id . ']')) {
+
+					echo "error di field lain<br>";
+
 					// error di field lain       
 					$value = set_value('dokumen[' . $id . '][]');
+					$value_explode = explode(',', $value);
+					// ambil ketua
+					$ketua = array_shift($value_explode);	
+					//ambil anggota
+					$anggota = $value_explode;
 					$valid = '';
 					$disabled = 'en';
 				} else {
 					// error di field ini
+					echo "error di field ini";
+
 					$value = set_value('dokumen[' . $id . '][]');
+					$value_explode = explode(',', $value);
+					// ambil ketua
+					$ketua = array_shift($value_explode);	
+					//ambil anggota
+					$anggota = $value_explode;
 					$valid = 'is-invalid';
 					$disabled = 'en';
 				}
@@ -748,55 +879,89 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				//tampilan default, saat value field 0, atau field sudah ada isinya dan menunggu verifikasi
 
 				if ($field_value) {
+
+					echo "ada value";
 					//field sudah dicek, tapi perlu direvisi
 					if ($verifikasi == 0 && $pengajuan_status == 4) {
-						$value = explode(',', $field_value);
+						echo "blm diverifikasi dan pengajuan status 4";
+						$value_explode = explode(',', $field_value);
+						// ambil ketua
+						$ketua = array_shift($value_explode);
+						//ambil anggota
+						$anggota = $value_explode;
 						$valid = 'is-invalid';
 						$disabled = 'en';
 					} else {
-						$value = explode(',', $field_value);
+						echo " sudah diverifikasi, nilai akan diexplode";
+						$value_explode = explode(',', $field_value);
+						// ambil ketua
+						$ketua = array_shift($value_explode);
+						//ambil anggota
+						$anggota = $value_explode;
 						$valid = '';
 						$disabled = 'readonly';
 					}
 				} else {
-					//field kosong
+					//field kosong, nilai awal
+
 					$value = '';
+					$ketua = get_user_session('studentid');
+					$anggota = '';
 					$valid = '';
 					$disabled = 'en';
 				}
 			}
 		?>
-
-			<fieldset>
-				<select class="js-data-example-ajax form-control form-control-lg <?= $fields['key']; ?> form-control <<?= $check['valid']; ?>" name="dokumen[<?= $id; ?>][]" multiple <?= $check['disabled'];  ?>>
-					<?php if ($value) {
-						foreach ($value as $anggota) { ?>
-							<option value="<?= $anggota; ?>"><?php echo get_mahasiswa_by_nim($anggota)['FULLNAME']; ?> (<?php echo get_mahasiswa_by_nim($anggota)['STUDENTID']; ?>)</option>
-						<?php }
-					} else { ?>
-						<option locked="locked" value="<?= get_user_session('studentid'); ?>"><?php echo get_mahasiswa_by_nim(get_user_session('studentid'))['FULLNAME']; ?> (<?php echo get_mahasiswa_by_nim(get_user_session('studentid'))['STUDENTID']; ?>)</option>
-
-					<?php
-					} ?>
-				</select>
-
-				<div class="hasil-select"></div>
-			</fieldset>
-
+			<style>
+				fieldset.is-invalid {
+					border:1px solid #b0272b;
+					border-radius:6px;
+					padding:10px;
+				}
+			</style>
+			<fieldset class="<?= $valid; ?>">
+				<div class="form-row">
+					<label for="" class="col-md-12 col-2">Ketua </label>
+					<div class="col-md-12 col-10">
+						<select class="select-mhs ketua form-control mb-4 " name="ketua" >						
+								<option value="<?= $ketua ?>"><?php echo get_mahasiswa_by_nim($ketua)['FULLNAME']; ?> (<?php echo get_mahasiswa_by_nim($ketua)['STUDENTID']; ?>)</option>
+						</select>	
+						<small id="ketualHelp" class="form-text text-muted">Klik untuk mengganti ketua (jika diperlukan).</small>
+					</div>
+				</div>
 			
+				<div class="form-row mt-2">
+					<label for="" class="col-md-12 col-2">Anggota</label>
+					<div class="col-md-12 col-10">
+						<select class="select-mhs mhs form-control" name="anggota" multiple required="required">
+						<?php  if ($value) {			
+								foreach ($anggota as $field) { ?>
+									<option value="<?= $field; ?>"><?php echo get_mahasiswa_by_nim($field)['FULLNAME']; ?> (<?php echo get_mahasiswa_by_nim($field)['STUDENTID']; ?>)</option>
+								<?php } 
+								}  ?>
+						</select>	
+						<small id="anggotalHelp" class="form-text text-muted">Klik lalu cari nama anggota. Gunakan NIM atau nama mahasiswa.</small>	
+					</div>
+				</div>
+
+				<!-- nilai dari ketua dan anggota digabung di sini -->		
+				<input type="hidden" id="namaanggota" name="dokumen[<?= $id; ?>]" value="<?= $field_value;  ?>" />			
+
+			</fieldset>
 
 			<script>
 				$(document).ready(function() {
+					
+					// get value 
+					var selectedValueKetua = [<?= $ketua; ?>];
+					var selectedValuesAnggota = [<?php if ($value) {
+																					foreach ($anggota as $field) {
+																						echo '"' . $field . '"' . ',';
+																					}
+																				} ?>
+																			];					
 
-					var selectedValuesTest = [<?= get_user_session('studentid'); ?>,
-						<?php if ($value) {
-							foreach ($value as $anggota) {
-								echo '"' . $anggota . '"' . ',';
-							}
-						} ?>
-					];
-
-					$('.js-data-example-ajax').select2({
+					$('.select-mhs').select2({
 						ajax: {
 							url: '<?= base_url('mahasiswa/pengajuan/getanggota'); ?>',
 							dataType: 'json',
@@ -815,41 +980,78 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 							cache: true
 						},
 						placeholder: 'Tuliskan NIM atau Nama Mahasiswa',
+						language: {
+							inputTooShort: function() {
+								return 'Ketikkan lebih dari 3 karakter nama atau NIM';
+							}
+						},
 						minimumInputLength: 3,
-						minimumResultsForSearch: Infinity
-						// templateResult: formatRepo,
-						// templateSelection: formatRepoSelection
+						minimumResultsForSearch: Infinity,
 					});
-					$('.js-data-example-ajax').val(selectedValuesTest).trigger('change');
+
+					$('.select-mhs.ketua').val(selectedValueKetua).trigger('change');
+					$('.select-mhs.mhs').val(selectedValuesAnggota).trigger('change');
+
+					$('.select-mhs').on('change', function() {
+						var data = $(".select-mhs option:selected")
+												.map(function() {
+                            return this.value;
+                        }).get(); 
+
+					 $("#namaanggota").val(data);					 
+					});			
 				});
 
+			
+
 				var classe = $('.is-invalid').next().attr('class');
-				console.log(classe);
+
+				
+
 			</script>
 
-			<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-			<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'select_pembimbing') {
+		/* 											
+			SELECT DOSEN / PEMBIMBING 					
+		*/
+
+	} elseif ($fields['type'] == 'select_pembimbing') {
 		if ($value != 0) {
 
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 
 		?>
 			<fieldset>
-				<select class="ambil-pembimbing form-control form-control-lg <?= $fields['key']; ?> form-control <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled']; ?>>
+				<select class="ambil-pembimbing form-control form-control-lg <?= $fields['key']; ?> <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled']; ?>>
 					<option value="<?= $check['value']; ?>"><?= get_dosen_by_id($check['value'])['nama']; ?></option>
 
 				</select>
 			</fieldset>
 
-			<span class="text-danger"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
-			<span class="<?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> text-danger"><i class="fas fa-exclamation-triangle"></i> <?= $fields['field'] ?> Perlu direvisi.</span>
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 			<script>
 				$(document).ready(function() {
@@ -875,8 +1077,12 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 							cache: true
 						},
 						placeholder: 'Pilih Dosen',
+						language: {
+							inputTooShort: function() {
+								return 'Ketikkan lebih dari 3 karakter nama atau NIM';
+							}
+						},
 						minimumInputLength: 3,
-
 					});
 					$('.ambil-pembimbing').val(selectedValuesTest).trigger('change');
 				});
@@ -884,65 +1090,127 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
-		<?php } elseif ($fields['type'] == 'select_prestasi') {
+		} 
+		
+		/* 											
+			SELECT CAPAIAN PRESTASi 					
+		*/
+		
+	} elseif ($fields['type'] == 'select_prestasi') {
+
 		if ($value != 0) {
-		?>
-			<?php
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
+				
 			$CI = &get_instance();
-			$capaian_prestasi = $CI->db->get('mstr_capaian_prestasi')->result();
+			$capaian_prestasi = $CI->db->select('*')->from('mstr_penghargaan_rekognisi_mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
 			?>
+
 			<fieldset>
-				<select name="<?= $fields['key']; ?>" class="custom-select">
+				<select class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?>>
+					<option value="">Pilih Prestasi</option>
 					<?php foreach ($capaian_prestasi as $capaian_prestasi) { ?>
-						<option value="<?= $capaian_prestasi->Capaian_Prestasi_Id; ?>"><?= $capaian_prestasi->Capaian_Prestasi; ?></option>
+						<option value="<?= $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id']; ?>" <?php echo (validation_errors()) ? (set_select('dokumen[' . $id . ']', $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id'])) : ($capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id'] == $check['value'] ? 'selected' : ''); ?>><?= $capaian_prestasi['keterangan']; ?></option>
 					<?php } ?>
 				</select>
 			</fieldset>
 
 
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
+
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
-		<?php } elseif ($fields['type'] == 'select_tingkat') {
+		/* 											
+			SELECT TINGKATAN / LINGKUP					
+		*/
+
+	} elseif ($fields['type'] == 'select_tingkat') {
+
 		if ($value != 0) {
-		?>
-			<?php
+			
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
+
 			$CI = &get_instance();
 			$tingkat_prestasi = $CI->db->get('mstr_tingkat_prestasi')->result();
 			?>
 			<fieldset>
-				<select name="<?= $fields['key']; ?>" class="custom-select">
+				<select name="dokumen[<?= $id; ?>]" class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" <?= $check['disabled'];  ?>>
+					<option value="">Pilih Lingkup Kegiatan</option>
 					<?php foreach ($tingkat_prestasi as $tingkat_prestasi) { ?>
-						<option value="<?= $tingkat_prestasi->Tingkat_Prestasi_Id; ?>"><?= $tingkat_prestasi->Tingkat_Prestasi; ?></option>
+						
+						<option value="<?= $tingkat_prestasi->Tingkat_Prestasi_Id; ?>"
+						<?php echo (validation_errors()) ? (set_select('dokumen[' . $id . ']', $tingkat_prestasi->Tingkat_Prestasi_Id)) : ($tingkat_prestasi->Tingkat_Prestasi_Id == $check['value'] ? 'selected' : ''); ?>
+						><?= $tingkat_prestasi->Tingkat_Prestasi; ?></option>					
+
+					<?php } ?>
+				</select>
+			</fieldset>
+			
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
+
+		<?php  } else {
+			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
+		}
+
+		/* 											
+			SELECT PKM 					
+		*/
+
+	} elseif ($fields['type'] == 'select_pkm') {
+		if ($value != 0) {
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
+		?>
+			<?php
+			$CI = &get_instance();
+			$pkm = $CI->db->select('*')->from('mstr_pimnas')->get()->result_array();
+			?>
+
+			<fieldset>
+				<select class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" <?= $check['disabled'];  ?>>
+					<option value="">Pilih Kategori PKM</option>
+					<?php foreach ($pkm as $pkm) { ?>
+						<option value="<?= $pkm['id']; ?>" <?php echo (validation_errors()) ? (set_select('dokumen[' . $id . ']', $pkm['id'])) : ($pkm['id'] == $check['value'] ? 'selected' : ''); ?>><?= $pkm['nama_pkm']; ?></option>
 					<?php } ?>
 				</select>
 			</fieldset>
 
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari LPKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
 
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
+		}
 
+	
 
-		<?php } elseif ($fields['type'] == 'select_nasional_internasional') {
-		if ($value != 0) { ?>
-
-			<fieldset>
-				<select name="<?= $fields['key']; ?>" class="custom-select">
-
-					<option value="nasional">Nasional</option>
-					<option value="internasional">Internasional</option>
-
-				</select>
-			</fieldset>
-
-
-		<?php  } else {
-			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
-		} ?>
-	<?php } ?>
+	}  ?>
 <?php }
 
 /*
@@ -985,7 +1253,7 @@ function data_sesuai($id, $verifikasi, $catatan)
 	<?php
 }
 
-function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
+function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, $jenis_pengajuan_id)
 {
 
 	$id = $field_id;
@@ -1014,9 +1282,9 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi, $catatan);			
+			data_sesuai($id, $verifikasi, $catatan);
 		}
-	
+
 		?>
 
 	<?php
@@ -1028,9 +1296,9 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
-		} 	
-		
+			data_sesuai($id, $verifikasi, $catatan);
+		}
+
 		?>
 
 	<?php
@@ -1042,9 +1310,9 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
-		}		
-		
+			data_sesuai($id, $verifikasi, $catatan);
+		}
+
 		?>
 
 	<?php
@@ -1056,7 +1324,81 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			data_sesuai($id, $verifikasi, $catatan);
+		} ?>
+
+	<?php
+	} elseif ($field['type'] == 'select_prestasi') {
+		/* tingkatan prestasi khusus untuk kegiatan kompetisi (ada juaranya), misalnya lomba Pimnas
+		tingkatan prestasi diambilkan dari setting tingkatan prestasi di table 'mstr_penghargaan_rekognisi_mahasiswa'
+		berdasarkan ID jenis pengajuannya
+		*/
+	?>
+
+		<?php
+		$CI = &get_instance();
+		$capaian_prestasi = $CI->db->select('*')->from('mstr_penghargaan_rekognisi_mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
+		?>
+
+		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
+			<?php foreach ($capaian_prestasi as $capaian_prestasi) { ?>
+				<option value="<?= $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id']; ?>" <?= ($capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id'] == $field_value) ? 'selected' : ''; ?>><?= $capaian_prestasi['keterangan']; ?></option>
+			<?php } ?>
+		</select>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan);
+		} ?>
+
+	<?php
+	} elseif ($field['type'] == 'select_tingkat') {
+		/* tingkatan wilayah/sekup kegiatan
+		*/
+	?>
+		<?php
+		$CI = &get_instance();
+		$tingkat_prestasi = $CI->db->get('mstr_tingkat_prestasi')->result();
+		?>
+
+		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
+		<?php foreach ($tingkat_prestasi as $tingkat_prestasi) { ?>
+				<option value="<?= $tingkat_prestasi->Tingkat_Prestasi_Id; ?>" <?= ($tingkat_prestasi->Tingkat_Prestasi_Id == $field_value) ? 'selected' : ''; ?>><?= $tingkat_prestasi->Tingkat_Prestasi; ?></option>
+			<?php } ?>
+		</select>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan);
+		} ?>
+
+
+	<?php
+	} elseif ($field['type'] == 'select_pkm') {
+
+	?>
+
+		<?php
+		$CI = &get_instance();
+		$pkm = $CI->db->select('*')->from('mstr_pimnas')->get()->result_array();
+		?>
+
+
+		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
+			<?php foreach ($pkm as $pkm) { ?>
+				<option value="<?= $pkm['id']; ?>" <?= ($pkm['id'] == $field_value) ? 'selected' : ''; ?>><?= $pkm['nama_pkm']; ?></option>
+			<?php } ?>
+		</select>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan);
 		} ?>
 
 	<?php
@@ -1068,7 +1410,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			data_sesuai($id, $verifikasi, $catatan);
 		} ?>
 
 	<?php
@@ -1080,7 +1422,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			data_sesuai($id, $verifikasi, $catatan);
 		} ?>
 
 	<?php
@@ -1097,7 +1439,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			// edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			data_sesuai($id, $verifikasi, $catatan);
 		} ?>
 
 
@@ -1129,10 +1471,10 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
-			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			// edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan);
 		}
-		 ?>
+		?>
 
 
 	<?php } elseif ($field['type'] == 'file') { ?>
@@ -1162,15 +1504,15 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 
-			data_sesuai($id, $verifikasi,$catatan);
-		} 
-	
-		
+			data_sesuai($id, $verifikasi, $catatan);
+		}
+
+
 		?>
 	<?php } elseif ($field['type'] == 'number') {
-		
-		
-		 ?>
+
+
+	?>
 
 		<input type="number" class="form-control mb-2" value="<?= (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $field_value;  ?>" id="input-<?= $id; ?>" disabled />
 
@@ -1179,8 +1521,8 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
-		} 
+			data_sesuai($id, $verifikasi, $catatan);
+		}
 
 
 		?>
@@ -1195,7 +1537,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			data_sesuai($id, $verifikasi, $catatan);
 		} ?>
 
 
@@ -1208,7 +1550,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			data_sesuai($id, $verifikasi, $catatan);
 		} ?>
 
 	<?php } elseif ($field['type'] == 'date') { ?>
@@ -1229,7 +1571,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status)
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
 		) {
 			edit_field($id,  $id_pengajuan);
-			data_sesuai($id, $verifikasi,$catatan);
+			data_sesuai($id, $verifikasi, $catatan);
 		} ?>
 
 	<?php }
