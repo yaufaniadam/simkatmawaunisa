@@ -92,7 +92,7 @@ function call_scripts()
 function field($field_id)
 {
 	$CI = &get_instance();
-	return $CI->db->get_where('Mstr_Fields', array('field_id' => $field_id))->row_array();
+	return $CI->db->get_where('mstr_fields', array('field_id' => $field_id))->row_array();
 }
 
 function get_user_session($session_name)
@@ -115,7 +115,7 @@ function get_dosen_by_id($id)
 function get_prodi_by_id($id)
 {
 	$CI = &get_instance();
-	$query = $CI->db->get_where('Mstr_Department', array('DEPARTMENT_ID' => $id))->row_array();
+	$query = $CI->db->get_where('mstr_department', array('DEPARTMENT_ID' => $id))->row_array();
 	return $query;
 }
 
@@ -207,13 +207,13 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 	$id = $field_id;
 
 	$CI = &get_instance();
-	$fields = $CI->db->select('mf.*')->from('Mstr_Fields mf')
+	$fields = $CI->db->select('mf.*')->from('mstr_fields mf')
 		->where(array('mf.field_id' => $id))
 		->get()->row_array();
 
 	$field_key = ($fields) ? $fields['key'] : '';
 
-	$value = $CI->db->select('fv.value, fv.verifikasi, fv.catatan')->from('Tr_Field_Value fv')
+	$value = $CI->db->select('fv.value, fv.verifikasi, fv.catatan')->from('tr_field_value fv')
 		->where(array('field_id' => $field_id, 'pengajuan_id' => $pengajuan_id))
 		->get()->row_array();
 
@@ -231,7 +231,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 
 			$image_id = (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $field_value;
 
-			$image = $CI->db->select('*')->from('Tr_Media')
+			$image = $CI->db->select('*')->from('tr_media')
 				->where(array('id' => $image_id))->get()->row_array();
 
 			if ($image) {
@@ -1107,7 +1107,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 				
 			$CI = &get_instance();
-			$capaian_prestasi = $CI->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
+			$capaian_prestasi = $CI->db->select('*')->from('mstr_penghargaan_rekognisi_mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
 			?>
 
 			<fieldset>
@@ -1146,7 +1146,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
 
 			$CI = &get_instance();
-			$tingkat_prestasi = $CI->db->get('Mstr_Tingkat_Prestasi')->result();
+			$tingkat_prestasi = $CI->db->get('mstr_tingkat_prestasi')->result();
 			?>
 			<fieldset>
 				<select name="dokumen[<?= $id; ?>]" class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" <?= $check['disabled'];  ?>>
@@ -1264,13 +1264,13 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 	$id = $field_id;
 
 	$CI = &get_instance();
-	$field = $CI->db->select('mf.*')->from('Mstr_Fields mf')
+	$field = $CI->db->select('mf.*')->from('mstr_fields mf')
 		->where(array('mf.field_id' => $id))
 		->get()->row_array();
 
 	$field_key = ($field) ? $field['key'] : '';
 
-	$fields = $CI->db->select('fv.value, fv.verifikasi, fv.catatan')->from('Tr_Field_Value fv')
+	$fields = $CI->db->select('fv.value, fv.verifikasi, fv.catatan')->from('tr_field_value fv')
 		->where(array('field_id' => $field_id, 'pengajuan_id' => $id_pengajuan))
 		->get()->row_array();
 
@@ -1335,14 +1335,14 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 	<?php
 	} elseif ($field['type'] == 'select_prestasi') {
 		/* tingkatan prestasi khusus untuk kegiatan kompetisi (ada juaranya), misalnya lomba Pimnas
-		tingkatan prestasi diambilkan dari setting tingkatan prestasi di table 'Mstr_Penghargaan_Rekognisi_Mahasiswa'
+		tingkatan prestasi diambilkan dari setting tingkatan prestasi di table 'mstr_penghargaan_rekognisi_mahasiswa'
 		berdasarkan ID jenis pengajuannya
 		*/
 	?>
 
 		<?php
 		$CI = &get_instance();
-		$capaian_prestasi = $CI->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
+		$capaian_prestasi = $CI->db->select('*')->from('mstr_penghargaan_rekognisi_mahasiswa')->where(['Jenis_Pengajuan_Id' => $jenis_pengajuan_id])->get()->result_array();
 		?>
 
 		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
@@ -1365,7 +1365,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 	?>
 		<?php
 		$CI = &get_instance();
-		$tingkat_prestasi = $CI->db->get('Mstr_Tingkat_Prestasi')->result();
+		$tingkat_prestasi = $CI->db->get('mstr_tingkat_prestasi')->result();
 		?>
 
 		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
@@ -1454,7 +1454,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 
 		<?php
 		$CI = &get_instance();
-		$query = $CI->db->query("SELECT value FROM Tr_Field_Value WHERE pengajuan_id =  $id_pengajuan AND field_id = $id")->row_array();
+		$query = $CI->db->query("SELECT value FROM tr_field_value WHERE pengajuan_id =  $id_pengajuan AND field_id = $id")->row_array();
 		$anggota_string = $query['value'];
 		$anggota_array = explode(",", $anggota_string);
 		?>
@@ -1486,7 +1486,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 		<?php
 		$image_id = (validation_errors()) ? set_value('dokumen[' . $id . ']') :  $field_value;
 
-		$image = $CI->db->select('*')->from('Tr_Media')
+		$image = $CI->db->select('*')->from('tr_media')
 			->where(array('id' => $image_id))->get()->row_array();
 		if ($image) {
 			$thumb = $image['file'];

@@ -21,6 +21,43 @@ class Pengajuan extends Admin_Controller
 		$this->load->view('layout/layout', $data);
 	}
 
+	public function detail($pengajuan_id = 0)
+	{
+		$this->load->helper('formulir');
+
+		// $pengajuan_id = $this->pengajuan_model->get_detail_pengajuan($spengajuan_id)['pengajuan_id'];
+		$jenis_pengajuan_id = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id)['Jenis_Pengajuan_Id'];
+
+		$pengajuan = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id);
+
+		$data['pengajuan'] = $pengajuan;
+		$data['timeline'] = $this->db->query(
+			"SELECT 
+			*,
+			FORMAT (ps.date, 'dd/MM/yyyy') as date,
+			FORMAT (ps.date, 'hh:mm:ss') as time 
+			FROM tr_pengajuan_status ps
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
+			WHERE ps.pengajuan_id = $pengajuan_id
+			ORDER BY status_pengajuan_id DESC"
+
+		)->result_array();
+
+		$data['fields'] = $this->db->query(
+			"SELECT * FROM mstr_jenis_pengajuan jp 
+			LEFT JOIN mstr_pengajuan_field pf ON pf.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_fields f ON f.field_id = pf.field_id
+			WHERE jp.Jenis_Pengajuan_Id = $jenis_pengajuan_id
+			AND pf.terpakai = 1
+			ORDER BY urutan ASC"
+		)->result_array();
+
+		$data['title'] =  $pengajuan['Jenis_Pengajuan'];
+		$data['view'] = 'pengajuan/detail';
+
+		$this->load->view('layout/layout', $data);
+	}
+
 	public function verified()
 	{
 		if ($this->input->post('submit')) {
@@ -57,12 +94,12 @@ class Pengajuan extends Admin_Controller
 				//lalu diforeach
 				foreach ($daftar_pengajuan_id as $pengajuan_id) {
 
-					$queryp = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object();
+					$queryp = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object();
 					$jenis_pengajuan_id = $queryp->Jenis_Pengajuan_Id;
 
 					//cek apakah pengajuan ini memiliki field anggota
 					$is_field_anggota_exist = $this->db->get_where(
-						'Tr_Pengajuan_Field',
+						'mstr_pengajuan_field',
 						[
 							'Jenis_Pengajuan_Id' => $jenis_pengajuan_id,
 							'field_id' => 77 // field anggota
@@ -76,7 +113,7 @@ class Pengajuan extends Admin_Controller
 					// 4. Berdasarkan biaya yang dikeluarkan oleh mahasiswa (id = 0)
 
 					$jenis_pengajuan = $this->db->get_where(
-						'Mstr_Jenis_Pengajuan',
+						'mstr_jenis_pengajuan',
 						[
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id
 						]
@@ -87,24 +124,24 @@ class Pengajuan extends Admin_Controller
 
 					if ($tipe_reward == 1) {
 
-						$nominal = $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
+						$nominal = $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						])->row_object()->nominal;
 
 
-						$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
+						$nim = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 
 						$data = [
 							'id_periode' => $periode_id,
 							'id_pengajuan' => $pengajuan_id,
 							'pic' => $_SESSION['user_id'],
 							'STUDENTID' => $nim,
-							'nominal' => $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
+							'nominal' => $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 								'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 							])->row_object()->nominal
 						];
 
-						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+						$this->db->insert('tr_penerbitan_pengajuan', $data);
 
 
 
@@ -112,7 +149,7 @@ class Pengajuan extends Admin_Controller
 							->set('pic', $this->session->userdata('user_id'))
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
-							->insert('Tr_Pengajuan_Status');
+							->insert('tr_pengajuan_status');
 							
 							redirect(base_url('admin/periode/bulan/' . $periode_id));
 
@@ -122,7 +159,7 @@ class Pengajuan extends Admin_Controller
 						$anggota = get_meta_value_by_type_field('select_anggota', $pengajuan_id, false);
 						$anggota = explode(',', $anggota);
 
-						$nominal = $this->db->select('nominal')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where([
+						$nominal = $this->db->select('nominal')->from('mstr_penghargaan_rekognisi_mahasiswa')->where([
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						])->get()->result_array();
 
@@ -136,20 +173,20 @@ class Pengajuan extends Admin_Controller
 								'nominal' => ($key < 1) ? $nominal[0]['nominal'] : $nominal[1]['nominal']
 							];
 
-							$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+							$this->db->insert('tr_penerbitan_pengajuan', $data);
 						}
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
-							->insert('Tr_Pengajuan_Status');
+							->insert('tr_pengajuan_status');
 
 							redirect(base_url('admin/periode/bulan/' . $periode_id));
 
 					} elseif ($tipe_reward == 3) {
 
-						$nominal = $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
+						$nominal = $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 							'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						])->row_object()->nominal;
 
@@ -167,20 +204,20 @@ class Pengajuan extends Admin_Controller
 								'STUDENTID' => $anggota,
 								'nominal' => ($key < 1) ? $nominal : '0'
 							];
-							$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+							$this->db->insert('tr_penerbitan_pengajuan', $data);
 						}
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
-							->insert('Tr_Pengajuan_Status');
+							->insert('tr_pengajuan_status');
 
 							redirect(base_url('admin/periode/bulan/' . $periode_id));
 
 					} elseif ($tipe_reward == 4) {
 
-						$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
+						$nim = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 
 						$biaya = get_meta_value_by_type_field('biaya', $pengajuan_id, false);
 
@@ -192,13 +229,13 @@ class Pengajuan extends Admin_Controller
 							//ambil value dari field biaya
 							'nominal' => $biaya,
 						];
-						$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+						$this->db->insert('tr_penerbitan_pengajuan', $data);
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
-							->insert('Tr_Pengajuan_Status');
+							->insert('tr_pengajuan_status');
 
 							redirect(base_url('admin/periode/bulan/' . $periode_id));
 
@@ -210,8 +247,8 @@ class Pengajuan extends Admin_Controller
 						// ambil nominal jumlah reward yang sesuai, dengan cara mengambil data capaian prestasi yg diraih
 						$capaian_prestasi = get_meta_value_by_type_field('select_prestasi', $pengajuan_id, false);
 
-						// lalu cocokkan dengan $capaian_prestasi dengan jumlah nominal di tabel Mstr_Penghargaan_Rekognisi_Mahasiswa
-						$nominal_exist = $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa',[
+						// lalu cocokkan dengan $capaian_prestasi dengan jumlah nominal di tabel mstr_penghargaan_rekognisi_mahasiswa
+						$nominal_exist = $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa',[
 							'Penghargaan_Rekognisi_Mahasiswa_Id' => $capaian_prestasi,
 						]);
 
@@ -224,7 +261,7 @@ class Pengajuan extends Admin_Controller
 						
 						//jika individu, maka diambil nim mhs yng mengajukan
 						if ($jumlah_anggota == 'individu') {
-							$nim = $this->db->get_where('Tr_Pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
+							$nim = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 
 							$data = [
 								'id_periode' => $periode_id,
@@ -234,13 +271,13 @@ class Pengajuan extends Admin_Controller
 								//ambil value dari field biaya
 								'nominal' => $nominal,
 							];
-							$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+							$this->db->insert('tr_penerbitan_pengajuan', $data);
 
 							//jika selain idnvidu berarti beregu /kelompok, 
 						} else {
 							//maka ambil data anggota kelompok menggunakan type field
 							$anggota = get_meta_value_by_type_field('select_mahasiswa', $pengajuan_id, false);
-							//data diexplode utk dimasukkan ke tabel 'Tr_Penerbitan_Pengajuan'
+							//data diexplode utk dimasukkan ke tabel 'tr_penerbitan_pengajuan'
 							$anggota = explode(',', $anggota);
 
 							foreach ($anggota as $key => $anggota) {
@@ -253,7 +290,7 @@ class Pengajuan extends Admin_Controller
 									'STUDENTID' => $anggota,
 									'nominal' => ($key < 1) ? $nominal : '0'
 								];
-								$this->db->insert('Tr_Penerbitan_Pengajuan', $data);
+								$this->db->insert('tr_penerbitan_pengajuan', $data);
 							}
 	
 						}
@@ -262,7 +299,7 @@ class Pengajuan extends Admin_Controller
 							->set('pic', $this->session->userdata('user_id'))
 							->set('date', 'getdate()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
-							->insert('Tr_Pengajuan_Status');
+							->insert('tr_pengajuan_status');
 
 							redirect(base_url('admin/periode/bulan/' . $periode_id));
 
@@ -290,17 +327,17 @@ class Pengajuan extends Admin_Controller
 
 	function reward($id_prestasi)
 	{
-		$prestasi = $this->db->get_where('Tr_Penerbitan_Pengajuan', ['id_penerbitan_pengajuan' => $id_prestasi])
+		$prestasi = $this->db->get_where('tr_penerbitan_pengajuan', ['id_penerbitan_pengajuan' => $id_prestasi])
 			->row_object();
 
-		$field_anggota = $this->db->get_where('Tr_Field_Value', [
+		$field_anggota = $this->db->get_where('tr_field_value', [
 			'pengajuan_id' => $prestasi->id_pengajuan,
 			'field_id' => 77
 		]);
 
 		$queryp = $this->db->select('*')
-			->from('Tr_Pengajuan p')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id', 'left')
+			->from('tr_pengajuan p')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id', 'left')
 			->where([
 				'p.pengajuan_id' => $prestasi->id_pengajuan
 			])
@@ -309,7 +346,7 @@ class Pengajuan extends Admin_Controller
 		$tipe_reward = $queryp->fixed;
 
 		if (($tipe_reward == 1) || ($tipe_reward == 3)) {
-			$reward = $this->db->get_where('Mstr_Penghargaan_Rekognisi_Mahasiswa', [
+			$reward = $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 				'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id
 			])->row_object()->nominal;
 		} elseif ($tipe_reward == 2) {
@@ -317,7 +354,7 @@ class Pengajuan extends Admin_Controller
 				$anggota = explode(',', $field_anggota->row_object()->value);
 				$urutan = array_search($prestasi->STUDENTID, $anggota);
 				$reward = $this->db->get_where(
-					'Mstr_Penghargaan_Rekognisi_Mahasiswa',
+					'mstr_penghargaan_rekognisi_mahasiswa',
 					[
 						'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 						'order' => $urutan > 0 ? 2 : 1
@@ -341,11 +378,11 @@ class Pengajuan extends Admin_Controller
 
 		$data['prestasi'] =
 			$this->db->select('*')
-			->from('Tr_Penerbitan_Pengajuan pp')
-			->join('Tr_Pengajuan p', 'pp.id_pengajuan = p.pengajuan_id', 'left')
-			->join('Mstr_Jenis_Pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
+			->from('tr_penerbitan_pengajuan pp')
+			->join('tr_pengajuan p', 'pp.id_pengajuan = p.pengajuan_id', 'left')
+			->join('mstr_jenis_pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
 			->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
-			->join('Tr_Periode_Penerbitan per', 'per.id_periode = pp.id_periode')
+			->join('tr_periode_penerbitan per', 'per.id_periode = pp.id_periode')
 			->where(['m.DEPARTMENT_ID' => $prodi, 'per.status' => 1])
 			->get()->result_array();
 
@@ -358,10 +395,10 @@ class Pengajuan extends Admin_Controller
 		$data['view'] = 'pengajuan/detail_prestasi';
 
 		$query = $this->db->select('*')
-			->from('Tr_Penerbitan_Pengajuan pp')
+			->from('tr_penerbitan_pengajuan pp')
 			->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
-			->join('Tr_Pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-			->join('Mstr_Jenis_Pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
+			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where(
 				[
 					'pp.id_penerbitan_pengajuan' => $id_penerbitan_pengajuan
@@ -383,8 +420,8 @@ class Pengajuan extends Admin_Controller
 
 	public function arsip($DEPARTMENT_ID = 0, $ID_JENIS_PENGAJUAN = 0)
 	{
-		$department_data = $this->db->query("SELECT * FROM Mstr_Department")->result_array();
-		$kategori_data = $this->db->query("SELECT * FROM Mstr_Jenis_Pengajuan WHERE Jenis_Pengajuan_Id != 12")->result_array();
+		$department_data = $this->db->query("SELECT * FROM mstr_department")->result_array();
+		$kategori_data = $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE Jenis_Pengajuan_Id != 12")->result_array();
 
 		$data['query'] = $this->pengajuan_model->get_arsip_pengajuan($DEPARTMENT_ID, $ID_JENIS_PENGAJUAN);
 		$data['departments'] = $department_data;
@@ -392,56 +429,19 @@ class Pengajuan extends Admin_Controller
 
 		$data['button_text'] = $DEPARTMENT_ID == 0 ? 'Semua Prodi' : $this->db->query(
 			"SELECT NAME_OF_DEPARTMENT 
-			FROM Mstr_Department 
+			FROM mstr_department 
 			WHERE DEPARTMENT_ID = $DEPARTMENT_ID"
 		)->row_object()->NAME_OF_DEPARTMENT;
 
 		$data['button_text_2'] = $ID_JENIS_PENGAJUAN == 0 ? 'Semua Kategori' : $this->db->query(
 			"SELECT Jenis_Pengajuan 
-			FROM Mstr_Jenis_Pengajuan 
+			FROM mstr_jenis_pengajuan 
 			WHERE Jenis_Pengajuan_Id = $ID_JENIS_PENGAJUAN"
 		)->row_object()->Jenis_Pengajuan;
 
 		$data['title'] = 'Semua Pengajuan';
 		$data['view'] = 'pengajuan/arsip';
 		$data['menu'] = 'arsip';
-		$this->load->view('layout/layout', $data);
-	}
-
-	public function detail($pengajuan_id = 0)
-	{
-		$this->load->helper('formulir');
-
-		// $pengajuan_id = $this->pengajuan_model->get_detail_pengajuan($spengajuan_id)['pengajuan_id'];
-		$jenis_pengajuan_id = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id)['Jenis_Pengajuan_Id'];
-
-		$pengajuan = $this->pengajuan_model->get_detail_pengajuan($pengajuan_id);
-
-		$data['pengajuan'] = $pengajuan;
-		$data['timeline'] = $this->db->query(
-			"SELECT 
-			*,
-			FORMAT (ps.date, 'dd/MM/yyyy') as date,
-			FORMAT (ps.date, 'hh:mm:ss') as time 
-			FROM Tr_Pengajuan_Status ps
-			LEFT JOIN Tr_Status s ON s.status_id = ps.status_id
-			WHERE ps.pengajuan_id = $pengajuan_id
-			ORDER BY status_pengajuan_id DESC"
-
-		)->result_array();
-
-		$data['fields'] = $this->db->query(
-			"SELECT * FROM Mstr_Jenis_Pengajuan jp 
-			LEFT JOIN Tr_Pengajuan_Field pf ON pf.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
-			LEFT JOIN Mstr_Fields f ON f.field_id = pf.field_id
-			WHERE jp.Jenis_Pengajuan_Id = $jenis_pengajuan_id
-			AND pf.terpakai = 1
-			ORDER BY urutan ASC"
-		)->result_array();
-
-		$data['title'] =  $pengajuan['Jenis_Pengajuan'];
-		$data['view'] = 'pengajuan/detail';
-
 		$this->load->view('layout/layout', $data);
 	}
 
@@ -467,13 +467,13 @@ class Pengajuan extends Admin_Controller
 				->set('pic', $this->session->userdata('user_id'))
 				->set('date', 'getdate()', FALSE)
 				->set('pengajuan_id', $pengajuan_id)
-				->insert('Tr_Pengajuan_Status');
+				->insert('tr_pengajuan_status');
 
 
 			foreach ($verifikasi as $id => $value_verifikasi) {
 				$this->db->where(array('field_id' => $id, 'pengajuan_id' => $pengajuan_id))
 					->update(
-						'Tr_Field_Value',
+						'tr_field_value',
 						array(
 							'verifikasi' =>  $value_verifikasi,
 							// 'value' => $dokumen
@@ -484,7 +484,7 @@ class Pengajuan extends Admin_Controller
 			foreach ($catatan as $id => $value_catatan) {
 				$this->db->where(array('field_id' => $id, 'pengajuan_id' => $pengajuan_id))
 					->update(
-						'Tr_Field_Value',
+						'tr_field_value',
 						array(
 							'catatan' =>  $value_catatan,
 							// 'value' => $dokumen
@@ -494,7 +494,9 @@ class Pengajuan extends Admin_Controller
 
 			if ($status_pengajuan == 4) {
 
-				//data utk kirim email & notif ke pegawai
+				//data utk kirim email & notif ke mhs
+			// 	yg dikirimi notif saat ada revisi
+			
 				$data_for_notif = [
 
 					'pengirim' => $_SESSION['user_id'],
@@ -509,6 +511,27 @@ class Pengajuan extends Admin_Controller
 
 				//sendmail & notif
 				$this->mailer->send_mail($data_for_notif);
+
+			} else 	if ($status_pengajuan == 6) {
+
+				//data utk kirim email & notif ke mhs
+			// 	yg dikirimi notif saat ada revisi
+
+				$data_for_notif = [
+
+					'pengirim' => $_SESSION['user_id'],
+					'penerima' => $this->input->post('user_id'),
+					'id_pengajuan' => $pengajuan_id,
+					'role' => [3],
+					'link' => base_url('admin/pengajuan/detail/' . $pengajuan_id),
+					'subjek' => 'Revisi Pengajuan prestasi',
+					'isi' => 'Mohon periksa kembali pengajuan Saudara.',
+					'id_status_notif' => 5,
+				];
+
+				//sendmail & notif
+				$this->mailer->send_mail($data_for_notif);
+
 			}
 
 			redirect(base_url('admin/pengajuan/detail/' . $pengajuan_id));
@@ -528,7 +551,7 @@ class Pengajuan extends Admin_Controller
 
 		$update_field = $this->db->where(array('field_id' => $id, 'pengajuan_id' => $pengajuan_id))
 			->update(
-				'Tr_Field_Value',
+				'tr_field_value',
 				array(
 					'value' =>  $this->input->post('valfield'),
 					'tanggal_edit' => date('Y-m-d h:m:s'),
@@ -555,13 +578,13 @@ class Pengajuan extends Admin_Controller
 				->set('pic', $this->session->userdata('user_id'))
 				->set('date', 'getdate()', FALSE)
 				->set('pengajuan_id', $pengajuan_id)
-				->insert('Tr_Pengajuan_Status');
+				->insert('tr_pengajuan_status');
 
 			foreach ($verifikasi as $id => $value_verifikasi) {
 
 				$this->db->where(array('field_id' => $id, 'pengajuan_id' => $pengajuan_id))
 					->update(
-						'Tr_Field_Value',
+						'tr_field_value',
 						array(
 							'verifikasi' =>  $value_verifikasi,
 						)
@@ -880,7 +903,7 @@ class Pengajuan extends Admin_Controller
 		);
 
 		$this->db->where('id_penerbitan_pengajuan', $id_penerbitan_pengajuan);
-		$this->db->update('Tr_Penerbitan_Pengajuan', $data);
+		$this->db->update('tr_penerbitan_pengajuan', $data);
 	}
 
 	public function hapus($id)
@@ -890,7 +913,7 @@ class Pengajuan extends Admin_Controller
 			->set('date', 'getdate()', FALSE)
 			->set('pengajuan_id', $id)
 			->set('pic', $this->session->userdata('user_id'))
-			->insert('Tr_Pengajuan_Status');
+			->insert('tr_pengajuan_status');
 
 		$this->session->set_flashdata('msg', 'Pengajuan berhasil dihapus!');
 		redirect(base_url('admin/pengajuan/index'));

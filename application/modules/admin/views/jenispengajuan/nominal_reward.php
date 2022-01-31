@@ -225,7 +225,7 @@ list($kat, $result, $nominal) = $kategori; ?>
 
                         <?php
 
-                        $cekvalue = $this->db->select('*')->from('Mstr_Penghargaan_Rekognisi_Mahasiswa')->where([
+                        $cekvalue = $this->db->select('*')->from('mstr_penghargaan_rekognisi_mahasiswa')->where([
                             "Jenis_Pengajuan_Id" => $kat['jpi'],
                         ])->get();
 
@@ -300,7 +300,7 @@ list($kat, $result, $nominal) = $kategori; ?>
 
                         <?php } ?>
 
-                        <button class="clone btn btn-md btn-warning mb-3">Tambah</button>
+                        <button class="clone btn btn-md btn-warning mb-3"><i class="fas fa-plus"></i> Tambah</button>
 
                         <input type="submit" name="submit" value="Simpan" class="btn btn-success btn-block simpan_nominal">
                         <p class="mt-1 sukses_simpan text-success text-center"><i class="fas fa-check-circle"></i> Berhasil disimpan</p>
