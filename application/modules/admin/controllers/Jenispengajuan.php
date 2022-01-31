@@ -409,7 +409,7 @@ class Jenispengajuan extends Admin_Controller
 
 				$this->db->where(array(
 					'Jenis_Pengajuan_Id' => $id,
-					'order' => '0'
+					'urutan' => '0'
 				));
 
 				$this->db->update('mstr_penghargaan_rekognisi_mahasiswa', $data_penghargaan);
