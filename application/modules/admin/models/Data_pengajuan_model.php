@@ -64,7 +64,7 @@ class Data_pengajuan_model extends CI_Model
 			FORMAT (ps.date, 'hh:mm:ss ') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN mtr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mmstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
@@ -105,7 +105,7 @@ class Data_pengajuan_model extends CI_Model
 			FORMAT (ps.date, 'hh:mm:ss ') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN mtr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mmstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID

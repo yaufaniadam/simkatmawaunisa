@@ -47,7 +47,7 @@ class Pengajuan extends Mahasiswa_Controller
 			LEFT JOIN mstr_jenis_pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN tr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			WHERE p.nim = '$nim'
 			AND ps.status_pengajuan_id = (SELECT MAX(status_pengajuan_id) 
 													FROM tr_pengajuan_status  
@@ -393,7 +393,7 @@ class Pengajuan extends Mahasiswa_Controller
 			date_format(ps.date, '%d %M %Y ') as date,
 			date_format(ps.date, '%H:%i') as time 
 			FROM tr_pengajuan_status ps
-			LEFT JOIN tr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			WHERE ps.pengajuan_id = $pengajuan->pengajuan_id
 			ORDER BY status_pengajuan_id DESC"
 		)->result_array();

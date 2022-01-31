@@ -12,7 +12,7 @@ class Pengajuan_model extends CI_Model
 			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN tr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
@@ -32,7 +32,7 @@ class Pengajuan_model extends CI_Model
 			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN tr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN tr_penerbitan_pengajuan pp ON pp.id_pengajuan = p.pengajuan_id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = pp.STUDENTID
@@ -72,7 +72,7 @@ class Pengajuan_model extends CI_Model
 			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN tr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
@@ -167,7 +167,7 @@ class Pengajuan_model extends CI_Model
 			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan p
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN tr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			-- LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
@@ -211,7 +211,7 @@ class Pengajuan_model extends CI_Model
 			FROM tr_pengajuan p
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
+			LEFT JOIN msmstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			WHERE p.pengajuan_id = $pengajuan_id 
@@ -269,7 +269,7 @@ class Pengajuan_model extends CI_Model
 			->get();
 		$result1 = $query1->row_array();
 
-		$query2 = $this->db->query("SELECT field_id FROM tr_pengajuan_field where Jenis_Pengajuan_Id=$id AND terpakai = 1");
+		$query2 = $this->db->query("SELECT field_id FROM mstr_pengajuan_field where Jenis_Pengajuan_Id=$id AND terpakai = 1");
 		$result2 = $query2->result_array();
 
 		$result3 = $this->db->get_where(
@@ -301,14 +301,14 @@ class Pengajuan_model extends CI_Model
 
 			// menambahkan field yang belum ada
 			$datafield_exist = $this->db->query(
-				"SELECT field_id FROM tr_pengajuan_field 
+				"SELECT field_id FROM mstr_pengajuan_field 
 									WHERE Jenis_Pengajuan_Id = $id AND field_id IN (
-										SELECT field_id FROM tr_pengajuan_field 
+										SELECT field_id FROM mstr_pengajuan_field 
 										WHERE Jenis_Pengajuan_Id = $id AND field_id = " . $data['field_id'] . " )"
 			)->num_rows();
 
 			if ($datafield_exist == 0) {
-				$this->db->insert('tr_pengajuan_field', $data);
+				$this->db->insert('mstr_pengajuan_field', $data);
 			} else {
 				$field_property = [
 					'terpakai' => 1,
@@ -316,7 +316,7 @@ class Pengajuan_model extends CI_Model
 				];
 
 				$this->db->update(
-					'tr_pengajuan_field',
+					'mstr_pengajuan_field',
 					$field_property,
 					[
 						'Jenis_Pengajuan_Id' => $id,
@@ -331,7 +331,7 @@ class Pengajuan_model extends CI_Model
 		}
 
 		$query_fields = $this->db->query(
-			"SELECT field_id FROM tr_pengajuan_field 
+			"SELECT field_id FROM mstr_pengajuan_field 
 			WHERE Jenis_Pengajuan_Id = $id 
 			-- AND field_id = $field
 			 AND field_id NOT IN ($not_exist_fields_data)"
@@ -346,7 +346,7 @@ class Pengajuan_model extends CI_Model
 		if ($query_fields->num_rows() > 0) {
 			foreach ($non_exist_fields as $field_tidak_dipakai) {
 				$this->db->update(
-					'tr_pengajuan_field',
+					'mstr_pengajuan_field',
 					$field_property,
 					[
 						'Jenis_Pengajuan_Id' => $id,
@@ -362,7 +362,7 @@ class Pengajuan_model extends CI_Model
 
 	public function tambah_field_pengajuan($data)
 	{
-		return $this->db->insert('tr_pengajuan_field', $data);
+		return $this->db->insert('mstr_pengajuan_field', $data);
 	}
 
 	public function tambah_jenis_pengajuan($data)
@@ -400,15 +400,15 @@ class Pengajuan_model extends CI_Model
 		if($jenis_pengajuan_id) {
 			$query = $this->db->query(
 				"SELECT * FROM mstr_fields
-			LEFT JOIN tr_pengajuan_field ON tr_pengajuan_field.field_id = mstr_fields.field_id 
-				WHERE tr_pengajuan_field.Jenis_Pengajuan_Id =" . $jenis_pengajuan_id .
-					" AND tr_pengajuan_field.terpakai=" . $aktif
+			LEFT JOIN mstr_pengajuan_field ON mstr_pengajuan_field.field_id = mstr_fields.field_id 
+				WHERE mstr_pengajuan_field.Jenis_Pengajuan_Id =" . $jenis_pengajuan_id .
+					" AND mstr_pengajuan_field.terpakai=" . $aktif
 			);
 		} else {
 			$query = $this->db->query(
 				"SELECT * FROM mstr_fields
-			LEFT JOIN tr_pengajuan_field ON tr_pengajuan_field.field_id = mstr_fields.field_id 
-			AND tr_pengajuan_field.terpakai=" . $aktif
+			LEFT JOIN mstr_pengajuan_field ON mstr_pengajuan_field.field_id = mstr_fields.field_id 
+			AND mstr_pengajuan_field.terpakai=" . $aktif
 			);
 
 		}

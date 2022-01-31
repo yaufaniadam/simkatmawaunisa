@@ -37,7 +37,7 @@ class Pengajuan extends Admin_Controller
 			date_format(ps.date, '%d %M %Y ') as date,
 			date_format(ps.date, '%H:%i') as time
 			FROM tr_pengajuan_status ps
-			LEFT JOIN tr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			WHERE ps.pengajuan_id = $pengajuan_id
 			ORDER BY status_pengajuan_id DESC"
 
@@ -45,7 +45,7 @@ class Pengajuan extends Admin_Controller
 
 		$data['fields'] = $this->db->query(
 			"SELECT * FROM mstr_jenis_pengajuan jp 
-			LEFT JOIN tr_pengajuan_field pf ON pf.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
+			LEFT JOIN mstr_pengajuan_field pf ON pf.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 			LEFT JOIN mstr_fields f ON f.field_id = pf.field_id
 			WHERE jp.Jenis_Pengajuan_Id = $jenis_pengajuan_id
 			AND pf.terpakai = 1
