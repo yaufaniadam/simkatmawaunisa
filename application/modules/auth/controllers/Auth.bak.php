@@ -102,7 +102,7 @@ class Auth extends CI_Controller
 						// cek user ke tabel Mhs (SQLSERVER UMY)
 
 						$result = $this->db->query(
-							"SELECT * from V_Mahasiswa m
+							"SELECT * from v_mahasiswa m
 							LEFT JOIN mstr_department d on d.DEPARTMENT_ID = m.DEPARTMENT_ID
 							WHERE email ='$email' "
 						)->row_array();

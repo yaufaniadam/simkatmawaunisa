@@ -103,13 +103,13 @@ function get_user_session($session_name)
 function get_mahasiswa_by_nim($nim)
 {
 	$CI = &get_instance();
-	$query = $CI->db->get_where('V_Mahasiswa', array('STUDENTID' => $nim))->row_array();
+	$query = $CI->db->get_where('v_mahasiswa', array('STUDENTID' => $nim))->row_array();
 	return $query;
 }
 function get_dosen_by_id($id)
 {
 	$CI = &get_instance();
-	$query = $CI->db->get_where('V_Dosen', array('id_pegawai' => $id))->row_array();
+	$query = $CI->db->get_where('v_dosen', array('id_pegawai' => $id))->row_array();
 	return $query;
 }
 function get_prodi_by_id($id)
@@ -1433,7 +1433,7 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 	<?php
 	} elseif ($field['type'] == 'select_pembimbing') {
 		$CI = &get_instance();
-		$dosen = $CI->db->get_where('V_Dosen', array('id_pegawai' => $field_value))->row_array();
+		$dosen = $CI->db->get_where('v_dosen', array('id_pegawai' => $field_value))->row_array();
 
 	?>
 

@@ -33,7 +33,7 @@ function get_jumlah_pengajuan_perbulan($no_urut)
 
 		return $CI->db->select("*")
 			->from("tr_penerbitan_pengajuan pp")
-			->join('V_Mahasiswa m', "m.STUDENTID=pp.STUDENTID")
+			->join('v_mahasiswa m', "m.STUDENTID=pp.STUDENTID")
 			->join('tr_pengajuan_status ps', 'ps.pengajuan_id=pp.id_pengajuan')
 			->where([
 				"FORMAT (ps.date, 'MMMM') =" => $nama_bulan[$no],
@@ -45,7 +45,7 @@ function get_jumlah_pengajuan_perbulan($no_urut)
 	} else {
 		return $CI->db->select("*")
 			->from("tr_penerbitan_pengajuan pp")
-			->join('V_Mahasiswa m', "m.STUDENTID=pp.STUDENTID")
+			->join('v_mahasiswa m', "m.STUDENTID=pp.STUDENTID")
 			->join('tr_pengajuan_status ps', 'ps.pengajuan_id=pp.id_pengajuan')
 			->where([
 				"FORMAT (ps.date, 'MMMM') =" => $nama_bulan[$no],
@@ -96,7 +96,7 @@ function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
 
 		return $CI->db->select('*')
 			->from('tr_penerbitan_pengajuan pp')
-			->join('V_Mahasiswa m', "m.STUDENTID=pp.STUDENTID")
+			->join('v_mahasiswa m', "m.STUDENTID=pp.STUDENTID")
 			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
 			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where([
@@ -149,7 +149,7 @@ function get_jumlah_pengajuan_per_prodi()
 			'nama_prodi' => $department['NAME_OF_DEPARTMENT'],
 			'jumlah_pengajuan' => $CI->db->select('*')
 				->from('tr_penerbitan_pengajuan pp')
-				->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
+				->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 				->join('mstr_department d', 'd.DEPARTMENT_ID = m.DEPARTMENT_ID')
 				->where([
 					'm.DEPARTMENT_ID' => $department['DEPARTMENT_ID'],
@@ -229,7 +229,7 @@ function tampil_notif()
 		->join('mstr_status_pesan sp', 'sp.status_pesan_id = n.id_status_notif')
 		->join('tr_pengajuan p', 'p.pengajuan_id=n.id_pengajuan')
 		->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id=p.Jenis_Pengajuan_Id')
-		->join('V_Mahasiswa m', 'm.STUDENTID=p.nim')
+		->join('v_mahasiswa m', 'm.STUDENTID=p.nim')
 		->order_by('id_notif', 'DESC')
 		->where($where)
 		->where(['n.status' => 0])

@@ -134,7 +134,7 @@ function generate_keterangan_surat($field_id, $id_surat, $pengajuan_status)
     <?php }
   } elseif ($fields['type'] == 'select_pembimbing') {
     $CI = &get_instance();
-    $dosen = $CI->db->get_where('V_Dosen', array('id_pegawai' => $fields['value']))->row_array();
+    $dosen = $CI->db->get_where('v_dosen', array('id_pegawai' => $fields['value']))->row_array();
     // print_r($dosen);
     ?>
 

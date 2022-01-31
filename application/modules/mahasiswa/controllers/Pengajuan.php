@@ -45,7 +45,7 @@ class Pengajuan extends Mahasiswa_Controller
 			FORMAT (ps.date, 'hh:mm:ss ') as time
 			FROM tr_pengajuan p 
 			LEFT JOIN mstr_jenis_pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
-			LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
+			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			WHERE p.nim = '$nim'
@@ -68,7 +68,7 @@ class Pengajuan extends Mahasiswa_Controller
 			->from('tr_penerbitan_pengajuan pp')
 			->join('tr_pengajuan p', 'pp.id_pengajuan = p.pengajuan_id', 'left')
 			->join('mstr_jenis_pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
-			->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
+			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_periode_penerbitan per', 'per.id_periode = pp.id_periode')
 			->where(['pp.STUDENTID' => $user_nim, 'per.status' => 1])
 			->get()->result_array();
@@ -83,7 +83,7 @@ class Pengajuan extends Mahasiswa_Controller
 
 		$query = $this->db->select('*')
 			->from('tr_penerbitan_pengajuan pp')
-			->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
+			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
 			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where(

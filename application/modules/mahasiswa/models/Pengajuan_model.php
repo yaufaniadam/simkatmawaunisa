@@ -105,7 +105,7 @@ class Pengajuan_model extends CI_Model
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
-			LEFT JOIN V_Mahasiswa m ON p.nim = m.STUDENTID
+			LEFT JOIN v_mahasiswa m ON p.nim = m.STUDENTID
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			WHERE p.pengajuan_id = $pengajuan_id AND s.status_id = (SELECT status_id FROM tr_pengajuan_status WHERE status_pengajuan_id = (
 			SELECT MAX(status_pengajuan_id) FROM tr_pengajuan_status WHERE pengajuan_id = $pengajuan_id
@@ -116,7 +116,7 @@ class Pengajuan_model extends CI_Model
 	public function getAnggota($search)
 	{
 		$this->db->select('*');
-		$this->db->from('V_Mahasiswa');
+		$this->db->from('v_mahasiswa');
 		$this->db->like('FULLNAME', $search);
 		$this->db->or_like('STUDENTID', $search);
 		$this->db->limit(10);
@@ -142,7 +142,7 @@ class Pengajuan_model extends CI_Model
 			FORMAT (ps.date, 'hh:mm:ss ') as time
 			FROM tr_pengajuan p 
 			LEFT JOIN mstr_jenis_pengajuan jp ON p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
-			LEFT JOIN V_Mahasiswa m ON m.STUDENTID = p.nim
+			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
 			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			WHERE p.nim = '$nim' "
@@ -155,13 +155,13 @@ class Pengajuan_model extends CI_Model
 													WHERE pengajuan_id = p.pengajuan_id)"
 		)->result_array();
 
-		// return $this->db->query("SELECT * FROM V_Mahasiswa")->result_array();
+		// return $this->db->query("SELECT * FROM v_mahasiswa")->result_array();
 	}
 	// AND p.Jenis_Pengajuan_Id = $id_jenis_pengajuan
 	public function getPembimbing($search)
 	{
 		$this->db->select('*');
-		$this->db->from('V_Dosen');
+		$this->db->from('v_dosen');
 		$this->db->like('nama', $search);
 		$this->db->limit(10);
 		return $this->db->get()->result_array();

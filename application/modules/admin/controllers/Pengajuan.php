@@ -381,7 +381,7 @@ class Pengajuan extends Admin_Controller
 			->from('tr_penerbitan_pengajuan pp')
 			->join('tr_pengajuan p', 'pp.id_pengajuan = p.pengajuan_id', 'left')
 			->join('mstr_jenis_pengajuan jp', 'p.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id')
-			->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
+			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_periode_penerbitan per', 'per.id_periode = pp.id_periode')
 			->where(['m.DEPARTMENT_ID' => $prodi, 'per.status' => 1])
 			->get()->result_array();
@@ -396,7 +396,7 @@ class Pengajuan extends Admin_Controller
 
 		$query = $this->db->select('*')
 			->from('tr_penerbitan_pengajuan pp')
-			->join('V_Mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
+			->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
 			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
 			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
 			->where(
