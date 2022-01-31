@@ -256,12 +256,12 @@ class Pengajuan_model extends CI_Model
 
 		// $query1 = $this->db->query("SELECT 
 		// * 
-		// FROM dbo.mstr_jenis_pengajuan jp
+		// FROM mstr_jenis_pengajuan jp
 		// LEFT JOIN mstr_penghargaan_rekognisi_mahasiswa reward ON reward.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id
 		// where jp.Jenis_Pengajuan_Id='$id'");
 
 		$query1 = $this->db->select("*,jp.Jenis_pengajuan_Id as jpi")
-			->from('dbo.mstr_jenis_pengajuan jp')
+			->from('mstr_jenis_pengajuan jp')
 			->join("mstr_penghargaan_rekognisi_mahasiswa reward", "reward.Jenis_Pengajuan_Id = jp.Jenis_Pengajuan_Id", "LEFT")
 			->where([
 				'jp.Jenis_Pengajuan_Id' => $id
