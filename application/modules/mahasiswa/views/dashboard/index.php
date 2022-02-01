@@ -12,9 +12,9 @@
 						<div class="col-10">
 							<h5><?= $this->session->userdata('fullname'); ?></h5>
 
-							<span class="badge badge-info"><?= $this->session->userdata('studentid'); ?></span>
+							<span class="badge badge-info"><?= $this->session->userdata('email'); ?></span>
 							<br>
-							<span class="badge"><?= $this->session->userdata('nama_prodi'); ?></span>
+							<span class="badge badge-warning"><?= $this->session->userdata('id_prodi'); ?></span>
 						</div>
 					</div>
 				</a>

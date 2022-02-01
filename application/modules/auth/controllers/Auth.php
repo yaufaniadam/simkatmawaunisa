@@ -13,7 +13,7 @@ class Auth extends CI_Controller
 		if (!$this->session->has_userdata('is_login')) {
 			redirect('auth/login');
 		} else {
-			if( $_SESSION['role'] != 3) {
+			if ($_SESSION['role'] != 3) {
 				redirect('admin/dashboard');
 			} else {
 				redirect('mahasiswa/dashboard');
@@ -25,12 +25,22 @@ class Auth extends CI_Controller
 	public function login()
 	{
 		if ($this->input->post('submit')) {
-			$this->form_validation->set_rules('username', 'Username', 'trim|required');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required');
+
+			$this->form_validation->set_rules(
+				'username',
+				'Username',
+				'trim|required',
+				array('required' => '%s wajib diisi')
+			);
+			$this->form_validation->set_rules(
+				'password',
+				'Password',
+				'trim|required',
+				array('required' => '%s wajib diisi')
+			);
 
 			if ($this->form_validation->run() == FALSE) {
-				$data['ref'] = '';
-				$this->load->view('auth/login', $data);
+				$this->load->view('auth/login');
 			} else {
 
 				$data = array(
@@ -57,9 +67,12 @@ class Auth extends CI_Controller
 
 					//periksa di tabel mhs
 
-					$params = http_build_query($data);
+					$data = array(
+						'n' => $this->input->post('username'),
+						'p' => $this->input->post('password')
+					);
 
-					$email = $this->input->post('username');
+					$params = http_build_query($data);
 
 					$body = array('http' =>
 					array(
@@ -68,19 +81,19 @@ class Auth extends CI_Controller
 						'content' => $params
 					));
 					$context = stream_context_create($body);
-					$link = file_get_contents(base_url(). '/sso/index/', false, $context);
+					$link = file_get_contents('https://service.unisayogya.ac.id/loginmahasiswa.php', false, $context);
 					$json = json_decode($link);
-
-					$ceknum = $json->{'status_code'};
+			
+					
+					$ceknum = $json->{'isallowed'};
 
 					// jika login benar
-					if ($ceknum == 0) {
-					
+					if ($ceknum == 1) {
+
 						$result = $this->db->query(
 							"SELECT * from v_mahasiswa m
 						LEFT JOIN mstr_department d on d.DEPARTMENT_ID = m.DEPARTMENT_ID
-						WHERE email ='$email' "
-						)->row_array();
+						WHERE STUDENTID = ".  $this->input->post('username') 	)->row_array();
 
 						$user_data = array(
 							'studentid' => $result['STUDENTID'],
@@ -99,15 +112,16 @@ class Auth extends CI_Controller
 
 						redirect(base_url('mahasiswa/dashboard'), 'refresh');
 					} else {
-						$data['ref'] = '';
+						
 						$data['msg'] = 'Invalid Username or Password!';
 						$this->load->view('auth/login', $data);
 					}
+
+					
 				}
 			}
 		} else {
-			$data['ref'] = '';
-			$this->load->view('auth/login', $data);
+			$this->load->view('auth/login');
 		}
 	}
 

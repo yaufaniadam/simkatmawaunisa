@@ -269,8 +269,8 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 						//field sudah dicek, tapi perlu direvisi
 						if ($verifikasi == 0 && $pengajuan_status == 4) {
 							//field memiliki isi
-							$form = '';
-							$listing = '';
+							$form = 'd-none';
+							$listing = 'listingggg';
 							$error = 'is-invalid';
 							$change = '';
 						} else {

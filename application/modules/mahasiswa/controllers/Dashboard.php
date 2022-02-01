@@ -13,8 +13,8 @@ class Dashboard extends Mahasiswa_Controller
 		$notif = $this->db
 			->select(
 				"*,
-				DATENAME(month,n.tanggal_masuk) as bulan_masuk_surat,
-				FORMAT (n.tanggal_masuk, 'dd') as tanggal_masuk_surat",
+				DATE_FORMAT(n.tanggal_masuk, '%M') as bulan_masuk_surat,
+				DATE_FORMAT(n.tanggal_masuk, '%d') as tanggal_masuk_surat",
 			)
 			->from('tr_notif n')
 			->join('mstr_status_pesan sp', 'sp.status_pesan_id = n.id_status_notif')

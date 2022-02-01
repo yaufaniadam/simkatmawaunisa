@@ -99,13 +99,13 @@
 							<?php		
 							
 							foreach ($timeline as $tl) { ?>
-								<div class="timeline-item <?= ($tl['status_id'] === 7 || $tl['status_id'] === 9) ? 'd-none' : '' ?>">
+								<div class="timeline-item <?= ($tl['status_id'] == 7 || $tl['status_id'] == 9) ? 'd-none' : '' ?>">
 									<div class="timeline-item-marker">
-										<div class="timeline-item-marker-text"><?= $tl['date']; ?></div>
+										<div class="timeline-item-marker-text"> <?= $tl['date']; ?></div>
 										<div class="timeline-item-marker-indicator bg-<?= $tl['badge']; ?>"></div>
 									</div>
 									<div class="timeline-item-content">
-										<?= $tl['status']; ?>
+										<?= $tl['status']; ?>									
 										<span class="badge badge-perak"><?= $tl['time']; ?></span>
 									</div>
 								</div>

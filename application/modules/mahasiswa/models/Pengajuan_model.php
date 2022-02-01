@@ -104,7 +104,7 @@ class Pengajuan_model extends CI_Model
 			"SELECT *, jp.jenis_pengajuan FROM tr_pengajuan p
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
-			LEFT JOIN msmstr_status s ON s.status_id = ps.status_id
+			LEFT JOIN mstr_status s ON s.status_id = ps.status_id
 			LEFT JOIN v_mahasiswa m ON p.nim = m.STUDENTID
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			WHERE p.pengajuan_id = $pengajuan_id AND s.status_id = (SELECT status_id FROM tr_pengajuan_status WHERE status_pengajuan_id = (
@@ -174,7 +174,7 @@ class Pengajuan_model extends CI_Model
 			LEFT JOIN mstr_pengajuan_field ON mstr_pengajuan_field.Jenis_Pengajuan_Id = tr_pengajuan.Jenis_Pengajuan_Id
 			LEFT JOIN tr_pengajuan_status ON tr_pengajuan_status.id_pengajuan = tr_pengajuan.pengajuan_id
 			LEFT JOIN mstr_fields ON mstr_fields.field_id = mstr_pengajuan_field.field_id
-			LEFT JOIN msmstr_status ON msmstr_status.status_id = tr_pengajuan_status.id_status
+			LEFT JOIN mstr_status ON mstr_status.status_id = tr_pengajuan_status.id_status
 			LEFT JOIN mstr_jenis_pengajuan ON mstr_jenis_pengajuan.Jenis_Pengajuan_Id = tr_pengajuan.Jenis_Pengajuan_Id
 			WHERE tr_pengajuan.pengajuan_id = $pengajuan_id AND mstr_pengajuan_field.terpakai = 1"
 		)->result_array();
