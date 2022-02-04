@@ -40,9 +40,7 @@ class Prestasi extends Admin_Controller
         $data['view'] = 'admin/prestasi/index';
         $data['menu'] = 'prestasi';    
         $this->load->view('layout/layout', $data);
-
-
-		//beda kah?
+		//masa beda?
     }
 
     public function detail($id_penerbitan_pengajuan = 0)
