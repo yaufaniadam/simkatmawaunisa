@@ -171,9 +171,9 @@
 <div class="modal fade" id="confirm-modal" tabindex="-1" aria-labelledby="confirm-modalLabel" aria-hidden="true">
 	<?= form_open(base_url('admin/periode/bulan')); ?>
 	<?php foreach ($daftar_pengajuan as $pengajuan) {	?>
-		<input type="text" name="pengajuan[]" value="<?= $pengajuan['pengajuan_id']; ?>" id="">		
+		<input type="hidden" name="pengajuan[]" value="<?= $pengajuan['pengajuan_id']; ?>" id="">		
 	<?php } ?>
-	<input type="text" name="id_periode" value="<?= $id_periode; ?>" id="">
+	<input type="hidden" name="id_periode" value="<?= $id_periode; ?>" id="">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
