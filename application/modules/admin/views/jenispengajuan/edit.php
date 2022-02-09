@@ -152,7 +152,9 @@ list($kat, $result, $nominal) = $kategori;
 						<div class="form-group">
 							<label for="Jenis_Pengajuan" class="control-label">Jenis Pengajuan *</label>
 							<div class="">
-								<input type="text" value="<?= (validation_errors()) ? set_value('Jenis_Pengajuan') : $kat['Jenis_Pengajuan'];  ?>" name="Jenis_Pengajuan" class="form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>" id="Jenis_Pengajuan">
+								
+								<textarea name="Jenis_Pengajuan" class="mb-1 form-control <?= (form_error('Jenis_Pengajuan')) ? 'is-invalid' : ''; ?>"><?= (validation_errors()) ? set_value('Jenis_Pengajuan') : $kat['Jenis_Pengajuan'];  ?></textarea>
+
 								<span class="invalid-feedback"><?php echo form_error('Jenis_Pengajuan'); ?></span>
 							</div>
 						</div>
@@ -165,6 +167,26 @@ list($kat, $result, $nominal) = $kategori;
 								<span class="invalid-feedback"><?php echo form_error('deskripsinya'); ?></span>
 							</div>
 						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="aktif" class="control-label">Apakah pengajuan ini Aktif *</label>
+							<div class="">
+								<select name="aktif" class="form-control <?= (form_error('aktif')) ? 'is-invalid' : ''; ?>" id="aktif">
+									<option value=''>Pilih Aktif/Tidak aktif</option>
+									<option value="1" <?= (validation_errors()) ? (set_select('aktif', 'individu')) : ($kat['aktif'] == '1' ? 'selected' : '') ?>>Aktif</option>
+
+									<option value="0" <?= (validation_errors()) ? (set_select('aktif', 'beregu')) : ($kat['aktif'] == '0' ? 'selected' : '') ?>>Tidak Aktif</option>
+								</select>
+								<span class="invalid-feedback"><?php echo form_error('aktif'); ?></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						
 					</div>
 				</div>
 
