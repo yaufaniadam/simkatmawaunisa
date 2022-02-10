@@ -191,10 +191,8 @@ list($kat, $result, $nominal) = $kategori;
 							<label for="lingkup" class="control-label">Lingkup *</label>
 							<div class="">
 								<select name="lingkup" class="form-control <?= (form_error('lingkup')) ? 'is-invalid' : ''; ?>" id="aktif">
-									<option value=''>Pilih Lingkup Kegiatan</option>
-									
+									<option value=''>Pilih Lingkup Kegiatan</option>									
 									<option value="1" >Internasional</option>
-
 									<option value="0" >Nasional</option>
 									<option value="0" >Propinsi</option>
 								</select>
