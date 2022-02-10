@@ -186,6 +186,21 @@ list($kat, $result, $nominal) = $kategori;
 						</div>
 					</div>
 					<div class="col-md-6">
+
+					<div class="form-group">
+							<label for="lingkup" class="control-label">Lingkup *</label>
+							<div class="">
+								<select name="lingkup" class="form-control <?= (form_error('lingkup')) ? 'is-invalid' : ''; ?>" id="aktif">
+									<option value=''>Pilih Lingkup Kegiatan</option>
+									
+									<option value="1" <?= (validation_errors()) ? (set_select('lingkup', 'individu')) : ($kat['lingkup'] == '1' ? 'selected' : '') ?>>Internasional</option>
+
+									<option value="0" <?= (validation_errors()) ? (set_select('lingkup', 'beregu')) : ($kat['lingkup'] == '0' ? 'selected' : '') ?>>Nasional</option>
+									<option value="0" <?= (validation_errors()) ? (set_select('lingkup', 'beregu')) : ($kat['lingkup'] == '0' ? 'selected' : '') ?>>Propinsi</option>
+								</select>
+								<span class="invalid-feedback"><?php echo form_error('lingkup'); ?></span>
+							</div>
+						</div>
 						
 					</div>
 				</div>
