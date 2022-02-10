@@ -953,7 +953,7 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 				$(document).ready(function() {
 					
 					// get value 
-					var selectedValueKetua = [<?= $ketua; ?>];
+					var selectedValueKetua = ['<?= $ketua; ?>'];
 					var selectedValuesAnggota = [<?php if ($value) {
 																					foreach ($anggota as $field) {
 																						echo '"' . $field . '"' . ',';
