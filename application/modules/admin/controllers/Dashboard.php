@@ -35,7 +35,7 @@ class Dashboard extends Admin_Controller
 		// $data['pengajuan_perlu_diproses'] = $this->pengajuan_model->pengajuan_perlu_diproses();
 		// $data['pengajuan_selesai'] = $this->pengajuan_model->pengajuan_selesai();
 		// $data['nama_bulan'] = $this->pengajuan_model->getbulan();
-		// $data['jenis_pengajuan'] = $this->db->query(
+		// $data[ adduan'] = $this->db->query(
 		// 	"SELECT 
 		// 	DISTINCT(jp.Jenis_Pengajuan),
 		// 	jp.Jenis_Pengajuan_Id
