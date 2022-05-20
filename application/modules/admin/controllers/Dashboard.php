@@ -11,6 +11,7 @@ class Dashboard extends Admin_Controller
 
 	public function index()
 	{
+		
 		$data['pengajuan_perlu_diproses'] = $this->pengajuan_model->pengajuan_perlu_diproses();
 
 		$data['prestasi'] = $this->db->query('select * FROM v_prestasi')->num_rows();

@@ -39,6 +39,7 @@ list($kat, $result, $nominal) = $kategori;
 		border: 1px solid #b0272b !important;
 		border-radius: 6px;
 	}
+	
 </style>
 
 <div class="row">
@@ -187,7 +188,7 @@ list($kat, $result, $nominal) = $kategori;
 					</div>
 					<div class="col-md-6">
 
-					<div class="form-group">
+					<!-- <div class="form-group">
 							<label for="lingkup" class="control-label">Lingkup *</label>
 							<div class="">
 								<select name="lingkup" class="form-control <?= (form_error('lingkup')) ? 'is-invalid' : ''; ?>" id="aktif">
@@ -198,7 +199,7 @@ list($kat, $result, $nominal) = $kategori;
 								</select>
 								<span class="invalid-feedback"><?php echo form_error('lingkup'); ?></span>
 							</div>
-						</div>
+						</div> -->
 						
 					</div>
 				</div>
@@ -236,9 +237,16 @@ list($kat, $result, $nominal) = $kategori;
 											$impl = implode('&', $unserial_array);
 										}
 
-										foreach ($results as $result) { ?>
+										foreach ($results as $result) { 
+											if(($result['field_id'] == 1) || ($result['field_id'] == 2)) {
+												$field_wajib = 1;
+											} else {
+												$field_wajib = '';
+											}
+										
+											?>
 											<div class="ui-state-highlights" id="item-<?= $result['field_id']; ?>">
-												<p class="nama_field"><span class="nama_field_disini"><?= $result['field']; ?></span></p>
+												<p class="nama_field"><span class="nama_field_disini"><?= $result['field']; ?> <?=($field_wajib == 1 ? '<small class="text-danger">(Field ini wajib ada di semua pengajuan)</small>' : ''); ?></span></p>
 												<div class="p-4">
 
 													<div class="mb-2">
@@ -283,6 +291,7 @@ list($kat, $result, $nominal) = $kategori;
 
 															<option value='select_prestasi' <?= ($result['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
 															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
+															<option value='select_akademik_nonakademik' <?= ($result['type'] == 'select_akademik_nonakademik') ? 'selected="selected"' : ''; ?>>Akademik/Non Akademik</option>
 															<!-- <option value='select_nasional_internasional' <?= ($result['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option> -->
 															<option value='select_pkm' <?= ($result['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
 														</select>
@@ -376,6 +385,7 @@ list($kat, $result, $nominal) = $kategori;
 															<option value='file' <?= ($field['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
 															<option value='select_prestasi' <?= ($field['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
 															<option value='select_tingkat' <?= ($field['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
+															<option value='select_akademik_nonakademik' <?= ($field['type'] == 'select_akademik_nonakademik') ? 'selected="selected"' : ''; ?>>Akademik Nonakademik</option>
 															<!-- <option value='select_nasional_internasional' <?= ($field['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option> -->
 															<option value='select_pkm' <?= ($field['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
 

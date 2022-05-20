@@ -752,6 +752,24 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		}
 
 		/* 											
+			select_akademik_nonakademik 					
+		*/
+
+	} elseif ($fields['type'] == 'select_akademik_nonakademik') {
+
+		
+		?>
+
+			<fieldset>
+				<input type="text" class="form-control"  value="Diisi oleh petugas" disabled="disabled" />
+			</fieldset>
+
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			
+
+		<?php 
+		/* 											
 			NUMBER 					
 		*/
 
@@ -1367,6 +1385,27 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 		<?php foreach ($tingkat_prestasi as $tingkat_prestasi) { ?>
 				<option value="<?= $tingkat_prestasi->Tingkat_Prestasi_Id; ?>" <?= ($tingkat_prestasi->Tingkat_Prestasi_Id == $field_value) ? 'selected' : ''; ?>><?= $tingkat_prestasi->Tingkat_Prestasi; ?></option>
 			<?php } ?>
+		</select>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan);
+		} ?>
+
+	<?php
+	} elseif ($field['type'] == 'select_akademik_nonakademik') {
+		/* akademik dan non akademik 
+		*/
+	?>
+		
+		<select class="form-control mb-2" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
+	
+				<option value="" <?= ('akademik' == $field_value) ? 'selected' : ''; ?>>Pilih Akademik/Non Akademik</option>
+				<option value="akademik" <?= ('akademik' == $field_value) ? 'selected' : ''; ?>>Akademik</option>
+				<option value="non-akademik" <?= ('non-akademik' == $field_value) ? 'selected' : ''; ?>>Non Akademik</option>
+		
 		</select>
 
 		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))

@@ -54,6 +54,21 @@ function get_jumlah_pengajuan_perbulan($no_urut)
 	}
 }
 
+function jml_prestasi_by_tingkatan($tingkatan)
+{
+	$CI = &get_instance();
+
+		$jmlstatus =  $CI->db->select("distinct(pengajuan_id)")
+		->from("tr_pengajuan_status")
+			->where("status_id =", 7)->get()->num_rows();
+
+		$jmlnextstatus =  $CI->db->select("distinct(pengajuan_id)")
+		->from("tr_pengajuan_status")
+			->where("status_id =", 9 )->get()->num_rows();
+
+		return $jmlstatus-$jmlnextstatus;
+	
+}
 function get_verified()
 {
 	$CI = &get_instance();

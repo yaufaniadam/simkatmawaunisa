@@ -73,7 +73,11 @@ class Auth extends CI_Controller
 					);
 
 					if ($query->num_rows() == 0) {
-						return false;
+						
+						$data['ref'] = '';
+						$data['msg'] = 'Invalid Username or Password!';
+						$this->load->view('auth/login', $data);
+
 					} else {
 						//Compare the password attempt with the password we have stored.
 						$result = $query->row_array();

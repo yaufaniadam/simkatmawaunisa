@@ -2,6 +2,7 @@
 
 <?php call_styles(); ?>
 
+
 <h1 class="h3 mb-4 text-gray-900"><?php /*echo $prestasi['kategori_prestasi'];*/ ?> </h1>
 
 <div class="row">
@@ -51,7 +52,9 @@
 						</div>
 					</div>
 					<?php
-					foreach ($pengajuan_fields as $pengajuan_field) { ?>
+					foreach ($pengajuan_fields as $pengajuan_field) { 
+						
+						if($pengajuan_field['is_admin'] != 1) ?>
 
 						<div class="form-group row">
 							<label class="col-md-5" for="dokumen[<?= $pengajuan_field['field_id']; ?>]">
@@ -59,11 +62,11 @@
 								<small class="form-text text-muted d-inline d-md-block">
 									<?= $pengajuan_field['deskripsi'] ?> 
 								</small>
-							</label>
+							 </label>
 
-							<div class="col-md-7">
+							<div class="col-md-7"> 
 								<?php generate_form_field($pengajuan_field['field_id'], $pengajuan_id, $pengajuan_status, 'mahasiswa/pengajuan',$pengajuan->Jenis_Pengajuan_Id ); ?>
-							</div>
+							</div> 
 						</div>
 					<?php  }  ?>
 

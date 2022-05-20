@@ -102,9 +102,10 @@ class Pengajuan extends Admin_Controller
 						'mstr_pengajuan_field',
 						[
 							'Jenis_Pengajuan_Id' => $jenis_pengajuan_id,
-							'field_id' => 77 // field anggota
+							'type' => 'select_mahasiswa' // field anggota
 						]
 					)->num_rows();
+
 
 					// mengambil tipe reward dari jenis pengajuan. ada 4 tipe reward			
 					// 1. Individu (id = 1)
@@ -119,7 +120,7 @@ class Pengajuan extends Admin_Controller
 						]
 					)->row_object();
 
-					$tipe_reward = 	$jenis_pengajuan->fixed;
+					 $tipe_reward = $jenis_pengajuan->fixed;
 
 
 					if ($tipe_reward == 1) {
@@ -136,6 +137,7 @@ class Pengajuan extends Admin_Controller
 							'id_pengajuan' => $pengajuan_id,
 							'pic' => $_SESSION['user_id'],
 							'STUDENTID' => $nim,
+							
 							'nominal' => $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 								'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 							])->row_object()->nominal
@@ -296,7 +298,7 @@ class Pengajuan extends Admin_Controller
 
 						$this->db->set('status_id', 9)
 							->set('pic', $this->session->userdata('user_id'))
-							->set('date', 'getdate()', FALSE)
+							->set('date', 'now()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('tr_pengajuan_status');
 
@@ -913,6 +915,6 @@ class Pengajuan extends Admin_Controller
 			->insert('tr_pengajuan_status');
 
 		$this->session->set_flashdata('msg', 'Pengajuan berhasil dihapus!');
-		redirect(base_url('admin/pengajuan/index'));
+		redirect(base_url('admin/pengajuan/index/' . $id));
 	}
 }

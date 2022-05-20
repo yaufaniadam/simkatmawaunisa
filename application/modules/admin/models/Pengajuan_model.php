@@ -51,8 +51,9 @@ class Pengajuan_model extends CI_Model
 		} else {
 			$prodi = "AND u.id_prodi = '" . $this->session->userdata('id_prodi') . "'";
 		}
+		
 
-		if ($role == '') {
+		if ($role == 0) {
 			$id_status = ' AND ps.status_id NOT IN (1)';
 			
 		} else if ($role == 1) {

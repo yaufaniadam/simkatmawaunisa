@@ -71,11 +71,28 @@ class Jenispengajuan extends Admin_Controller
 				$id = $this->db->insert_id();
 				if ($result) {
 
+					// insert data penghargaan
 					$insdata_penghargaan = [
 						"urutan" => 0,
 						"Jenis_Pengajuan_Id" => $id,
 					];
 					$this->db->insert('mstr_penghargaan_rekognisi_mahasiswa', $insdata_penghargaan);
+
+					//insert field wajib
+					$insdata_field = [
+						["urutan" => 1,
+						"terpakai" => 1,
+						"field_id" => 1, //id untuk field lingkup pengajuan
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 2,
+						"terpakai" => 1,
+						"field_id" => 2, //id untuk field akademik non akademik
+						"Jenis_Pengajuan_Id" => $id,
+						],
+					];
+
+					$this->db->insert_batch('mstr_pengajuan_field', $insdata_field);
 
 					$this->session->set_flashdata('msg', 'Kategori Pengajuan berhasil ditambah!');
 					redirect(base_url('admin/jenispengajuan/edit/' . $id . '?id=&pos='));
@@ -248,7 +265,6 @@ class Jenispengajuan extends Admin_Controller
 			];
 			echo json_encode(array("status" => "Error", "error" => $error));
 		} else {
-
 
 			$data = [
 				"required" => $this->input->post('required'),

@@ -12,7 +12,7 @@
 								<?php if ($pengajuan_perlu_diproses > 0) { ?>
 									<?= $pengajuan_perlu_diproses; ?>
 								<?php } else { ?>
-									tidak ada
+									-
 								<?php } ?>
 							</div>
 						</div>
@@ -35,7 +35,7 @@
 								<?php if ($prestasi > 0) { ?>
 									<?= $prestasi; ?>
 								<?php } else { ?>
-									tidak ada
+									-
 								<?php } ?>
 							</div>
 						</div>
@@ -46,6 +46,105 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<!-- tingkatan wilayah -->
+	<div class="row">
+		<div class="col-12 col-md-12 mb-4">
+			<h4>Tingkatan prestasi</h4>
+		</div>
+		<div class="col-4 col-md-3 mb-4">
+			<div class="card border-left-danger shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+								Internasional
+							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">
+								<?php if ( jml_prestasi_by_tingkatan(4) > 0) { ?>
+									<?= jml_prestasi_by_tingkatan(4); ?>
+								<?php } else { ?>
+									-
+								<?php } ?>
+							</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-globe fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-4 col-md-3 mb-4">
+			<div class="card border-left-ijomuda shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+								Nasional
+							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">
+								<?php if ( jml_prestasi_by_tingkatan(3) > 0) { ?>
+									<?= jml_prestasi_by_tingkatan(3); ?>
+								<?php } else { ?>
+									-
+								<?php } ?>
+							</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-medal fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-4 col-md-3 mb-4">
+			<div class="card border-left-ungutua shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+								Provinsi
+							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">
+								<?php if ( jml_prestasi_by_tingkatan(1) > 0) { ?>
+									<?= jml_prestasi_by_tingkatan(1); ?>
+								<?php } else { ?>
+									-
+								<?php } ?>
+							</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-medal fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-4 col-md-3 mb-4">
+			<div class="card border-left-birutua shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+								Perguruan Tinggi
+							</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800">
+								<?php if ( jml_prestasi_by_tingkatan(5) > 0) { ?>
+									<?= jml_prestasi_by_tingkatan(5); ?>
+								<?php } else { ?>
+									-
+								<?php } ?>
+							</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-building fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</div>
 	<?php /*
 	<div class="row">
