@@ -9,6 +9,7 @@
 							<th>Kategori Reward</th>
 							<th>Periode Reward</th>
 							<th>Reward</th>
+							<th>Point</th>
 							<th>Status</th>
 						</tr>
 					</thead>
@@ -16,7 +17,7 @@
 						<?php
 						foreach ($prestasi as $prestasi) { ?>
 							<tr>
-								<td><a href="<?= base_url('mahasiswa/pengajuan/detail_prestasi/' . $prestasi['id_penerbitan_pengajuan']); ?>"><?= $prestasi['judul']; ?></a></td>
+								<td><a href="<?= base_url('mahasiswa/pengajuan/detail_prestasi/' . $prestasi['id_penerbitan_pengajuan']); ?>"><?= get_meta_value('judul', $prestasi['id_pengajuan'], false); ?></a></td>
 								<td><?= $prestasi['Jenis_Pengajuan']; ?></td>
 								<td><?= $prestasi['nama_periode']; ?></td>
 
@@ -30,6 +31,7 @@
 									
 								</td>
 								
+								<td><?= $prestasi['point']; ?></td>
 								<td><?= $prestasi['status_pencairan'] == 1 ? "<i class='fas fa-check-circle text-success'></i> Dicairkan oleh:<br> " .$prestasi['penerima'] . " (". $prestasi['tanggal_pencairan'] .")"  : "Belum dicairkan"; ?></td>
 							</tr>
 						<?php }

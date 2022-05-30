@@ -1,18 +1,19 @@
 <div class="row">
 
 	<!-- Earnings (Monthly) Card Example -->
-	<div class="col-xl-6 col-md-6 mb-4">
+	<div class="col-12">
 	<div class="card shadow mb-4">
 			<div class="card-body">
 				<a class="nav-link">
 					<div class="row">
-						<div class="col-2">
+						<!-- <div class="col-2">
 							<?= ($this->session->userdata('role') == 3) ? profPic($this->session->userdata('studentid'), 70) : ''; ?>
-						</div>
-						<div class="col-10">
+						</div> -->
+						<div class="col-12">
 							<h5><?= $this->session->userdata('fullname'); ?></h5>
 
-							<span class="badge badge-info"><?= $this->session->userdata('email'); ?></span>
+							<!-- <span class="badge badge-info"><?= $this->session->userdata('email'); ?></span> -->
+							<span class="badge badge-info"><?= $this->session->userdata('studentid'); ?></span>
 							<br>
 							<span class="badge badge-warning"><?= $this->session->userdata('id_prodi'); ?></span>
 						</div>
@@ -49,7 +50,7 @@
 	</div>
 
 	<!-- Earnings (Monthly) Card Example -->
-	<div class="col-xl-6 col-md-6 mb-4">
+	<div class="col-12">
 		<div class="row">
 			<div class="col-xl-6 col-md-6 mb-4">
 				<div class="card border-left-ungutua shadow h-100 py-2">
@@ -68,7 +69,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xl-6 col-md-6 mb-4">
+			<div class="col-6 mb-4">
 				<div class="card border-left-danger shadow h-100 py-2">
 					<div class="card-body">
 						<div class="row no-gutters align-items-center">

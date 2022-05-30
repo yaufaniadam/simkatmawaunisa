@@ -19,7 +19,7 @@
 		<li class="nav-item ">
 			<a class="nav-link">
 				<span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $this->session->userdata('fullname'); ?></span>
-				<?= ($this->session->userdata('role') == 3) ? profPic($this->session->userdata('studentid'), 30) : ''; ?>
+				<!-- <?= ($this->session->userdata('role') == 3) ? profPic($this->session->userdata('studentid'), 30) : ''; ?> -->
 			</a>
 		</li>
 

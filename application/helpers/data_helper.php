@@ -54,21 +54,7 @@ function get_jumlah_pengajuan_perbulan($no_urut)
 	}
 }
 
-function jml_prestasi_by_tingkatan($tingkatan)
-{
-	$CI = &get_instance();
 
-		$jmlstatus =  $CI->db->select("distinct(pengajuan_id)")
-		->from("tr_pengajuan_status")
-			->where("status_id =", 7)->get()->num_rows();
-
-		$jmlnextstatus =  $CI->db->select("distinct(pengajuan_id)")
-		->from("tr_pengajuan_status")
-			->where("status_id =", 9 )->get()->num_rows();
-
-		return $jmlstatus-$jmlnextstatus;
-	
-}
 function get_verified()
 {
 	$CI = &get_instance();
@@ -462,6 +448,39 @@ function get_file($id)
 {
 	$CI = &get_instance();
 	return	$media = $CI->db->select("*")->from('tr_media')->where(array('id' => $id))->get()->row_array();
+}
+
+
+
+//cek nominal reward sudah ada apa blum
+function cek_nominalreward($id)
+{
+	$CI = &get_instance();
+	return	$media = $CI->db->select("*")->from('mstr_penghargaan_rekognisi_mahasiswa')->where(array('Jenis_Pengajuan_Id' => $id, 'keterangan !=' => NULL))->get()->num_rows();
+}
+
+function getStatusPengajuanById($pengajuan_id) {
+
+	$CI = &get_instance();
+
+	$status = $CI->db->query(
+		"SELECT s.status
+		FROM tr_pengajuan p
+		LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
+		LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
+		LEFT JOIN mstr_status s ON s.status_id = ps.status_id
+		WHERE p.pengajuan_id = $pengajuan_id 
+		AND s.status_id = (
+			SELECT status_id FROM tr_pengajuan_status 
+			WHERE status_pengajuan_id = (
+			SELECT MAX(status_pengajuan_id) FROM tr_pengajuan_status 
+			WHERE pengajuan_id = $pengajuan_id
+			)
+		)"
+	)->row_array();
+
+	return $status;
+
 }
 
 function getUsersbyRole($role, $prodi)

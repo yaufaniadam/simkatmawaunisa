@@ -90,21 +90,25 @@ class Pengajuan extends Admin_Controller
 				$daftar_pengajuan_id = $this->input->post('pengajuan_id[]');
 				$periode_id = $this->input->post('periode_id');
 
+				
 
 				//lalu diforeach
 				foreach ($daftar_pengajuan_id as $pengajuan_id) {
+
+					$point = get_meta_value('point', $pengajuan_id, false);
+
 
 					$queryp = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object();
 					$jenis_pengajuan_id = $queryp->Jenis_Pengajuan_Id;
 
 					//cek apakah pengajuan ini memiliki field anggota
-					$is_field_anggota_exist = $this->db->get_where(
-						'mstr_pengajuan_field',
-						[
-							'Jenis_Pengajuan_Id' => $jenis_pengajuan_id,
-							'type' => 'select_mahasiswa' // field anggota
-						]
-					)->num_rows();
+					// $is_field_anggota_exist = $this->db->get_where(
+					// 	'mstr_pengajuan_field',
+					// 	[
+					// 		'Jenis_Pengajuan_Id' => $jenis_pengajuan_id,
+					// 		'type' => 'select_mahasiswa' // field anggota
+					// 	]
+					// )->num_rows();
 
 
 					// mengambil tipe reward dari jenis pengajuan. ada 4 tipe reward			
@@ -137,6 +141,8 @@ class Pengajuan extends Admin_Controller
 							'id_pengajuan' => $pengajuan_id,
 							'pic' => $_SESSION['user_id'],
 							'STUDENTID' => $nim,
+							'point' => $point,
+						
 							
 							'nominal' => $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 								'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
@@ -171,6 +177,7 @@ class Pengajuan extends Admin_Controller
 								'id_pengajuan' => $pengajuan_id,
 								'pic' => $_SESSION['user_id'],
 								'STUDENTID' => $anggota,
+								'point' => $point,
 								'nominal' => ($key < 1) ? $nominal[0]['nominal'] : $nominal[1]['nominal']
 							];
 
@@ -203,6 +210,7 @@ class Pengajuan extends Admin_Controller
 								'id_pengajuan' => $pengajuan_id,
 								'pic' => $_SESSION['user_id'],
 								'STUDENTID' => $anggota,
+								'point' => $point,
 								'nominal' => ($key < 1) ? $nominal : '0'
 							];
 							$this->db->insert('tr_penerbitan_pengajuan', $data);
@@ -227,6 +235,7 @@ class Pengajuan extends Admin_Controller
 							'id_pengajuan' => $pengajuan_id,
 							'pic' => $_SESSION['user_id'],
 							'STUDENTID' => $nim,
+							'point' => $point,
 							//ambil value dari field biaya
 							'nominal' => $biaya,
 						];
@@ -269,6 +278,7 @@ class Pengajuan extends Admin_Controller
 								'id_pengajuan' => $pengajuan_id,
 								'pic' => $_SESSION['user_id'],
 								'STUDENTID' => $nim,
+								'point' => $point,
 								//ambil value dari field biaya
 								'nominal' => $nominal,
 							];
@@ -289,6 +299,7 @@ class Pengajuan extends Admin_Controller
 									'id_pengajuan' => $pengajuan_id,
 									'pic' => $_SESSION['user_id'],
 									'STUDENTID' => $anggota,
+									'point' => $point,
 									'nominal' => ($key < 1) ? $nominal : '0'
 								];
 								$this->db->insert('tr_penerbitan_pengajuan', $data);

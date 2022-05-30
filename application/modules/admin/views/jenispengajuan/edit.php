@@ -81,7 +81,7 @@ list($kat, $result, $nominal) = $kategori;
 					<a class="nav-link active" href="<?= base_url('admin/jenispengajuan/edit/' . $kat['jpi']); ?>"><i class="fas fa-fw fa-edit"></i> Edit Jenis pengajuan</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link " href="<?= base_url('admin/jenispengajuan/nominal_reward/'  . $kat['jpi']); ?>"><i class="fas fa-fw fa-dollar-sign"></i> Nominal Reward</a>
+					<a class="nav-link " href="<?= base_url('admin/jenispengajuan/nominal_reward/'  . $kat['jpi']); ?>"><i class="fas fa-fw fa-dollar-sign"></i> Nominal Reward  <?= (cek_nominalreward($kat['jpi']) < 1) ? '<i class="fas fa-exclamation-triangle text-danger"></i>':''; ?></a>
 				</li>
 			</ul>
 			<!-- <p class="card-header">Jenis Pengajuan</p> -->
@@ -126,24 +126,26 @@ list($kat, $result, $nominal) = $kategori;
 					</div>
 
 					<div class="col-md-6">
-						<div class="form-group">
-							<label for="jumlah_anggota" class="control-label">Jumlah Anggota *</label>
+
+					<div class="form-group">
+							<label for="aktif" class="control-label">Apakah pengajuan ini Aktif *</label>
 							<div class="">
-								<select name="jumlah_anggota" class="form-control <?= (form_error('jumlah_anggota')) ? 'is-invalid' : ''; ?>" id="jumlah_anggota">
-									<option value=''>Pilih Jumlah Anggota</option>
-									<option value="individu" <?= (validation_errors()) ? (set_select('jumlah_anggota', 'individu')) : ($kat['jumlah_anggota'] == 'individu' ? 'selected' : '') ?>>Individu</option>
 
-									<option value="beregu" <?= (validation_errors()) ? (set_select('jumlah_anggota', 'beregu')) : ($kat['jumlah_anggota'] == 'beregu' ? 'selected' : '') ?>>Beregu</option>
+							<select <?= (cek_nominalreward($kat['jpi']) < 1) ? 'disabled':''; ?> name="aktif" class="form-control <?= (form_error('aktif')) ? 'is-invalid' : ''; ?>" id="aktif">
+									<option value=''>Pilih Aktif/Tidak aktif</option>
+									<option value="1" <?= (validation_errors()) ? (set_select('aktif', 'individu')) : ($kat['aktif'] == '1' ? 'selected' : '') ?>>Aktif</option>
 
-									<option value="kelompok" <?= (validation_errors()) ? (set_select('jumlah_anggota', 'kelompok')) : ($kat['jumlah_anggota'] == 'kelompok' ? 'selected' : '') ?>>Kelompok</option>
-
-
+									<option value="0" <?= (validation_errors()) ? (set_select('aktif', 'beregu')) : ($kat['aktif'] == '0' ? 'selected' : '') ?>>Tidak Aktif</option>
 								</select>
-								<span class="invalid-feedback"><?php echo form_error('jumlah_anggota'); ?></span>
+								<span class="invalid-feedback"><?php echo form_error('aktif'); ?></span>
 
-
+							<?php if( cek_nominalreward($kat['jpi']) < 1) { 					
+									echo '<span class="text-danger" style="font-size:13px;">Nominal reward belum dibuat, sehingga pengajuan belum bisa diaktifkan.</span>';
+								} ?>
 							</div>
 						</div>
+
+					
 
 					</div>
 				</div>
@@ -171,49 +173,20 @@ list($kat, $result, $nominal) = $kategori;
 					</div>
 				</div>
 				
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label for="aktif" class="control-label">Apakah pengajuan ini Aktif *</label>
-							<div class="">
-								<select name="aktif" class="form-control <?= (form_error('aktif')) ? 'is-invalid' : ''; ?>" id="aktif">
-									<option value=''>Pilih Aktif/Tidak aktif</option>
-									<option value="1" <?= (validation_errors()) ? (set_select('aktif', 'individu')) : ($kat['aktif'] == '1' ? 'selected' : '') ?>>Aktif</option>
-
-									<option value="0" <?= (validation_errors()) ? (set_select('aktif', 'beregu')) : ($kat['aktif'] == '0' ? 'selected' : '') ?>>Tidak Aktif</option>
-								</select>
-								<span class="invalid-feedback"><?php echo form_error('aktif'); ?></span>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-
-					<!-- <div class="form-group">
-							<label for="lingkup" class="control-label">Lingkup *</label>
-							<div class="">
-								<select name="lingkup" class="form-control <?= (form_error('lingkup')) ? 'is-invalid' : ''; ?>" id="aktif">
-									<option value=''>Pilih Lingkup Kegiatan</option>									
-									<option value="1" >Internasional</option>
-									<option value="0" >Nasional</option>
-									<option value="0" >Propinsi</option>
-								</select>
-								<span class="invalid-feedback"><?php echo form_error('lingkup'); ?></span>
-							</div>
-						</div> -->
-						
-					</div>
-				</div>
+			
 
 				<div class="form-group">
 					<label for="template" class="control-label">Form Field *
 						<small id="" class="form-text text-muted">Seret lalu lepaskan form field yang tidak aktif ke kolom form field aktif.</small>
 					</label>
+					<!-- <p class="alert alert-warning">Buat beberapa field tidak terpakai sebagai cadangan jika ada pengembangan di masa mendatang.</p> -->
 					<div class="row">
 						<div class="col-md-6">
 							<div class="card card-success card-outline <?= (form_error('fields')) ? 'is-invalid' : ''; ?>">
 								<div class="card-header">Field terpakai</div>
 								<div class="card-body p-0 py-3">
 									<span style="text-align:center;font-size:12px; color:#918d8d;display:block;">Seret field yang akan digunakan ke sini</span>
+								
 									<div id="sortable2" class="connectedSortable errorTxt ">
 
 										<?php
@@ -237,16 +210,12 @@ list($kat, $result, $nominal) = $kategori;
 											$impl = implode('&', $unserial_array);
 										}
 
-										foreach ($results as $result) { 
-											if(($result['field_id'] == 1) || ($result['field_id'] == 2)) {
-												$field_wajib = 1;
-											} else {
-												$field_wajib = '';
-											}
+										foreach ($results as $result) { 											
 										
 											?>
 											<div class="ui-state-highlights" id="item-<?= $result['field_id']; ?>">
-												<p class="nama_field"><span class="nama_field_disini"><?= $result['field']; ?> <?=($field_wajib == 1 ? '<small class="text-danger">(Field ini wajib ada di semua pengajuan)</small>' : ''); ?></span></p>
+												<p class="nama_field"><span class="nama_field_disini"><?= $result['field']; ?></span></p>
+												<?php if($result['editable'] == 1 ) { ?>													
 												<div class="p-4">
 
 													<div class="mb-2">
@@ -287,7 +256,8 @@ list($kat, $result, $nominal) = $kategori;
 															<option value='date' <?= ($result['type'] == 'date') ? 'selected="selected"' : ''; ?>>Tanggal</option>
 															<!-- <option value='date_range' <?= ($result['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option> -->
 															<option value='url' <?= ($result['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
-															<option value='file' <?= ($result['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
+															<option value='file' <?= ($result['type'] == 'file') ? 'selected="selected"' : ''; ?>>File</option>
+															<option value='image' <?= ($result['type'] == 'image') ? 'selected="selected"' : ''; ?>>Image</option>
 
 															<option value='select_prestasi' <?= ($result['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
 															<option value='select_tingkat' <?= ($result['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
@@ -313,6 +283,7 @@ list($kat, $result, $nominal) = $kategori;
 														<p class="mt-1 sukses_simpan text-success text-center"><i class="fas fa-check-circle"></i> Berhasil disimpan</p>
 													</div>
 												</div>
+												<?php } // endif editable ?>
 											</div>
 										<?php	}
 										?>
@@ -341,73 +312,77 @@ list($kat, $result, $nominal) = $kategori;
 										?>
 											<div class="ui-state-highlights <?= (!in_array($field['field_id'], array_column($results, 'field_id'))) ? "" : "d-none"; ?>" id="item-<?= $field['field_id']; ?>">
 												<p class="nama_field"><span class="nama_field_disini"><?= $field['field']; ?></span></p>
-												<div class="p-4">
+												
+												<?php if($field['editable'] == 1 ) { ?>
+													<div class="p-4">
 
-													<div class="mb-2">
-														<input type="hidden" name="required" value=" <?= ($field['required'] == 1) ? '1' : '0'; ?>">
-														<input type="checkbox" <?= ($field['required'] == 1) ? 'checked="checked"' : ''; ?> class="checkp" />
-														<label for="exampleFormControlInput1" class="form-label">Centang jika field wajib</label>
+														<div class="mb-2">
+															<input type="hidden" name="required" value=" <?= ($field['required'] == 1) ? '1' : '0'; ?>">
+															<input type="checkbox" <?= ($field['required'] == 1) ? 'checked="checked"' : ''; ?> class="checkp" />
+															<label for="exampleFormControlInput1" class="form-label">Centang jika field wajib</label>
+														</div>
+
+														<div class="mb-2">
+															<label for="field" class="form-label">Nama Field</label>
+															<input class="form-control field-field" type="text" value="<?= $field['field']; ?>" name="field" />
+														</div>
+														<div class="mb-2">
+															<label for="placeholder" class="form-label">Placeholder</label>
+															<input class="form-control" type="text" value="<?= $field['placeholder']; ?>" name="placeholder" />
+														</div>
+
+														<div class="mb-2">
+															<label for="deskripsi" class="form-label">Deskripsi</label>
+															<textarea class="form-control" name="deskripsi" placeholder="Deskripsi singkat penjelasan field" /><?= $field['deskripsi']; ?></textarea>
+														</div>
+
+														<div class="mb-2">
+															<label for="type" class="form-label">Jenis Field</label>
+															<select class="form-control field-type" name="type">
+																<option value="">Pilih jenis field</option>
+																<option value='text' <?= ($field['type'] == 'text') ? 'selected="selected"' : ''; ?>>Teks singkat</option>
+																<option value='judul' <?= ($field['type'] == 'judul') ? 'selected="selected"' : ''; ?>>Judul</option>
+																<option value='number' <?= ($field['type'] == 'number') ? 'selected="selected"' : ''; ?>>Angka</option>
+																<option value='biaya' <?= ($field['type'] == 'biaya') ? 'selected="selected"' : ''; ?>>Biaya / Uang Rupiah</option>
+																<option value='textarea' <?= ($field['type'] == 'textarea') ? 'selected="selected"' : ''; ?>>Teks panjang</option>
+																<option value='wysiwyg' <?= ($field['type'] == 'wysiwyg') ? 'selected="selected"' : ''; ?>>Teks editor</option>
+																<option value='select_pembimbing' <?= ($field['type'] == 'select_pembimbing') ? 'selected="selected"' : ''; ?>>Pilih Dosen</option>
+																<option value='select_mahasiswa' <?= ($field['type'] == 'select_mahasiswa') ? 'selected="selected"' : ''; ?>>Pilih Mahasiswa</option>
+																<option value='sem' <?= ($field['type'] == 'sem') ? 'selected="selected"' : ''; ?>>Semester</option>
+																<option value='ta' <?= ($field['type'] == 'ta') ? 'selected="selected"' : ''; ?>>Tahun Akademik </option>
+																<option value='tahun' <?= ($field['type'] == 'tahun') ? 'selected="selected"' : ''; ?>>Tahun </option>
+
+																<option value='date' <?= ($field['type'] == 'date') ? 'selected="selected"' : ''; ?>>Tanggal</option>
+																<!-- <option value='date_range' <?= ($field['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option> -->
+																<option value='url' <?= ($field['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
+																<option value='file' <?= ($field['type'] == 'file') ? 'selected="selected"' : ''; ?>>File</option>
+																<option value='image' <?= ($field['type'] == 'image') ? 'selected="selected"' : ''; ?>>Image</option>
+																<option value='select_prestasi' <?= ($field['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
+																<option value='select_tingkat' <?= ($field['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
+																<option value='select_akademik_nonakademik' <?= ($field['type'] == 'select_akademik_nonakademik') ? 'selected="selected"' : ''; ?>>Akademik Nonakademik</option>
+																<!-- <option value='select_nasional_internasional' <?= ($field['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option> -->
+																<option value='select_pkm' <?= ($field['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
+
+															</select>
+														</div>
+
+														<div class="mb-2">
+															<label for="key" class="form-label">Key (wajib, tanpa spasi, huruf kecil semua)</label>
+															<input class="form-control field-key" type="text" value="<?= $field['key']; ?>" name="key" placeholder="Key sebagai kode identitas field" <?= ($field['type'] == 'judul') ? 'readonly="readonly"' : ''; ?> />
+														</div>
+
+														<div class="mb-2">
+															<a class="form-control btn btn-warning simpan simpan-<?= $field['field_id']; ?>" data-id="<?= $field['field_id']; ?>" style="cursor:pointer">
+																<span class="loading d-none">
+																	<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+																	<span class="sr-only">Loading...</span>
+																</span>
+																Simpan
+															</a>
+															<p class="mt-1 sukses_simpan text-success text-center"><i class="fas fa-check-circle"></i> Berhasil disimpan</p>
+														</div>
 													</div>
-
-													<div class="mb-2">
-														<label for="field" class="form-label">Nama Field</label>
-														<input class="form-control field-field" type="text" value="<?= $field['field']; ?>" name="field" />
-													</div>
-													<div class="mb-2">
-														<label for="placeholder" class="form-label">Placeholder</label>
-														<input class="form-control" type="text" value="<?= $field['placeholder']; ?>" name="placeholder" />
-													</div>
-
-													<div class="mb-2">
-														<label for="deskripsi" class="form-label">Deskripsi</label>
-														<textarea class="form-control" name="deskripsi" placeholder="Deskripsi singkat penjelasan field" /><?= $field['deskripsi']; ?></textarea>
-													</div>
-
-													<div class="mb-2">
-														<label for="type" class="form-label">Jenis Field</label>
-														<select class="form-control field-type" name="type">
-															<option value="">Pilih jenis field</option>
-															<option value='text' <?= ($field['type'] == 'text') ? 'selected="selected"' : ''; ?>>Teks singkat</option>
-															<option value='judul' <?= ($field['type'] == 'judul') ? 'selected="selected"' : ''; ?>>Judul</option>
-															<option value='number' <?= ($field['type'] == 'number') ? 'selected="selected"' : ''; ?>>Angka</option>
-															<option value='biaya' <?= ($field['type'] == 'biaya') ? 'selected="selected"' : ''; ?>>Biaya / Uang Rupiah</option>
-															<option value='textarea' <?= ($field['type'] == 'textarea') ? 'selected="selected"' : ''; ?>>Teks panjang</option>
-															<option value='wysiwyg' <?= ($field['type'] == 'wysiwyg') ? 'selected="selected"' : ''; ?>>Teks editor</option>
-															<option value='select_pembimbing' <?= ($field['type'] == 'select_pembimbing') ? 'selected="selected"' : ''; ?>>Pilih Dosen</option>
-															<option value='select_mahasiswa' <?= ($field['type'] == 'select_mahasiswa') ? 'selected="selected"' : ''; ?>>Pilih Mahasiswa</option>
-															<option value='sem' <?= ($field['type'] == 'sem') ? 'selected="selected"' : ''; ?>>Semester</option>
-															<option value='ta' <?= ($field['type'] == 'ta') ? 'selected="selected"' : ''; ?>>Tahun Akademik </option>
-															<option value='tahun' <?= ($field['type'] == 'tahun') ? 'selected="selected"' : ''; ?>>Tahun </option>
-
-															<option value='date' <?= ($field['type'] == 'date') ? 'selected="selected"' : ''; ?>>Tanggal</option>
-															<!-- <option value='date_range' <?= ($field['type'] == 'date_range') ? 'selected="selected"' : ''; ?>>Rentang Tanggal</option> -->
-															<option value='url' <?= ($field['type'] == 'url') ? 'selected="selected"' : ''; ?>>Url</option>
-															<option value='file' <?= ($field['type'] == 'file') ? 'selected="selected"' : ''; ?>>File/Image</option>
-															<option value='select_prestasi' <?= ($field['type'] == 'select_prestasi') ? 'selected="selected"' : ''; ?>>Prestasi (Juara 1 dst)</option>
-															<option value='select_tingkat' <?= ($field['type'] == 'select_tingkat') ? 'selected="selected"' : ''; ?>>Tingkatan (Nasional, wilayah, dst)</option>
-															<option value='select_akademik_nonakademik' <?= ($field['type'] == 'select_akademik_nonakademik') ? 'selected="selected"' : ''; ?>>Akademik Nonakademik</option>
-															<!-- <option value='select_nasional_internasional' <?= ($field['type'] == 'select_nasional_internasional') ? 'selected="selected"' : ''; ?>>Tingkatan Nasional Internasional</option> -->
-															<option value='select_pkm' <?= ($field['type'] == 'select_pkm') ? 'selected="selected"' : ''; ?>>Kategori Lomba PKM</option>
-
-														</select>
-													</div>
-
-													<div class="mb-2">
-														<label for="key" class="form-label">Key (wajib, tanpa spasi, huruf kecil semua)</label>
-														<input class="form-control field-key" type="text" value="<?= $field['key']; ?>" name="key" placeholder="Key sebagai kode identitas field" <?= ($field['type'] == 'judul') ? 'readonly="readonly"' : ''; ?> />
-													</div>
-
-													<div class="mb-2">
-														<a class="form-control btn btn-warning simpan simpan-<?= $field['field_id']; ?>" data-id="<?= $field['field_id']; ?>" style="cursor:pointer">
-															<span class="loading d-none">
-																<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-																<span class="sr-only">Loading...</span>
-															</span>
-															Simpan
-														</a>
-														<p class="mt-1 sukses_simpan text-success text-center"><i class="fas fa-check-circle"></i> Berhasil disimpan</p>
-													</div>
-												</div>
+												<?php } ?>
 											</div>
 										<?php	}	?>
 									</div>

@@ -52,9 +52,7 @@
 						</div>
 					</div>
 					<?php
-					foreach ($pengajuan_fields as $pengajuan_field) { 
-						
-						if($pengajuan_field['is_admin'] != 1) ?>
+					foreach ($pengajuan_fields as $pengajuan_field) {  ?>
 
 						<div class="form-group row">
 							<label class="col-md-5" for="dokumen[<?= $pengajuan_field['field_id']; ?>]">

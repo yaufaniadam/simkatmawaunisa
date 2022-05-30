@@ -25,11 +25,12 @@
 					<thead>
 						<tr>
 							<th style="width:1%"><input type="checkbox" name="" id="check_all"></th>
-							<th style="width:40%">Kategori</th>
+							<th style="width:30%">Kategori</th>
 							<th style="width:35%">Judul Kegiatan</th>
-							<th style="width:25%">Status</th>
-							<th>Mahasiswa</th>							
-							<th>Nominal (Rp)</th>
+							<th style="width:10%">Status</th>
+							<th style="width:20%">Mahasiswa</th>							
+							<th style="width:15%">Nominal (Rp)</th>
+							<th>Point</th>
 							<th>&nbsp;</th>
 							
 						</tr>
@@ -40,6 +41,7 @@
 						$total = 0;
 						foreach ($daftar_pengajuan as $pengajuan) {
 							$nominal = $pengajuan['nominal'];
+							$point = get_meta_value('point', $pengajuan['pengajuan_id'], false);
 						?>
 							<input type="hidden" name="pengajuan[]" value="<?= $pengajuan['pengajuan_id']; ?>" id="">
 							<tr class="<? ($pengajuan['status_id'] == 2) ? 'proses' : ''; ?> <?= ($pengajuan['status_id'] == 4) ? 'perlu-revisi' : ''; ?>">
@@ -70,6 +72,11 @@
 										} else {
 											echo "<span class=' text-right'>" . number_format($nominal, 2) . "</span>";
 										}	?>
+									</p>
+								</td>
+								<td>
+									<p class="m-0">
+										<?= $point; ?>
 									</p>
 								</td>
 
@@ -115,8 +122,8 @@
 							$total  += $nominal;
 						} ?>
 						<tr>
-							<th colspan="4" style="text-align: right;">Total</th>
-							<th colspan="2">Rp <span style="float:right;"><?= number_format($total, 2); ?></span></th>
+							<th colspan="5" style="text-align: right;">Total</th>
+							<th colspan="1">Rp <span style="float:right;"><?= number_format($total, 2); ?></span></th>
 						</tr>
 					</tbody>
 				</table>

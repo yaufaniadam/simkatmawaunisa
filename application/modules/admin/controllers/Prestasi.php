@@ -8,40 +8,96 @@ class Prestasi extends Admin_Controller
         parent::__construct();     
     }
 
-    public function index($DEPARTMENT_ID = 0, $ID_JENIS_PENGAJUAN = 0)
+    public function index()
     {
 
         $department_data = $this->db->query("SELECT * FROM mstr_department")->result_array();
-		$kategori_data = $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE Jenis_Pengajuan_Id != 12")->result_array();
+				$kategori_data = $this->db->query("SELECT * FROM mstr_jenis_pengajuan WHERE Jenis_Pengajuan_Id != 12")->result_array();
+				
 
-		$data['departments'] = $department_data;
-		$data['kategories'] = $kategori_data;
+				$data['departments'] = $department_data;
+				$data['kategories'] = $kategori_data;
 
-		$data['button_text'] = $DEPARTMENT_ID == 0 ? 'Semua Prodi' : $this->db->query(
-			"SELECT NAME_OF_DEPARTMENT 
-			FROM mstr_department 
-			WHERE DEPARTMENT_ID = $DEPARTMENT_ID"
-		)->row_object()->NAME_OF_DEPARTMENT;
+				$this->session->unset_userdata('kategori');
 
-		$data['button_text_2'] = $ID_JENIS_PENGAJUAN == 0 ? 'Semua Kategori' : $this->db->query(
-			"SELECT Jenis_Pengajuan 
-			FROM mstr_jenis_pengajuan 
-			WHERE Jenis_Pengajuan_Id = $ID_JENIS_PENGAJUAN"
-		)->row_object()->Jenis_Pengajuan;
+			// echo '<pre>'; print_r($data['kat']); echo '</pre>';
 
-        $prestasi = $this->db->query('SELECT * FROM v_prestasi 
-            WHERE status = 1 '
-            	. ($DEPARTMENT_ID == 0 ? "" : "AND DEPARTMENT_ID = '$DEPARTMENT_ID'")
-				. ($ID_JENIS_PENGAJUAN == 0 ? "" : " AND Jenis_Pengajuan_Id = $ID_JENIS_PENGAJUAN") 
-            )->result_array();
+				// $data['button_text'] = $DEPARTMENT_ID == 0 ? 'Semua Prodi' : $this->db->query(
+				// 	"SELECT NAME_OF_DEPARTMENT 
+				// 	FROM mstr_department 
+				// 	WHERE DEPARTMENT_ID = $DEPARTMENT_ID"
+				// )->row_object()->NAME_OF_DEPARTMENT;
+
+				// $data['button_text_2'] = $ID_JENIS_PENGAJUAN == 0 ? 'Semua Kategori' : $this->db->query(
+				// 	"SELECT Jenis_Pengajuan 
+				// 	FROM mstr_jenis_pengajuan 
+				// 	WHERE Jenis_Pengajuan_Id = $ID_JENIS_PENGAJUAN"
+				// )->row_object()->Jenis_Pengajuan;
+
+				// $data['tahun'] = $this->db->query(
+				// 	"SELECT YEAR(tanggal) as tahun
+				// 	FROM v_prestasi"
+				// )->row_object()->tahun;
+
+				// echo '<pre>'; print_r($data['tahun']); echo '</pre>';
+
+
+        // $prestasi = $this->db->query('SELECT * FROM v_prestasi 
+        //     WHERE status = 1 '
+        //     	. ($DEPARTMENT_ID == 0 ? "" : "AND DEPARTMENT_ID = '$DEPARTMENT_ID'")
+				// . ($ID_JENIS_PENGAJUAN == 0 ? "" : " AND Jenis_Pengajuan_Id = $ID_JENIS_PENGAJUAN") 
+        //     )->result_array();
         
-        $data['daftar_prestasi'] = $prestasi;
+        // $data['daftar_prestasi'] = $prestasi;
         $data['title'] = 'Daftar Prestasi & Rekognisi';
         $data['view'] = 'admin/prestasi/index';
         $data['menu'] = 'prestasi';    
         $this->load->view('layout/layout', $data);
 		//masa beda?
     }
+
+		function search(){
+
+			$kategori = $this->input->post('kategori');
+	
+			$this->session->set_userdata('kategori' ,$this->input->post('kategori'));
+
+			echo json_encode($kategori);	
+		}
+
+		public function prestasi_json($kategori = null) {
+
+			$where ='WHERE 1';
+
+			if($kategori) {
+				// $kategori = "AND Jenis_Pengajuan_Id ='" . $this->session->userdata('kategori') ."'";
+				$kategori = "AND Jenis_Pengajuan_Id = '" . $kategori . "'";
+			} else {
+				$kategori ='';
+			}
+
+			$records['data'] = $this->db->query("SELECT * FROM v_prestasi $where $kategori"
+			
+			)->result_array();
+			$data = array();	
+			foreach ($records['data']  as $row) 
+			{  			
+				$data[]= array(
+					$row['Jenis_Pengajuan'],
+					get_meta_value_by_type_field('judul', $row['id_pengajuan'], false),
+					$row['FULLNAME'],
+					$row['NAME_OF_DEPARTMENT'],
+					// $row['nama_periode'],
+					// $row['nominal'],
+					// $row['point'],		
+				);
+			}
+			$records['data'] = $data;
+
+			// echo '<pre>'; print_r($records); echo '</pre>';
+			echo json_encode($records);	
+
+		}
 
     public function detail($id_penerbitan_pengajuan = 0)
 	{

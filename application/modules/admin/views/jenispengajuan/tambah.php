@@ -104,7 +104,7 @@ echo form_open_multipart(base_url('admin/jenispengajuan/tambah/'), 'class="form-
 					</div>
 				</div>	
 
-				<div class="form-group row">
+				<!-- <div class="form-group row">
 					<label for="Jenis_Pengajuan" class="col-md-3 control-label">Jumlah Anggota</label>
 					<div class="col-md-9">
 						<select name="jumlah_anggota" class="form-control <?= (form_error('parent')) ? 'is-invalid' : ''; ?>" id="jumlah_anggota">		
@@ -116,7 +116,7 @@ echo form_open_multipart(base_url('admin/jenispengajuan/tambah/'), 'class="form-
 						</select>
 						<span class="invalid-feedback"><?php echo form_error('jumlah_anggota'); ?></span>
 					</div>
-				</div>	
+				</div>	 -->
 				
 				<div class="form-group row">
 					<label for="kode" class="col-md-3 control-label"></label>

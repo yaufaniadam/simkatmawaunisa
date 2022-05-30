@@ -61,9 +61,9 @@
 						</div>
 					</div>
 
-					<?php foreach ($fields as $field) { ?>
+					<?php foreach ($fields as $field) {?>
 
-						<div class="form-row">
+						<div class="form-row <?= ($field['is_admin'] == 1) ? 'bg-ijomuda py-3 mb-3':'' ?> ">
 						<label class="col-md-5" for="dokumen[<?= $field['field_id']; ?>]">
 								<?= $field['field'] ?> <?= ($field['required'] == 1) ? '<sup class="badge badge-danger badge-counter">Wajib</sup>': ''; ?>
 								<small class="form-text text-muted d-inline d-md-block">
@@ -77,7 +77,8 @@
 							</div>
 						</div>
 
-					<?php } ?>
+						<?php } // endforeach
+					 ?>
 
 					<?php if (($pengajuan['status_id'] == 2 || $pengajuan['status_id'] == 5) && (($this->session->userdata('role') == 2) || ($this->session->userdata('role') == 1))) { ?>
 						<div class="form-row pt-3">
@@ -121,6 +122,9 @@
 
 								<?php if ($pengajuan['status_id'] == 2) { ?>
 
+									
+								
+
 									// cek jumlah field dengan class .verifikasi
 									var numItems = $('.verifikasi').length;
 
@@ -152,6 +156,7 @@
 										// lalu cocokkan dengan fungsi dibawah ini
 										// jumalh field yang dichecked harus sama dengan jumalh field
 										if ($('.verifikasi:checked').length == numItems) {
+										
 
 											//  jika jumlah field tidak sama, maka option id="#diterima" memunculkan modal eror di bawah
 											//$('#error_modal').modal("show");
@@ -164,14 +169,18 @@
 								<?php } ?>
 
 								$('#sudahPeriksa').click(function(e) {
+
+									var fieldAdmin = $('.akademik.field-admin :selected').text();
+											
 									if ($(this).is(':checked')) {
 
-										if (!$("input[name='rev2']:checked").val()) {
-											alert('Hasil belum dipilih!');
+										if (  (!$("input[name='rev2']:checked").val())    ) {
+											alert('Hasil belum dipilih atau ada field yang belum diisi oleh verifikator!');
 											return false;
 										} else {
 											$('#sub1').removeAttr('disabled');
 										}
+									
 
 									} else {
 										$('#sub1').attr('disabled', 'disabled');
@@ -210,7 +219,7 @@
 				<div class="card-body pb-3">
 					<div class="media">
 
-						<?= profPic($pengajuan['nim'], 60); ?>
+						<!-- <?= profPic($pengajuan['nim'], 60); ?> -->
 
 						<div class="media-body ml-2">
 							<h5 class="mt-0 text-gray-900 mb-0 font-weight-bold"><?= $pengajuan['FULLNAME']; ?></h5>
@@ -223,7 +232,7 @@
 		</div>
 		<div class="card shadow mt-3">
 			<a href="#collStatus" class="d-block card-header pt-3 pb-2 bg-<?= $pengajuan['badge']; ?>" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collStatus">
-				<p class="h5 text-center font-weight-bold text-white"> <?= $pengajuan['status']; ?> </p>
+				<p class="h6 text-center font-weight-bold text-white"> <?= $pengajuan['status']; ?> </p>
 			</a>
 			<div class="collapse show" id="collStatus">
 				<div class="card-body pl-2">
@@ -244,6 +253,32 @@
 				</div>
 			</div>
 		</div>
+
+
+
+		<?php
+		
+		$duplikat = cek_duplikat($pengajuan['pengajuan_id'], $pengajuan['Jenis_Pengajuan_Id'], $pengajuan['nim'] );
+		
+		if($duplikat) { ?>
+
+
+<div class="card shadow mt-3">
+			<a href="#colDuplicate" class="d-block card-header pt-3 pb-2 bg-danger" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="colDuplicate">
+				<p class="h6 text-center font-weight-bold text-white"> Terindikasi duplikasi </p>
+			</a>
+			<div class="collapse show" id="colDuplicate">
+				<div class="card-body p-4">
+					<p>Ditemukan pengajuan dengan kategori yang sama untuk <strong><?= $pengajuan['FULLNAME']; ?></strong></p>
+					<div class="list-group"">
+						<?php foreach ($duplikat as $duplikat) { ?>
+							<a class="list-group-item p-2 list-group-item-action" href="<?= base_url('admin/pengajuan/detail/'. $duplikat['pengajuan_id']); ?>"><strong><?= get_meta_value_by_type_field('judul',$duplikat['pengajuan_id'], false); ?></strong> &raquo; <?= getStatusPengajuanById($duplikat['pengajuan_id'])['status']; ?> </a> 
+						<?php } ?>
+						</div>
+				</div>
+			</div>
+		</div>						
+	 <?php } // endif duplikat	?>
 		
 	</div>
 	<!-- /.col -->

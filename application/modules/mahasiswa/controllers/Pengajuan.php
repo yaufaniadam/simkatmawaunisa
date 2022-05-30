@@ -71,10 +71,6 @@ class Pengajuan extends Mahasiswa_Controller
 			->where(['STUDENTID' => $user_nim, 'status' => 1])
 			->get()->result_array();
 
-			// echo "<pre>";
-			// print_r($data['prestasi']);
-			// echo "</pre>";
-
 			$data['title'] = 'Prestasi Saya';
 			$data['menu'] = 'prestasi';
 
@@ -384,7 +380,7 @@ class Pengajuan extends Mahasiswa_Controller
 			"SELECT * FROM mstr_pengajuan_field pf
 			LEFT JOIN mstr_fields f ON f.field_id = pf.field_id
 			WHERE pf.Jenis_Pengajuan_Id = $pengajuan->Jenis_Pengajuan_Id
-			AND pf.terpakai = 1
+			AND pf.terpakai = 1 AND f.is_admin = 0
 			ORDER BY urutan ASC"
 		)->result_array();
 

@@ -24,6 +24,8 @@ class Jenispengajuan extends Admin_Controller
 
 		if ($this->input->post('submit')) {
 
+			$this->load->model('fields_model', 'fields_model');
+
 			$this->form_validation->set_rules(
 				'Jenis_Pengajuan',
 				'Nama Jenis Pengajuan',
@@ -42,12 +44,12 @@ class Jenispengajuan extends Admin_Controller
 				'trim|required',
 				array('required' => '%s wajib diisi.')
 			);
-			$this->form_validation->set_rules(
-				'jumlah_anggota',
-				'Jumlah Anggota',
-				'trim|required',
-				array('required' => '%s wajib diisi.')
-			);
+			// $this->form_validation->set_rules(
+			// 	'jumlah_anggota',
+			// 	'Jumlah Anggota',
+			// 	'trim|required',
+			// 	array('required' => '%s wajib diisi.')
+			// );
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['kategori_jenis_pengajuan'] = $this->pengajuan_model->get_kategori_jenis_pengajuan();
@@ -63,7 +65,7 @@ class Jenispengajuan extends Admin_Controller
 					'parent' => $parent,
 					'jenis_pengajuan' => $this->input->post('Jenis_Pengajuan'),
 					'deskripsi' => $this->input->post('deskripsi'),
-					'jumlah_anggota' => $this->input->post('jumlah_anggota'),
+					// 'jumlah_anggota' => $this->input->post('jumlah_anggota'),
 				);
 
 				$result = $this->pengajuan_model->tambah_jenis_pengajuan($data);
@@ -78,16 +80,101 @@ class Jenispengajuan extends Admin_Controller
 					];
 					$this->db->insert('mstr_penghargaan_rekognisi_mahasiswa', $insdata_penghargaan);
 
+					//insert field judul
+
+					$data_judul = [
+						'field' => 'Judul kegiatan/Nama Acara/Nama Lomba, dll',
+						'key' => 'judul',
+						'type' => 'judul',
+						'required' => '1',
+						'deskripsi' => 'Deskripsi di sini.',
+					];
+	
+					$data_judul = $this->security->xss_clean($data_judul);
+	
+					$this->fields_model->insert($data_judul);
+					$buat_judul_id = $this->db->insert_id();
+
 					//insert field wajib
 					$insdata_field = [
+					
 						["urutan" => 1,
 						"terpakai" => 1,
-						"field_id" => 1, //id untuk field lingkup pengajuan
+						"field_id" => $buat_judul_id, //id untuk field judul
 						"Jenis_Pengajuan_Id" => $id,
 						],
 						["urutan" => 2,
 						"terpakai" => 1,
+						"field_id" => 15, //id untuk field Laman Penyelenggara
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 3,
+						"terpakai" => 1,
+						"field_id" => 11, //id untuk field Surat TUgas
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						
+						["urutan" => 4,
+						"terpakai" => 1,
+						"field_id" => 4, //id untuk field Tahun Kegiatan
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 5,
+						"terpakai" => 1,
+						"field_id" => 5, //id untuk field Anggota /Mahasiswa
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 6,
+						"terpakai" => 1,
+						"field_id" => 6, //id untuk field Dosen
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 7,
+						"terpakai" => 1,
+						"field_id" => 7, //id untuk field Keterlibatan Dosen
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 8,
+						"terpakai" => 1,
+						"field_id" => 8, //id untuk field Tingkatan Prestasi
+						"Jenis_Pengajuan_Id" => $id,
+						],
+					
+						["urutan" => 9,
+						"terpakai" => 1,
+						"field_id" => 10, //id untuk field Sertifikat
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 10,
+						"terpakai" => 1,
+						"field_id" => 14, //id untuk field UPP
+						"Jenis_Pengajuan_Id" => $id,
+						],						
+						["urutan" => 11,
+						"terpakai" => 1,
+						"field_id" => 1, //id untuk field lingkup Kegiatan
+						"Jenis_Pengajuan_Id" => $id,
+						],
+
+						["urutan" => 12,
+						"terpakai" => 1,
+						"field_id" => 12, //id untuk field Negara Peserta
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 13,
+						"terpakai" => 1,
+						"field_id" => 13, //id untuk field Negara Peserta
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						//diisi admin
+						["urutan" => 14,
+						"terpakai" => 1,
 						"field_id" => 2, //id untuk field akademik non akademik
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 15,
+						"terpakai" => 1,
+						"field_id" => 9, //id untuk field Skor
 						"Jenis_Pengajuan_Id" => $id,
 						],
 					];
@@ -119,12 +206,12 @@ class Jenispengajuan extends Admin_Controller
 				'trim|required',
 				array('required' => '%s wajib diisi.')
 			);
-			$this->form_validation->set_rules(
-				'jumlah_anggota',
-				'Jumlah Anggota',
-				'trim|required',
-				array('required' => '%s wajib diisi.')
-			);
+			// $this->form_validation->set_rules(
+			// 	'jumlah_anggota',
+			// 	'Jumlah Anggota',
+			// 	'trim|required',
+			// 	array('required' => '%s wajib diisi.')
+			// );
 			$this->form_validation->set_rules(
 				'deskripsinya',
 				'Deskripsi',
@@ -170,7 +257,7 @@ class Jenispengajuan extends Admin_Controller
 					'parent' => $parent,
 					'jenis_pengajuan' => $this->input->post('Jenis_Pengajuan'),
 					'deskripsi' => $this->input->post('deskripsinya'),
-					'jumlah_anggota' => $this->input->post('jumlah_anggota'),
+					// 'jumlah_anggota' => $this->input->post('jumlah_anggota'),
 					'aktif' => $this->input->post('aktif')
 				);
 
