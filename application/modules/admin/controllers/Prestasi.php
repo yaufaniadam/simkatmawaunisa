@@ -20,10 +20,10 @@ class Prestasi extends Admin_Controller
 
 				$this->session->unset_userdata('kategori');
 
-				$data['tahun'] = $this->db->query(
-					"SELECT tahun
-					FROM v_prestasi"
-				)->row_object()->tahun;
+				// $data['tahun'] = $this->db->query(
+				// 	"SELECT tahun
+				// 	FROM v_prestasi"
+				// )->row_object()->tahun;
 
 
         // $prestasi = $this->db->query('SELECT * FROM v_prestasi 

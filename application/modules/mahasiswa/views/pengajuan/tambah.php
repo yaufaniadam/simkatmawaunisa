@@ -96,7 +96,7 @@
 				<div class="collapse show" id="collStatus">
 					<div class="card-body pl-2">
 
-						<div class="timeline timeline-xs">
+						<div class="timeline timeline-xs mb-3">
 							<?php		
 							
 							foreach ($timeline as $tl) { ?>
@@ -111,6 +111,10 @@
 									</div>
 								</div>
 							<?php } ?>
+						</div>
+
+						<div class="alert alert-warning"><h6><i class="fas fa-comment-dots"></i> <strong>Catatan Admin</strong></h6>
+							<?= $pengajuan->catatan; ?>
 						</div>
 
 					</div>

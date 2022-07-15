@@ -21,7 +21,7 @@ class Pengajuan extends Admin_Controller
 		$this->load->view('layout/layout', $data);
 	}
 
-	public function detail($pengajuan_id = 0)
+public function detail($pengajuan_id = 0)
 	{
 		$this->load->helper('formulir');
 
@@ -472,13 +472,15 @@ class Pengajuan extends Admin_Controller
 			$catatan = $this->input->post('catatan'); //ambil nilai 
 			$pengajuan_id = $this->input->post('pengajuan_id');
 			$status_pengajuan = $this->input->post('rev2');
+			$catatan_ditolak = $this->input->post('catatan_ditolak');
 			//set status
 			$this->db->set('status_id', $status_pengajuan)
 				->set('pic', $this->session->userdata('user_id'))
 				->set('date', 'NOW()', FALSE)
 				->set('pengajuan_id', $pengajuan_id)
+				->set('pengajuan_id', $pengajuan_id)
+				->set('catatan', $catatan_ditolak)
 				->insert('tr_pengajuan_status');
-
 
 			foreach ($verifikasi as $id => $value_verifikasi) {
 				$this->db->where(array('field_id' => $id, 'pengajuan_id' => $pengajuan_id))

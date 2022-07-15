@@ -104,6 +104,11 @@
 										
 										</ul>
 
+										<div id="pesan_ditolak">
+											<textarea class="form-control" name="catatan_ditolak" id="" cols="30" rows="5" placeholder="Catatan dari BKA"></textarea>
+										</div>
+							
+
 
 										<p class="mt-3">
 											<span class="pl-2 mb-2 d-inline-block"><input type="checkbox" name="" id="sudahPeriksa"> Pernyataan ini dibuat dengan sebenar-benarnya dan dapat dipertanggung jawabkan kebenarannya. <a class="help" data-toggle="tooltip" data-placement="top" title="Centang untuk mengaktifkan tombol verifikasi."><i class="fa fa-info-circle"></i></a></span>
@@ -250,7 +255,7 @@
 									<td>No Rekening</td>
 									<td>
 										<?php if ($pengajuan['norekening'] ) { ?>
-										<?= $pengajuan['norekening'] ?> Kode Bank <?= $pengajuan['kdbank'] ?> an. <?= $pengajuan['namadirekening'] ?> 
+										<?= $pengajuan['norekening'] ?> <?= $pengajuan['namabank'] ?> an. <?= $pengajuan['namadirekening'] ?> 
 										<?php } else { echo "-";} ?>
 									</td>
 								</tr>							
@@ -283,6 +288,12 @@
 					</div>
 				</div>
 			</div>
+			
+			
+			<div class="alert alert-warning"><h6><i class="fas fa-comment-dots"></i> <strong>Catatan Admin</strong></h6>
+				<?= $pengajuan['catatan']; ?>
+			</div>
+
 		</div>
 
 
