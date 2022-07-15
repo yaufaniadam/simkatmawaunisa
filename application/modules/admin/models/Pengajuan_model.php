@@ -224,7 +224,7 @@ class Pengajuan_model extends CI_Model
 	public function get_detail_pengajuan($pengajuan_id)
 	{
 		return $this->db->query(
-			"SELECT *
+			"SELECT *, m.*
 			FROM tr_pengajuan p
 			LEFT JOIN mstr_jenis_pengajuan jp ON jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id 		
 			LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id

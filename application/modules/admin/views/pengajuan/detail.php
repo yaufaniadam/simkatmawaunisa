@@ -224,7 +224,38 @@
 						<div class="media-body ml-2">
 							<h5 class="mt-0 text-gray-900 mb-0 font-weight-bold"><?= $pengajuan['FULLNAME']; ?></h5>
 							<span class="mb-0 badge badge-ijomuda"> <?= $pengajuan['nim']; ?></span>
-							<p class="mb-0 text-gray-800"> <?= $pengajuan['NAME_OF_DEPARTMENT']; ?></p>
+							<table class="mt-4 table table-striped table-bordered">
+								<tr>
+									<td>Prodi</td>
+									<td><?= $pengajuan['NAME_OF_DEPARTMENT']; ?>
+									</td>
+								</tr>
+								<tr>
+									<td>No Telp</td>
+									<td>
+										<?php if ($pengajuan['notelpon'] ) { ?>
+										<?= $pengajuan['notelpon'] ?>
+										<?php } else { echo "-";} ?>
+									</td>
+								</tr>
+								<tr>
+									<td>Email</td>									
+									<td>
+										<?php if ($pengajuan['email'] ) { ?>
+										<?= $pengajuan['email'] ?>
+										<?php } else { echo "-";} ?>
+									</td>
+								</tr>
+								<tr>
+									<td>No Rekening</td>
+									<td>
+										<?php if ($pengajuan['norekening'] ) { ?>
+										<?= $pengajuan['norekening'] ?> Kode Bank <?= $pengajuan['kdbank'] ?> an. <?= $pengajuan['namadirekening'] ?> 
+										<?php } else { echo "-";} ?>
+									</td>
+								</tr>							
+							</table>
+
 						</div>
 					</div>
 				</div>

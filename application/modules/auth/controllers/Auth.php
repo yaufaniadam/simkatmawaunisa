@@ -91,6 +91,7 @@ class Auth extends CI_Controller
 								'email' => $result['email'],
 								'fakultas' => $result['NAME_OF_FACULTY'],
 								'id_prodi' => $result['NAME_OF_DEPARTMENT'],
+								'department_id' => $result['DEPARTMENT_ID'],
 								'role' => 3,
 								'created_at' => date('Y-m-d : h:m:s'),
 							);

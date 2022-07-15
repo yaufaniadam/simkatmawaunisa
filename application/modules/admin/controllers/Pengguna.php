@@ -85,6 +85,7 @@ class Pengguna extends Admin_Controller
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['user'] = $this->pengguna_model->get_user_by_id($id);
+				$data['prodi'] = $this->pengguna_model->get_prodi();
 				$data['role'] = $this->pengguna_model->role();
 				$data['title'] = 'Edit Pengguna';
 				$data['view'] = 'admin/pengguna/edit';
@@ -96,6 +97,7 @@ class Pengguna extends Admin_Controller
 					'fullname' => $this->input->post('nama'),
 					'password' => ($this->input->post('password') !== "" ? password_hash($this->input->post('password'), PASSWORD_BCRYPT) : $this->input->post('password_hidden')),
 					'updated_at' => date('Y-m-d h:m:s'),
+					'prodi' => $this->input->post('prodi'),
 				);
 
 				$data = $this->security->xss_clean($data);
@@ -109,6 +111,7 @@ class Pengguna extends Admin_Controller
 		} else {
 			$data['user'] = $this->pengguna_model->get_user_by_id($id);
 			$data['role'] = $this->pengguna_model->role();
+			$data['prodi'] = $this->pengguna_model->get_prodi();
 			$data['title'] = 'Edit Pengguna';
 			$data['view'] = 'admin/pengguna/edit';
 			$this->load->view('layout/layout', $data);

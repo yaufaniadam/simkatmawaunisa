@@ -1,9 +1,9 @@
 <div class="col-12">
 	<div class="row">
-		<div class="col-1 mb-4 pt-2">
+		<div class="col-md-2 mb-4 pt-2">
 			Pilih Tahun 
 		</div>
-		<div class="col-1 mb-4">
+		<div class="col-md-2 mb-4">
 			<select name="pilih_tahun" id="pilihtahun" class="form-control">
 				<?php 
 				foreach($alltahun as $tahun) { ?>
@@ -194,27 +194,7 @@
 
 
 						</div>
-						<!-- <div class="tab-pane fade pt-4" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-							<table id="data-pengajuan-table" class="table table-bordered tb-pengajuans table-striped">
-								<thead>
-									<tr>
-										<?php foreach ($nama_bulan as $bulan) { ?>
-											<th style="width:20%"><?php echo get_nama_bulan($bulan['bulan']) ?></th>
-										<?php } ?>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<?php foreach ($nama_bulan as $bulan) { ?>
-											<th style="width:20%">
-												<i class="fas fa-envelope text-danger"></i> <?php echo  get_jumlah_pengajuan_perbulan($bulan['bulan'], $selected_tahun) ?>
-												<i class="fas fa-medal text-warning"></i> <?php echo  get_jumlah_prestasi_perbulan($bulan['bulan'] , $selected_tahun) ?>
-											</th>
-										<?php } ?>
-									</tr>
-								</tbody>
-							</table>
-						</div> -->
+					
 
 					</div>
 
@@ -393,11 +373,11 @@
 						unit: 'date'
 					},
 					gridLines: {
-						display: false,
-						drawBorder: false
+						display: true,
+						drawBorder: true
 					},
 					ticks: {
-						maxTicksLimit: 7
+						maxTicksLimit: 1
 					}
 				}],
 				yAxes: [{
