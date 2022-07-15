@@ -6,7 +6,7 @@
 <div class="row">
 	<div class="col-12">
 		<div class="card card-success card-outline">
-			<div class="card-header">
+			<!-- <div class="card-header">
 			<?php echo form_open("/", 'id="filter_search"') ?>
 				<div class="row">
 		
@@ -33,7 +33,7 @@
 
 				</div>
 				<?php echo form_close(); ?>
-			</div>
+			</div> -->
 
 			<div class="card-body">
 				<table id="prestasi" class="table table-bordered tb-pengajuans table-striped">
@@ -43,6 +43,10 @@
 							<th style="width:35%">Judul/Nama/Kegiatan/Karya</th>
 							<th  style="width:20%">Mahasiswa</th>
 							<th  style="width:20%">Prodi</th>
+							<th  style="width:20%">Tahun</th>
+							<th  style="width:20%">Periode</th>
+							<th  style="width:20%">Tingkat</th>
+							<th  style="width:20%">Prestasi</th>
 						</tr>
 					</thead>
 				
@@ -88,8 +92,6 @@
 <script src="<?= base_url() ?>/public/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <script>
-
-
 	
 		//---------------------------------------------------
 		var table = $('#prestasi').DataTable({

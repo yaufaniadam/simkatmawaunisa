@@ -17,19 +17,23 @@ class Pengguna_model extends CI_Model
 	// get all users for server-side datatable processing (ajax based)
 	public function get_pengguna($role)
 	{
-		if ($role == '') {
-			$where = "WHERE a.role != 1";
-		} else {
-			$where = "WHERE a.role != 1 AND a.role=$role";
-		}
+		// if ($role == '') {
+		// 	$where = "WHERE a.role != 1";
+		// } else {
+		// 	$where = "WHERE a.role != 1 AND a.role=$role";
+		// }
 		return $this->db->query("SELECT a.*, r.role FROM users a
-		LEFT JOIN mstr_role r ON r.role_id = a.role
-		$where ");
+		LEFT JOIN mstr_role r ON r.role_id = a.role WHERE a.role != 1");
 	}
 
 	public function get_role()
 	{
 		return $this->db->get_where('mstr_role', array('role_id !=' => '1'))->result_array();
+	}
+
+	public function get_prodi()
+	{
+		return $this->db->get('mstr_department')->result_array();
 	}
 	// Count total users by role
 	public function count_all_users_by_role($role)

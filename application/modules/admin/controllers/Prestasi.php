@@ -20,26 +20,10 @@ class Prestasi extends Admin_Controller
 
 				$this->session->unset_userdata('kategori');
 
-			// echo '<pre>'; print_r($data['kat']); echo '</pre>';
-
-				// $data['button_text'] = $DEPARTMENT_ID == 0 ? 'Semua Prodi' : $this->db->query(
-				// 	"SELECT NAME_OF_DEPARTMENT 
-				// 	FROM mstr_department 
-				// 	WHERE DEPARTMENT_ID = $DEPARTMENT_ID"
-				// )->row_object()->NAME_OF_DEPARTMENT;
-
-				// $data['button_text_2'] = $ID_JENIS_PENGAJUAN == 0 ? 'Semua Kategori' : $this->db->query(
-				// 	"SELECT Jenis_Pengajuan 
-				// 	FROM mstr_jenis_pengajuan 
-				// 	WHERE Jenis_Pengajuan_Id = $ID_JENIS_PENGAJUAN"
-				// )->row_object()->Jenis_Pengajuan;
-
-				// $data['tahun'] = $this->db->query(
-				// 	"SELECT YEAR(tanggal) as tahun
-				// 	FROM v_prestasi"
-				// )->row_object()->tahun;
-
-				// echo '<pre>'; print_r($data['tahun']); echo '</pre>';
+				$data['tahun'] = $this->db->query(
+					"SELECT tahun
+					FROM v_prestasi"
+				)->row_object()->tahun;
 
 
         // $prestasi = $this->db->query('SELECT * FROM v_prestasi 
@@ -67,7 +51,15 @@ class Prestasi extends Admin_Controller
 
 		public function prestasi_json($kategori = null) {
 
-			$where ='WHERE 1';
+			$prodinya = $this->session->userdata('id_prodi');
+
+			if($prodinya == 0) {
+				$prodi ='';
+			} else {
+				$prodi = 'AND DEPARTMENT_ID = '. $prodinya;
+			}
+
+			$where ='WHERE status = 1';
 
 			if($kategori) {
 				// $kategori = "AND Jenis_Pengajuan_Id ='" . $this->session->userdata('kategori') ."'";
@@ -76,7 +68,7 @@ class Prestasi extends Admin_Controller
 				$kategori ='';
 			}
 
-			$records['data'] = $this->db->query("SELECT * FROM v_prestasi $where $kategori"
+			$records['data'] = $this->db->query("SELECT * FROM v_prestasi $where $kategori $prodi"
 			
 			)->result_array();
 			$data = array();	
@@ -87,9 +79,10 @@ class Prestasi extends Admin_Controller
 					get_meta_value_by_type_field('judul', $row['id_pengajuan'], false),
 					$row['FULLNAME'],
 					$row['NAME_OF_DEPARTMENT'],
-					// $row['nama_periode'],
-					// $row['nominal'],
-					// $row['point'],		
+					$row['tahun'],
+					$row['nama_periode'],
+					get_tingkat(get_meta_value_by_type_field('select_tingkat', $row['id_pengajuan'], false))['Tingkat_Prestasi'],	
+					get_prestasi(get_meta_value_by_type_field('select_prestasi', $row['id_pengajuan'], false))['keterangan'],	
 				);
 			}
 			$records['data'] = $data;

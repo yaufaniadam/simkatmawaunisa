@@ -94,7 +94,7 @@ list($kat, $result, $nominal) = $kategori;
 							<div class="">
 
 
-								<select name="parent" class="form-control <?= (form_error('parent')) ? 'is-invalid' : ''; ?>" id="parent" onchange="window.location='<?= $kat['jpi']; ?>?id='+this.value+'&pos='+this.selectedIndex;">
+								<select name="parent" class="form-control <?= (form_error('parent')) ? 'is-invalid' : ''; ?>" id="parent" >
 
 									<option value=''>Pilih Kategori</option>
 									<?php
@@ -107,7 +107,7 @@ list($kat, $result, $nominal) = $kategori;
 
 								</select>
 								<span class="invalid-feedback"><?php echo form_error('parent'); ?></span>
-								<?php
+								<?php /*
 								if (isset($_GET['id'])) {
 									$parent = $_GET['id'];
 								?>
@@ -115,7 +115,7 @@ list($kat, $result, $nominal) = $kategori;
 										var myselect = document.getElementById("parent");
 										myselect.options.selectedIndex = <?php echo $_GET["pos"]; ?>
 									</script>
-								<?php	}	?>
+								<?php	}	*/?>
 
 
 							</div>

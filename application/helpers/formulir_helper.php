@@ -118,6 +118,18 @@ function get_prodi_by_id($id)
 	$query = $CI->db->get_where('mstr_department', array('DEPARTMENT_ID' => $id))->row_array();
 	return $query;
 }
+function get_negara_by_id($id)
+{
+	$CI = &get_instance();
+	$query = $CI->db->get_where('mstr_negara', array('id' => $id))->row_array();
+	return $query;
+}
+function get_province_by_id($id)
+{
+	$CI = &get_instance();
+	$query = $CI->db->get_where('mstr_propinsi', array('id' => $id))->row_array();
+	return $query;
+}
 
 function field_value_checker($required, $field_value, $id, $verifikasi, $pengajuan_status, $array)
 {
@@ -1051,8 +1063,34 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
 
 			
+			<?php
+		/* 											
+			Sumber Pembiayaan 					
+		*/
 
-		<?php 
+	} elseif ($fields['type'] == 'sumber_pembiayaan') {
+
+		if ($value != 0) {
+			$check = field_value_checker($fields['required'], $field_value, $id, $verifikasi, $pengajuan_status, false);
+		
+		?>
+
+			<fieldset>
+			<select class="form-control <?= $fields['key']; ?> <?= $check['valid']; ?>" name="dokumen[<?= $id; ?>]" id="input-<?= $id; ?>" <?= $check['disabled'];  ?>>
+				<option value=""> -- Pilih Sumber Pembiayaan -- </option>	
+					<option value="mandiri" <?php echo (validation_errors()) ? (set_select('dokumen[' . $id . ']', 'mandiri')) : ('mandiri' == $check['value'] ? 'selected' : ''); ?>>Mandiri</option>
+					<option value="universitas" <?php echo (validation_errors()) ? (set_select('dokumen[' . $id . ']', 'universitas')) : ('universitas' == $check['value'] ? 'selected' : ''); ?>>Universitas</option>
+					<option value="sponsor" <?php echo (validation_errors()) ? (set_select('dokumen[' . $id . ']', 'sponsor')) : ('sponsor' == $check['value'] ? 'selected' : ''); ?>>Sponsor</option>	
+				</select>
+			</fieldset>
+
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			
+
+			<?php  } else {
+			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
+		} 
 		/* 											
 			NUMBER 					
 		*/
@@ -1395,6 +1433,292 @@ function generate_form_field($field_id, $pengajuan_id, $pengajuan_status, $fungs
 		<?php  } else {
 			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
 		} 
+
+		/* 											
+			SELECT NEGARA 					
+		*/
+
+	} elseif ($fields['type'] == 'select_negara') {
+		if ($value != 0) {
+
+			if (validation_errors()) { // cek adakah eror validasi
+				// kondisional di bawah untuk memeriksa, erornya pada field ini ataukah pada field lain
+
+				// echo "ada error";
+
+				if (set_value('dokumen[' . $id . ']')) {
+
+					// echo "error di field lain<br>";
+
+					// error di field lain       
+					$value = set_value('dokumen[' . $id . ']');
+					$value_explode = explode(',', $value);
+					$countries = $value_explode;
+					$valid = '';
+					$disabled = 'eng';
+				} else {
+					// error di field ini
+					// echo "error di field ini";
+
+					$value = set_value('dokumen[' . $id . ']');
+					$value_explode = explode(',', $value);
+					$countries = $value_explode;
+					$valid = 'is-invalid';
+					$disabled = 'enf';
+				}
+			} else {
+				//tampilan default, saat value field 0, atau field sudah ada isinya dan menunggu verifikasi
+
+				if ($field_value) {
+
+					// echo "ada value";
+					//field sudah dicek, tapi perlu direvisi
+					if ($verifikasi == 0 && $pengajuan_status == 4) {
+						// echo "blm diverifikasi dan pengajuan status 4";
+						$value_explode = explode(',', $field_value);
+						$countries = $value_explode;
+						$valid = 'is-invalid';
+						$disabled = 'ens';
+					} else {
+						// echo " sudah diverifikasi, nilai akan diexplode";
+						$value_explode = explode(',', $field_value);
+						$countries = $value_explode;
+						$valid = '';
+						$disabled = 'readonly';
+					}
+				} else {
+					//field kosong, nilai awal
+
+					$value = '';
+					$countries = '';
+					$valid = '';
+					$disabled = 'en';
+				}
+			}
+
+ ?>
+			<fieldset>
+				<select class="ambil-negara form-control form-control-lg <?= $valid; ?>" name="negara" multiple>
+					<?php  if ($value) {				
+					foreach($countries as $negara) { ?>
+						<option value="<?= $negara; ?>"><?php echo get_negara_by_id($negara)['nicename']; ?></option>
+					<?php	} 
+					}
+					?>		
+				</select>
+
+						<!-- nilai dari ketua dan anggota digabung di sini -->		
+				<input type="hidden" id="namanegara" name="dokumen[<?= $id; ?>]" value="<?= $field_value;  ?>" />			
+
+	
+			</fieldset>
+
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari BKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
+
+			<script>
+				$(document).ready(function() {
+
+					var selectedValuesTest = [<?php if ($value) {
+																					foreach ($countries as $negara) {
+																						echo '"' .  $negara . '"' . ',';
+																					}
+																				} ?>];
+
+					$('.ambil-negara').select2({
+						ajax: {
+							url: '<?= base_url('mahasiswa/pengajuan/getnegara'); ?>',
+							dataType: 'json',
+							type: 'post',
+							delay: 250,
+							data: function(params) {
+								return {
+									search: params.term,
+								}
+							},
+							processResults: function(data) {
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						placeholder: 'Pilih Negara',
+						language: {
+							inputTooShort: function() {
+								return 'Ketikkan nama negara minimal 3 huruf';
+							}
+						},
+						minimumInputLength: 3,
+					});
+					$('.ambil-negara').val(selectedValuesTest).trigger('change');
+
+					$('.ambil-negara').on('change', function() {
+						var data = $(".ambil-negara option:selected")
+												.map(function() {
+                            return this.value;
+                        }).get(); 
+
+					 $("#namanegara").val(data);					 
+					});			
+
+				});
+			</script>
+
+		<?php  } else {
+			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
+		} 
+
+		/* 											
+			SELECT PROPINSI 					
+		*/
+
+	} elseif ($fields['type'] == 'select_propinsi') {
+		if ($value != 0) {
+
+			if (validation_errors()) { // cek adakah eror validasi
+				// kondisional di bawah untuk memeriksa, erornya pada field ini ataukah pada field lain
+
+				// echo "ada error";
+
+				if (set_value('dokumen[' . $id . ']')) {
+
+					// echo "error di field lain<br>";
+
+					// error di field lain       
+					$value = set_value('dokumen[' . $id . ']');
+					$value_explode = explode(',', $value);
+					$provinces = $value_explode;
+					$valid = '';
+					$disabled = 'eng';
+				} else {
+					// error di field ini
+					// echo "error di field ini";
+
+					$value = set_value('dokumen[' . $id . ']');
+					$value_explode = explode(',', $value);
+					$provinces = $value_explode;
+					$valid = 'is-invalid';
+					$disabled = 'enf';
+				}
+			} else {
+				//tampilan default, saat value field 0, atau field sudah ada isinya dan menunggu verifikasi
+
+				if ($field_value) {
+
+					// echo "ada value";
+					//field sudah dicek, tapi perlu direvisi
+					if ($verifikasi == 0 && $pengajuan_status == 4) {
+						// echo "blm diverifikasi dan pengajuan status 4";
+						$value_explode = explode(',', $field_value);
+						$provinces = $value_explode;
+						$valid = 'is-invalid';
+						$disabled = 'ens';
+					} else {
+						// echo " sudah diverifikasi, nilai akan diexplode";
+						$value_explode = explode(',', $field_value);
+						$provinces = $value_explode;
+						$valid = '';
+						$disabled = 'readonly';
+					}
+				} else {
+					//field kosong, nilai awal
+
+					$value = '';
+					$provinces = '';
+					$valid = '';
+					$disabled = 'en';
+				}
+			}
+
+ ?>
+			<fieldset>
+				<select class="ambil-province form-control form-control-lg <?= $valid; ?>" name="province" multiple>
+					<?php  if ($value) {				
+					foreach($provinces as $province) { ?>
+						<option value="<?= $province; ?>"><?php echo get_province_by_id($province)['name']; ?></option>
+					<?php	} 
+					}
+					?>		
+				</select>
+
+						<!-- nilai dari ketua dan anggota digabung di sini -->		
+				<input type="hidden" id="namaprovinces" name="dokumen[<?= $id; ?>]" value="<?= $field_value;  ?>" />			
+
+	
+			</fieldset>
+
+			<span class="invalid-feedback d-block"><?php echo form_error('dokumen[' . $id . ']'); ?></span>
+
+			<div class="alert alert-danger <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? '' : 'd-none'; ?> ">
+				<div class="bg-white p-3 rounded-sm">
+					<strong>Catatan dari BKA:</strong>
+					<hr>
+					<?= $fields['field'] ?> Perlu direvisi. <br>
+					<?php echo ($catatan != '') ?  $catatan : ''; ?>
+				</div>
+			</div>
+
+			<script>
+				$(document).ready(function() {
+
+					var selectedValuesTest = [<?php if ($value) {
+																					foreach ($provinces as $province) {
+																						echo '"' .  $province . '"' . ',';
+																					}
+																				} ?>];
+
+					$('.ambil-province').select2({
+						ajax: {
+							url: '<?= base_url('mahasiswa/pengajuan/getpropinsi'); ?>',
+							dataType: 'json',
+							type: 'post',
+							delay: 250,
+							data: function(params) {
+								return {
+									search: params.term,
+								}
+							},
+							processResults: function(data) {
+								return {
+									results: data
+								};
+							},
+							cache: true
+						},
+						placeholder: 'Pilih Propinsi',
+						language: {
+							inputTooShort: function() {
+								return 'Ketikkan nama propinsi minimal 3 huruf';
+							}
+						},
+						minimumInputLength: 3,
+					});
+					$('.ambil-province').val(selectedValuesTest).trigger('change');
+
+					$('.ambil-province').on('change', function() {
+						var data = $(".ambil-province option:selected")
+												.map(function() {
+                            return this.value;
+                        }).get(); 
+
+					 $("#namaprovinces").val(data);					 
+					});			
+
+				});
+			</script>
+
+		<?php  } else {
+			echo "<i class='fas fa-exclamation-triangle text-danger'></i> Terdapat kesalahan, silakan lakukan pengajuan kembali.";
+		} 
 		
 		/* 											
 			SELECT CAPAIAN PRESTASi 					
@@ -1610,7 +1934,10 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 	<?php
 	} elseif (($field['type'] == 'biaya')) { ?>
 
-		<input type="text" class="form-control mb-2 <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?> <?= ($field['is_admin'] == 1) ? 'field-admin' : ''; ?>" id="input-<?= $id; ?>" value="<?= $field_value;  ?>" name="dokumen[<?= $id; ?>]" disabled />
+					<input type="text" class="form-control mb-2 <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?> <?= ($field['is_admin'] == 1) ? 'field-admin' : ''; ?>" id="input-<?= $id; ?>" value="<?= $field_value;  ?>" name="dokumen[<?= $id; ?>]" disabled />
+	
+
+
 
 		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
 			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
@@ -1648,8 +1975,27 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 
 		<select class="form-control mb-2 <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?> <?= ($field['is_admin'] == 1) ? 'field-admin' : ''; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>
 			<?php foreach ($capaian_prestasi as $capaian_prestasi) { ?>
-				<option value="<?= $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id']; ?>" <?= ($capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id'] == $field_value) ? 'selected' : ''; ?>><?= $capaian_prestasi['keterangan']; ?></option>
+				<option value="<?= $capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id']; ?>" <?= ($capaian_prestasi['Penghargaan_Rekognisi_Mahasiswa_Id'] == $field_value) ? 'selected' : ''; ?>><?= $capaian_prestasi['keterangan']; ?> (Pagu hadiah: Rp<?= number_format($capaian_prestasi['nominal']); ?>)</option>
 			<?php } ?>
+		</select>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan, $field['is_admin']);
+		} ?>
+
+	<?php
+	} elseif ($field['type'] == 'sumber_pembiayaan') {
+		/* tingkatan wilayah/sekup kegiatan
+		*/
+	?>
+	
+		<select class="form-control mb-2 <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?> <?= ($field['is_admin'] == 1) ? 'field-admin' : ''; ?>" id="input-<?= $id; ?>" name="dokumen[<?= $id; ?>][]" disabled>		
+				<option value="mandiri" <?= ('mandiri' == $field_value) ? 'selected' : ''; ?>>Mandiri</option>
+				<option value="universitas" <?= ('universitas' == $field_value) ? 'selected' : ''; ?>>Universitas</option>
+				<option value="sponsor" <?= ('sponsor' == $field_value) ? 'selected' : ''; ?>>Sponsor</option>	
 		</select>
 
 		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
@@ -1801,7 +2147,6 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 		//parameternya adalah NIM dan kategori Pengajuannya sama
 		?>
 
-		<span>Notif di sini jika ada potensi duplikasi pengajuan.</span>
 
 		<table class="table table-striped table-bordered <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>">
 
@@ -1824,6 +2169,85 @@ function generate_keterangan_surat($field_id, $id_pengajuan, $pengajuan_status, 
 		}
 		?>
 
+		<?php
+	} elseif ($field['type'] == 'select_negara') { ?>
+
+		<?php
+		$CI = &get_instance();
+		$query = $CI->db->query("SELECT value FROM tr_field_value WHERE pengajuan_id =  $id_pengajuan AND field_id = $id")->row_array();
+		$countries = $query['value'];
+		$countries = explode(",", $countries);
+
+		// cek duplikasi entry baik entry yg sedang diproses mauoun entry yang sudah jadi prestasi
+		//parameternya adalah NIM dan kategori Pengajuannya sama
+
+		if($query['value']) {
+		?>
+
+		<table class="table table-striped table-bordered <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>">
+
+			<?php
+			
+			
+			$i = 1;
+			foreach ($countries as $country) { ?>
+				<tr>
+					<td style="width:40px;"><?= $i++ ?> </td>
+					<td><strong><?php echo get_negara_by_id($country)['nicename']; ?></strong></td>
+				</tr>
+			<?php } //endforeach
+			  ?>
+
+		</table>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			// edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan, $field['is_admin']);
+		} //endif
+		}
+		?>
+
+		<?php
+	} elseif ($field['type'] == 'select_propinsi') { ?>
+
+		<?php
+		$CI = &get_instance();
+		$query = $CI->db->query("SELECT value FROM tr_field_value WHERE pengajuan_id =  $id_pengajuan AND field_id = $id")->row_array();
+		$provinces = $query['value'];
+		$provinces = explode(",", $provinces);
+
+		// cek duplikasi entry baik entry yg sedang diproses mauoun entry yang sudah jadi prestasi
+		//parameternya adalah NIM dan kategori Pengajuannya sama
+
+		if($query['value']) {
+		?>
+
+		<table class="table table-striped table-bordered <?= (($verifikasi == 0) && ($pengajuan_status == 4)) ? 'is-invalid' : ''; ?>">
+
+			<?php
+			
+	
+			$i = 1;
+			foreach ($provinces as $province) { ?>
+				<tr>
+					<td style="width:40px;"><?= $i++ ?> </td>
+					<td><strong><?php echo get_province_by_id($province)['name']; ?></strong></td>
+				</tr>
+			<?php } //endforeach
+			  ?>
+
+		</table>
+
+		<?php if ((($pengajuan_status == 2 && $verifikasi == 0) || ($pengajuan_status == 5 && $verifikasi == 0))
+			&& (($CI->session->userdata('role') == 2) || ($CI->session->userdata('role') == 1))
+		) {
+			// edit_field($id,  $id_pengajuan);
+			data_sesuai($id, $verifikasi, $catatan, $field['is_admin']);
+		} //endif
+		}
+		?>
 
 	<?php } elseif (($field['type'] == 'file') || ($field['type'] == 'image')) { ?>
 		<?php

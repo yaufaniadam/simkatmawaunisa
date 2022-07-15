@@ -449,6 +449,16 @@ function get_file($id)
 	$CI = &get_instance();
 	return	$media = $CI->db->select("*")->from('tr_media')->where(array('id' => $id))->get()->row_array();
 }
+function get_tingkat($id)
+{
+	$CI = &get_instance();
+	return	$media = $CI->db->select("*")->from('mstr_tingkat_prestasi')->where(array('Tingkat_Prestasi_Id' => $id))->get()->row_array();
+}
+function get_prestasi($id)
+{
+	$CI = &get_instance();
+	return	$media = $CI->db->select("*")->from('mstr_penghargaan_rekognisi_mahasiswa')->where(array('Penghargaan_Rekognisi_Mahasiswa_Id' => $id))->get()->row_array();
+}
 
 
 

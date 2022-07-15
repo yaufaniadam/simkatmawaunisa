@@ -167,6 +167,25 @@ class Pengajuan_model extends CI_Model
 		return $this->db->get()->result_array();
 	}
 
+	public function getNegara($search)
+	{
+		$this->db->select('*');
+		$this->db->from('mstr_negara');
+		$this->db->like('nicename', $search);
+		$this->db->limit(10);
+		return $this->db->get()->result_array();
+	}
+
+	public function getPropinsi($search)
+	{
+		$this->db->select('*');
+		$this->db->from('mstr_propinsi');
+		$this->db->like('name', $search);
+		$this->db->limit(10);
+		return $this->db->get()->result_array();
+	}
+
+
 	public function get_spesific_pengajuan_fields($pengajuan_id)
 	{
 		return $this->db->query(

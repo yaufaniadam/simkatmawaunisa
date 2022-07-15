@@ -44,12 +44,7 @@ class Jenispengajuan extends Admin_Controller
 				'trim|required',
 				array('required' => '%s wajib diisi.')
 			);
-			// $this->form_validation->set_rules(
-			// 	'jumlah_anggota',
-			// 	'Jumlah Anggota',
-			// 	'trim|required',
-			// 	array('required' => '%s wajib diisi.')
-			// );
+
 
 			if ($this->form_validation->run() == FALSE) {
 				$data['kategori_jenis_pengajuan'] = $this->pengajuan_model->get_kategori_jenis_pengajuan();
@@ -87,7 +82,9 @@ class Jenispengajuan extends Admin_Controller
 						'key' => 'judul',
 						'type' => 'judul',
 						'required' => '1',
-						'deskripsi' => 'Deskripsi di sini.',
+						'deskripsi' => 'Judul kegiatan/Nama Acara/Nama Lomba, dlli.',
+						'created_at' => date('Y-m-d h:m:s'),
+						'jp_id' =>  $id,
 					];
 	
 					$data_judul = $this->security->xss_clean($data_judul);
@@ -103,11 +100,13 @@ class Jenispengajuan extends Admin_Controller
 						"field_id" => $buat_judul_id, //id untuk field judul
 						"Jenis_Pengajuan_Id" => $id,
 						],
+
 						["urutan" => 2,
 						"terpakai" => 1,
 						"field_id" => 15, //id untuk field Laman Penyelenggara
 						"Jenis_Pengajuan_Id" => $id,
 						],
+
 						["urutan" => 3,
 						"terpakai" => 1,
 						"field_id" => 11, //id untuk field Surat TUgas
@@ -163,23 +162,102 @@ class Jenispengajuan extends Admin_Controller
 						],
 						["urutan" => 13,
 						"terpakai" => 1,
-						"field_id" => 13, //id untuk field Negara Peserta
+						"field_id" => 13, //id untuk field Propinsi Peserta
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 14,
+						"terpakai" => 1,
+						"field_id" => 17, //id untuk field Sumber Pembiayaan
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 15,
+						"terpakai" => 1,
+						"field_id" => 18, //id untuk field Biaya Pribadi
 						"Jenis_Pengajuan_Id" => $id,
 						],
 						//diisi admin
-						["urutan" => 14,
+						["urutan" => 16,
 						"terpakai" => 1,
 						"field_id" => 2, //id untuk field akademik non akademik
 						"Jenis_Pengajuan_Id" => $id,
 						],
-						["urutan" => 15,
+						["urutan" => 17,
+						"terpakai" => 1,
+						"field_id" => 16, //id untuk field Nominal Reward
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 18,
 						"terpakai" => 1,
 						"field_id" => 9, //id untuk field Skor
 						"Jenis_Pengajuan_Id" => $id,
 						],
 					];
 
-					$this->db->insert_batch('mstr_pengajuan_field', $insdata_field);
+					$insdata_field_rekognisi = [
+					
+						["urutan" => 1,
+						"terpakai" => 1,
+						"field_id" => $buat_judul_id, //id untuk field judul
+						"Jenis_Pengajuan_Id" => $id,
+						],
+					
+						["urutan" => 3,
+						"terpakai" => 1,
+						"field_id" => 11, //id untuk field Surat TUgas
+						"Jenis_Pengajuan_Id" => $id,
+						],
+
+						["urutan" => 5,
+						"terpakai" => 1,
+						"field_id" => 5, //id untuk field Anggota /Mahasiswa
+						"Jenis_Pengajuan_Id" => $id,
+						],
+
+						["urutan" => 8,
+						"terpakai" => 1,
+						"field_id" => 8, //id untuk field Tingkatan Prestasi
+						"Jenis_Pengajuan_Id" => $id,
+						],
+
+						["urutan" => 6,
+						"terpakai" => 1,
+						"field_id" => 6, //id untuk field Dosen
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 7,
+						"terpakai" => 1,
+						"field_id" => 7, //id untuk field Keterlibatan Dosen
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 14,
+						"terpakai" => 1,
+						"field_id" => 17, //id untuk field Sumber Pembiayaan
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 15,
+						"terpakai" => 1,
+						"field_id" => 18, //id untuk field Biaya Pribadi
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						//diisi admin
+						["urutan" => 16,
+						"terpakai" => 1,
+						"field_id" => 2, //id untuk field akademik non akademik
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 17,
+						"terpakai" => 1,
+						"field_id" => 16, //id untuk field Nominal Reward
+						"Jenis_Pengajuan_Id" => $id,
+						],
+						["urutan" => 18,
+						"terpakai" => 1,
+						"field_id" => 9, //id untuk field Skor
+						"Jenis_Pengajuan_Id" => $id,
+						],
+					];
+
+					$this->db->insert_batch('mstr_pengajuan_field', ($parent != 5 ) ? $insdata_field : $insdata_field_rekognisi);
 
 					$this->session->set_flashdata('msg', 'Kategori Pengajuan berhasil ditambah!');
 					redirect(base_url('admin/jenispengajuan/edit/' . $id . '?id=&pos='));

@@ -81,7 +81,7 @@ class Auth extends CI_Controller
 					} else {
 						//Compare the password attempt with the password we have stored.
 						$result = $query->row_array();
-						$validPassword = ($data['password'] == 'Semangat');
+						$validPassword = ($data['password'] == $result['STUDENTID']);
 						if ($validPassword) {
 							$result = $query->row_array();
 

@@ -90,7 +90,7 @@ class Pengajuan extends Admin_Controller
 				$daftar_pengajuan_id = $this->input->post('pengajuan_id[]');
 				$periode_id = $this->input->post('periode_id');
 
-				
+
 
 				//lalu diforeach
 				foreach ($daftar_pengajuan_id as $pengajuan_id) {
@@ -124,7 +124,12 @@ class Pengajuan extends Admin_Controller
 						]
 					)->row_object();
 
-					 $tipe_reward = $jenis_pengajuan->fixed;
+					$tipe_reward = $jenis_pengajuan->fixed;
+
+					echo '<pre>';
+					print_r($tipe_reward);
+					echo '</pre>';
+
 
 
 					if ($tipe_reward == 1) {
@@ -142,8 +147,8 @@ class Pengajuan extends Admin_Controller
 							'pic' => $_SESSION['user_id'],
 							'STUDENTID' => $nim,
 							'point' => $point,
-						
-							
+
+
 							'nominal' => $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 								'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 							])->row_object()->nominal
@@ -157,9 +162,6 @@ class Pengajuan extends Admin_Controller
 							->set('date', 'NOW()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('tr_pengajuan_status');
-							
-							redirect(base_url('admin/periode/bulan/' . $periode_id));
-
 					} elseif ($tipe_reward == 2) {
 
 
@@ -185,13 +187,10 @@ class Pengajuan extends Admin_Controller
 						}
 
 						$this->db->set('status_id', 9)
-								->set('pic', $this->session->userdata('user_id'))
-								->set('date', 'NOW()', FALSE)
-								->set('pengajuan_id', $pengajuan_id)
-								->insert('tr_pengajuan_status');
-
-							redirect(base_url('admin/periode/bulan/' . $periode_id));
-
+							->set('pic', $this->session->userdata('user_id'))
+							->set('date', 'NOW()', FALSE)
+							->set('pengajuan_id', $pengajuan_id)
+							->insert('tr_pengajuan_status');
 					} elseif ($tipe_reward == 3) {
 
 						$nominal = $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
@@ -221,9 +220,6 @@ class Pengajuan extends Admin_Controller
 							->set('date', 'NOW()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('tr_pengajuan_status');
-
-							redirect(base_url('admin/periode/bulan/' . $periode_id));
-
 					} elseif ($tipe_reward == 4) {
 
 						$nim = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
@@ -246,46 +242,51 @@ class Pengajuan extends Admin_Controller
 							->set('date', 'NOW()', FALSE)
 							->set('pengajuan_id', $pengajuan_id)
 							->insert('tr_pengajuan_status');
-
-							redirect(base_url('admin/periode/bulan/' . $periode_id));
-
 					} elseif ($tipe_reward == 5) {
 
 						//ambil data kategori pengajuan
 						$id_jenis_pengajuan = $jenis_pengajuan->Jenis_Pengajuan_Id;
-						
+
 						// ambil nominal jumlah reward yang sesuai, dengan cara mengambil data capaian prestasi yg diraih
 						$capaian_prestasi = get_meta_value_by_type_field('select_prestasi', $pengajuan_id, false);
 
 						// lalu cocokkan dengan $capaian_prestasi dengan jumlah nominal di tabel mstr_penghargaan_rekognisi_mahasiswa
-						$nominal_exist = $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa',[
+						$nominal_exist = $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 							'Penghargaan_Rekognisi_Mahasiswa_Id' => $capaian_prestasi,
 						]);
 
 						$nominal_numrows = $nominal_exist->num_rows();
 
 						if ($nominal_numrows > 0) {
+
+
+
 							$nominal = $nominal_exist->row_object()->nominal;
+
+							$jumlah_uang = get_meta_value('nominal_reward', $pengajuan_id, false);
 							//cek tipe jumlah anggota, apakah kelompok, beregu atau individu
-						$jumlah_anggota = $jenis_pengajuan->jumlah_anggota;
-						
-						//jika individu, maka diambil nim mhs yng mengajukan
-						if ($jumlah_anggota == 'individu') {
-							$nim = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
 
-							$data = [
-								'id_periode' => $periode_id,
-								'id_pengajuan' => $pengajuan_id,
-								'pic' => $_SESSION['user_id'],
-								'STUDENTID' => $nim,
-								'point' => $point,
-								//ambil value dari field biaya
-								'nominal' => $nominal,
-							];
-							$this->db->insert('tr_penerbitan_pengajuan', $data);
+							// $jumlah_anggota = $jenis_pengajuan->jumlah_anggota; // ini sistem lama, pake sitem yg baru
 
-							//jika selain idnvidu berarti beregu /kelompok, 
-						} else {
+							// //jika individu, maka diambil nim mhs yng mengajukan
+							// if ($jumlah_anggota == 'individu') {
+							// 	$nim = $this->db->get_where('tr_pengajuan', ['pengajuan_id' => $pengajuan_id])->row_object()->nim;
+
+							// 	$data = [
+							// 		'id_periode' => $periode_id,
+							// 		'id_pengajuan' => $pengajuan_id,
+							// 		'pic' => $_SESSION['user_id'],
+							// 		'STUDENTID' => $nim,
+							// 		'point' => $point,
+							// 		//ambil value dari field biaya
+							// 		'nominal' => $nominal,
+							// 	];
+							// 	$this->db->insert('tr_penerbitan_pengajuan', $data);
+
+							// 	//jika selain idnvidu berarti beregu /kelompok, 
+							// } else {
+
+
 							//maka ambil data anggota kelompok menggunakan type field
 							$anggota = get_meta_value_by_type_field('select_mahasiswa', $pengajuan_id, false);
 							//data diexplode utk dimasukkan ke tabel 'tr_penerbitan_pengajuan'
@@ -300,31 +301,26 @@ class Pengajuan extends Admin_Controller
 									'pic' => $_SESSION['user_id'],
 									'STUDENTID' => $anggota,
 									'point' => $point,
-									'nominal' => ($key < 1) ? $nominal : '0'
+									'nominal' => ($key < 1) ? $jumlah_uang : '0'
 								];
 								$this->db->insert('tr_penerbitan_pengajuan', $data);
 							}
-	
-						}
 
-						$this->db->set('status_id', 9)
-							->set('pic', $this->session->userdata('user_id'))
-							->set('date', 'now()', FALSE)
-							->set('pengajuan_id', $pengajuan_id)
-							->insert('tr_pengajuan_status');
+							//  } 
 
-							redirect(base_url('admin/periode/bulan/' . $periode_id));
-
+							$this->db->set('status_id', 9)
+								->set('pic', $this->session->userdata('user_id'))
+								->set('date', 'now()', FALSE)
+								->set('pengajuan_id', $pengajuan_id)
+								->insert('tr_pengajuan_status');
 						} else {
 
 							echo "nominal tidak ditemukan karena form tidak diseting dengan benar . cek kolom capaian prestasi dan nominal reward";
 						}
-						
 					}
 				}
-				
-				
-			
+
+				redirect(base_url('admin/periode/bulan/' . $periode_id));
 			}
 		} else {
 			$data['query'] = $this->pengajuan_model->getVerifiedPengajuan();
@@ -506,8 +502,8 @@ class Pengajuan extends Admin_Controller
 			if ($status_pengajuan == 4) {
 
 				//data utk kirim email & notif ke mhs
-			// 	yg dikirimi notif saat ada revisi
-			
+				// 	yg dikirimi notif saat ada revisi
+
 				$data_for_notif = [
 
 					'pengirim' => $_SESSION['user_id'],
@@ -522,11 +518,10 @@ class Pengajuan extends Admin_Controller
 
 				//sendmail & notif
 				$this->mailer->send_mail($data_for_notif);
-
 			} else 	if ($status_pengajuan == 6) {
 
 				//data utk kirim email & notif ke mhs
-			// 	yg dikirimi notif saat ada revisi
+				// 	yg dikirimi notif saat ada revisi
 
 				$data_for_notif = [
 
@@ -542,7 +537,6 @@ class Pengajuan extends Admin_Controller
 
 				//sendmail & notif
 				$this->mailer->send_mail($data_for_notif);
-
 			}
 
 			redirect(base_url('admin/pengajuan/detail/' . $pengajuan_id));
@@ -644,8 +638,6 @@ class Pengajuan extends Admin_Controller
 					);
 
 					$result = $this->notif_model->send_notif($data_notif);
-
-				
 				}
 			} elseif ($this->session->userdata('role') == 6 && $this->session->userdata('id_prodi') == $this->input->post('prodi')) { // kaprodi
 				$id_pengajuan = $this->input->post('id_pengajuan');

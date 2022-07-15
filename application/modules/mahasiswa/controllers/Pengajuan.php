@@ -357,6 +357,35 @@ class Pengajuan extends Mahasiswa_Controller
 		}
 	}
 
+	public function getNegara()
+	{
+		$search = $this->input->post('search');
+		$negara = $this->pengajuan_model->getNegara($search);
+
+		foreach ($negara as $negara) {
+			$selectajax[] = [
+				'value' => $negara['id'],
+				'id' => $negara['id'],
+				'text' => $negara['nicename']
+			];
+			$this->output->set_content_type('application/json')->set_output(json_encode($selectajax));
+		}
+	}
+	public function getPropinsi()
+	{
+		$search = $this->input->post('search');
+		$propinsi = $this->pengajuan_model->getPropinsi($search);
+
+		foreach ($propinsi as $propinsi) {
+			$selectajax[] = [
+				'value' => $propinsi['id'],
+				'id' => $propinsi['id'],
+				'text' => $propinsi['name']
+			];
+			$this->output->set_content_type('application/json')->set_output(json_encode($selectajax));
+		}
+	}
+
 	private function getNamaField($id_field)
 	{
 		$this->db->select('*');
