@@ -9,10 +9,21 @@ class Dashboard extends Admin_Controller
 		// echo check merges
 	}
 
-	public function index()
+	public function index($tahun = null)
 	{
-		
-		$data['pengajuan_perlu_diproses'] = $this->pengajuan_model->pengajuan_perlu_diproses();
+
+		if($tahun) {
+			$tahun = $tahun;
+		} else {
+			$tahun = date('Y');
+		}
+
+		$data['selected_tahun'] = $tahun;
+
+		//ambil tahun yg sudah ada di db
+		$data['alltahun'] = $this->pengajuan_model->get_tahun();
+
+		$data['pengajuan_perlu_diproses'] = $this->pengajuan_model->pengajuan_perlu_diproses($tahun);
 
 		$prodinya = $this->session->userdata('id_prodi');
 
@@ -21,15 +32,16 @@ class Dashboard extends Admin_Controller
 		} else {
 			$prodi = 'AND DEPARTMENT_ID = '. $prodinya;
 		}
-		$where ='WHERE status = 1';
+		$where ='WHERE status = 1 AND YEAR(tanggal) = ' . $tahun;
+
 		$data['prestasi'] = $this->db->query("select * FROM v_prestasi $where $prodi")->num_rows();
 
 		
-		$data['propinsi'] = $this->get_lingkup_kegiatan(1);
-		$data['wilayah'] = $this->get_lingkup_kegiatan(2);
-		$data['nasional'] = $this->get_lingkup_kegiatan(3);
-		$data['internasional'] = $this->get_lingkup_kegiatan(4);
-		$data['pt'] = $this->get_lingkup_kegiatan(5);
+		$data['propinsi'] = $this->get_lingkup_kegiatan(1, $tahun);
+		$data['wilayah'] = $this->get_lingkup_kegiatan(2, $tahun);
+		$data['nasional'] = $this->get_lingkup_kegiatan(3, $tahun);
+		$data['internasional'] = $this->get_lingkup_kegiatan(4, $tahun);
+		$data['pt'] = $this->get_lingkup_kegiatan(5, $tahun);
 
 		$data['nama_bulan'] = $this->pengajuan_model->getbulan();
 
@@ -64,7 +76,7 @@ class Dashboard extends Admin_Controller
 
 	//get jumlah lingkup kegiatan
 
-	function get_lingkup_kegiatan($lingkup){
+	function get_lingkup_kegiatan($lingkup, $tahun){
 
 		
 		$prodinya = $this->session->userdata('id_prodi');
@@ -75,7 +87,7 @@ class Dashboard extends Admin_Controller
 			$prodi = 'AND vp.DEPARTMENT_ID = '. $prodinya;
 		}
 
-		$where ="WHERE tps.status_id = 10 AND tf.value = $lingkup AND tf.field_id = 1 ";
+		$where ="WHERE tps.status_id = 10 AND tf.value = $lingkup AND tf.field_id = 1 AND YEAR(vp.tanggal) =" . $tahun;
 
 		// return	$this->db->select("tf.value")->from('tr_field_value tf')
 		// ->join('tr_pengajuan_status tps', 'tf.pengajuan_id=tps.pengajuan_id', 'left')
@@ -85,7 +97,7 @@ class Dashboard extends Admin_Controller
 		// ->where(array('tf.value' => $lingkup))
 		// ->where(array('tps.status_id' => 10))->get()->num_rows();
 
-		return $this->db->query("select tf.value FROM tr_field_value tf 
+		return $this->db->query("select tf.value, vp.tanggal FROM tr_field_value tf 
 		LEFT JOIN tr_pengajuan_status tps ON tf.pengajuan_id=tps.pengajuan_id
 		LEFT JOIN v_prestasi vp ON vp.id_pengajuan=tps.pengajuan_id
 		

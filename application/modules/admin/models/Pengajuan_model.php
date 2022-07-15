@@ -83,7 +83,7 @@ class Pengajuan_model extends CI_Model
 		return $result = $query->result_array();
 	}
 
-	public function pengajuan_perlu_diproses()
+	public function pengajuan_perlu_diproses($tahun)
 	{
 		// $this->db->query("SELECT * FROM tr_pengajuan p 
 		// LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
@@ -106,7 +106,8 @@ class Pengajuan_model extends CI_Model
 				->join("tr_pengajuan_status ps", "ps.pengajuan_id=p.pengajuan_id")
 				->where([
 					"m.DEPARTMENT_ID =" => $prodi_user,
-					"ps.status_id =" => 2
+					"ps.status_id =" => 2,
+					"YEAR(ps.date) =" => $tahun,
 				])
 				->get()
 				->num_rows();
@@ -116,7 +117,8 @@ class Pengajuan_model extends CI_Model
 				->join("v_mahasiswa m", "m.STUDENTID=p.nim")
 				->join("tr_pengajuan_status ps", "ps.pengajuan_id=p.pengajuan_id")
 				->where([
-					"ps.status_id =" => 2
+					"ps.status_id =" => 2,
+					"YEAR(ps.date) =" => $tahun,
 				])->get()
 				->num_rows();
 		}
@@ -203,6 +205,20 @@ class Pengajuan_model extends CI_Model
 		// AND FORMAT (ps.date, 'yyyy') = YEAR(NOW())
 		// AND m.DEPARTMENT_ID = '1'
 		// ORDER BY bulan DESC
+	}
+	public function get_tahun()
+	{
+		return $this->db->query(
+			"SELECT 
+			-- distinct(FORMAT (ps.date, 'MMMM')) AS bulan 
+			distinct(YEAR(ps.date)) AS tahun 
+			FROM tr_pengajuan_status ps
+			WHERE ps.status_id = 2 
+			-- AND FORMAT (ps.date, 'yyyy') = YEAR(NOW())
+			ORDER BY tahun ASC
+			"
+		)->result_array();
+
 	}
 
 	public function get_detail_pengajuan($pengajuan_id)

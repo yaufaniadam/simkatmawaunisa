@@ -147,8 +147,7 @@ class Pengajuan extends Admin_Controller
 							'pic' => $_SESSION['user_id'],
 							'STUDENTID' => $nim,
 							'point' => $point,
-
-
+							'date' => date('Y-m-d h:m:s'),
 							'nominal' => $this->db->get_where('mstr_penghargaan_rekognisi_mahasiswa', [
 								'Jenis_Pengajuan_Id' => $queryp->Jenis_Pengajuan_Id,
 							])->row_object()->nominal
@@ -180,6 +179,7 @@ class Pengajuan extends Admin_Controller
 								'pic' => $_SESSION['user_id'],
 								'STUDENTID' => $anggota,
 								'point' => $point,
+								'date' => date('Y-m-d h:m:s'),
 								'nominal' => ($key < 1) ? $nominal[0]['nominal'] : $nominal[1]['nominal']
 							];
 
@@ -210,6 +210,7 @@ class Pengajuan extends Admin_Controller
 								'pic' => $_SESSION['user_id'],
 								'STUDENTID' => $anggota,
 								'point' => $point,
+								'date' => date('Y-m-d h:m:s'),
 								'nominal' => ($key < 1) ? $nominal : '0'
 							];
 							$this->db->insert('tr_penerbitan_pengajuan', $data);
@@ -233,6 +234,7 @@ class Pengajuan extends Admin_Controller
 							'STUDENTID' => $nim,
 							'point' => $point,
 							//ambil value dari field biaya
+							'date' => date('Y-m-d h:m:s'),
 							'nominal' => $biaya,
 						];
 						$this->db->insert('tr_penerbitan_pengajuan', $data);
@@ -301,6 +303,7 @@ class Pengajuan extends Admin_Controller
 									'pic' => $_SESSION['user_id'],
 									'STUDENTID' => $anggota,
 									'point' => $point,
+									'date' => date('Y-m-d h:m:s'),
 									'nominal' => ($key < 1) ? $jumlah_uang : '0'
 								];
 								$this->db->insert('tr_penerbitan_pengajuan', $data);

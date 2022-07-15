@@ -71,7 +71,7 @@ function get_verified()
 	
 }
 
-function get_jumlah_prestasi_perbulan($no_urut)
+function get_jumlah_prestasi_perbulan($no_urut, $tahun)
 {
 	$CI = &get_instance();
 
@@ -105,7 +105,7 @@ function get_jumlah_prestasi_perbulan($no_urut)
 			->prodi;
 
 		return $CI->db->select("*")
-			->from("Tr_Penerbitan_Pengajuan")
+			->from("v_prestasi")
 		
 			->where([
 				// "FORMAT (ps.date, 'MMMM') =" => $nama_bulan[$no],
@@ -117,10 +117,10 @@ function get_jumlah_prestasi_perbulan($no_urut)
 	} else {
 	
 		return $CI->db->select("*")
-			->from("tr_penerbitan_pengajuan a")
-			->join('tr_periode_penerbitan b', "b.id_periode = a.id_periode")
+			->from("v_prestasi a")
 			->where([				
 				"MONTH(tanggal) =" => $no,				
+				"YEAR(tanggal) =" => $tahun,				
 			])
 			->get()
 			->num_rows();
@@ -150,7 +150,7 @@ function get_nama_bulan($no_urut)
 	return $nama_bulan[$no];
 }
 
-function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
+function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id, $tahun)
 {
 	$CI = &get_instance();
 
@@ -166,31 +166,27 @@ function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id)
 			->prodi;
 
 		return $CI->db->select('*')
-			->from('tr_penerbitan_pengajuan pp')
-			->join('v_mahasiswa m', "m.STUDENTID=pp.STUDENTID")
-			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->from('v_prestasi')
 			->where([
-				"jp.Jenis_Pengajuan_Id" => $jenis_pengajuan_id,
-				"m.DEPARTMENT_ID" => $prodi_user
+				"Jenis_Pengajuan_Id" => $jenis_pengajuan_id,
+				"DEPARTMENT_ID" => $prodi_user,
+				'YEAR(tanggal)' => $tahun,
 			])
 			->get()
 			->num_rows();
 	} else {
 		return $CI->db->select('*')
-			->from('tr_penerbitan_pengajuan pp')
-			->join('tr_pengajuan p', 'p.pengajuan_id = pp.id_pengajuan')
-			->join('mstr_jenis_pengajuan jp', 'jp.Jenis_Pengajuan_Id = p.Jenis_Pengajuan_Id')
+			->from('v_prestasi')
 			->where([
-				'jp.Jenis_Pengajuan_Id' => $jenis_pengajuan_id
-
+				'Jenis_Pengajuan_Id' => $jenis_pengajuan_id,
+				'YEAR(tanggal)' => $tahun,
 			])
 			->get()
 			->num_rows();
 	}
 }
 
-function get_jumlah_pengajuan_per_prodi()
+function get_jumlah_pengajuan_per_prodi($tahun)
 {
 	$CI = &get_instance();
 
@@ -219,11 +215,10 @@ function get_jumlah_pengajuan_per_prodi()
 		$pengajuan_per_prodi[] = [
 			'nama_prodi' => $department['NAME_OF_DEPARTMENT'],
 			'jumlah_pengajuan' => $CI->db->select('*')
-				->from('tr_penerbitan_pengajuan pp')
-				->join('v_mahasiswa m', 'm.STUDENTID = pp.STUDENTID')
-				->join('mstr_department d', 'd.DEPARTMENT_ID = m.DEPARTMENT_ID')
+				->from('v_prestasi')
 				->where([
-					'm.DEPARTMENT_ID' => $department['DEPARTMENT_ID'],
+					'DEPARTMENT_ID' => $department['DEPARTMENT_ID'],
+					'YEAR(tanggal)' => $tahun,
 				])
 				->get()
 				->num_rows()

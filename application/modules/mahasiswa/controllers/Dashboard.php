@@ -41,6 +41,11 @@ class Dashboard extends Mahasiswa_Controller
 				]
 			)->num_rows();
 
+			$data['profil'] = $this->db
+			->select('*')
+			->from('v_mahasiswa')
+			->where(['STUDENTID' => $_SESSION['studentid']])->get()->row_array();
+
 		// $is_field_anggota_exist = $this->db->get_where('mstr_pengajuan_field', ['field_id' => 77])->num_rows();
 
 		$prestasi_saya = $this->db

@@ -1,5 +1,4 @@
 <div class="row">
-
 	<!-- Earnings (Monthly) Card Example -->
 	<div class="col-12">
 	<div class="card shadow mb-4">
@@ -9,13 +8,41 @@
 						<!-- <div class="col-2">
 							<?= ($this->session->userdata('role') == 3) ? profPic($this->session->userdata('studentid'), 70) : ''; ?>
 						</div> -->
-						<div class="col-12">
+						<div class="col-6">
 							<h5><?= $this->session->userdata('fullname'); ?></h5>
 
 							<!-- <span class="badge badge-info"><?= $this->session->userdata('email'); ?></span> -->
 							<span class="badge badge-info"><?= $this->session->userdata('studentid'); ?></span>
 							<br>
 							<span class="badge badge-warning"><?= $this->session->userdata('id_prodi'); ?></span>
+						</div>
+						<div class="col-6">
+							<table class="table table-striped table-bordered">
+								<tr>
+									<td>No Telp</td>
+									<td>
+										<?php if ($profil['notelpon'] ) { ?>
+										<?= $profil['notelpon'] ?>
+										<?php } else { echo "Lengkapi data Saudara di SIMPTT Unisa";} ?>
+									</td>
+								</tr>
+								<tr>
+									<td>Email</td>									
+									<td>
+										<?php if ($profil['email'] ) { ?>
+										<?= $profil['email'] ?>
+										<?php } else { echo "Lengkapi data Saudara di SIMPTT Unisa";} ?>
+									</td>
+								</tr>
+								<tr>
+									<td>No Rekening</td>
+									<td>
+										<?php if ($profil['norekening'] ) { ?>
+										<?= $profil['norekening'] ?> Kode Bank <?= $profil['kdbank'] ?> an. <?= $profil['namadirekening'] ?> 
+										<?php } else { echo "Lengkapi data Saudara di SIMPTT Unisa";} ?>
+									</td>
+								</tr>							
+							</table>
 						</div>
 					</div>
 				</a>
