@@ -2416,7 +2416,7 @@ function cek_duplikat($id_pengajuan, $jenis_pengajuan, $nim) {
 
 	//ambil value Anggota yang NIMnya sama
 	$fields_anggota = $CI->db->select('fv.value, fv.pengajuan_id')->from('tr_field_value fv')
-	->where(array('field_id' => 5,  'pengajuan_id !=' => $id_pengajuan))
+	->where(array('field_id' => 5,  'pengajuan_id !=' => $id_pengajuan ))
 	->like('fv.value', $nim, 'both')
 	->get()->result_array();
 
