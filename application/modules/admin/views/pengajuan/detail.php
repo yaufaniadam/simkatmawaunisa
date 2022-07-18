@@ -313,9 +313,11 @@
 				<div class="card-body p-4">
 					<p>Ditemukan pengajuan dengan kategori yang sama untuk <strong><?= $pengajuan['FULLNAME']; ?></strong></p>
 					<div class="list-group"">
-						<?php foreach ($duplikat as $duplikat) { ?>
-							<a class="list-group-item p-2 list-group-item-action" href="<?= base_url('admin/pengajuan/detail/'. $duplikat['pengajuan_id']); ?>"><strong><?= get_meta_value_by_type_field('judul',$duplikat['pengajuan_id'], false); ?></strong> &raquo; <?php // getStatusPengajuanById($duplikat['pengajuan_id'])['status']; ?> </a> 
-						<?php } ?>
+						<?php foreach ($duplikat as $duplikat) {
+							if( ($duplikat['pengajuan_id'])['status'] != 1 ) || ($duplikat['pengajuan_id'])['status'] != 20 ) ) { ?>
+							<a class="list-group-item p-2 list-group-item-action" href="<?= base_url('admin/pengajuan/detail/'. $duplikat['pengajuan_id']); ?>"><strong><?= get_meta_value_by_type_field('judul',$duplikat['pengajuan_id'], false); ?></strong> &raquo; <?php getStatusPengajuanById($duplikat['pengajuan_id'])['status']; ?> </a> 
+						<?php }
+						} ?>
 						</div>
 				</div>
 			</div>
