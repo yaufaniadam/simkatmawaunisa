@@ -94,7 +94,7 @@
 					<p class="h5 text-center font-weight-bold text-white"> <?= (($pengajuan->status_id == 7) || ($pengajuan->status_id == 9)) ? 'Awaiting Verification' : $pengajuan->status;  ?> </p>
 				</a>
 				<div class="collapse show" id="collStatus">
-					<div class="card-body pl-2">
+					<div class="card-body pl-3">
 
 						<div class="timeline timeline-xs mb-3">
 							<?php		
@@ -113,7 +113,7 @@
 							<?php } ?>
 						</div>
 
-						<div class="alert alert-warning"><h6><i class="fas fa-comment-dots"></i> <strong>Catatan Admin</strong></h6>
+						<div class="alert alert-warning m-2 mt-4"><h6><i class="fas fa-comment-dots"></i> <strong>Catatan Admin</strong></h6>
 							<?= $pengajuan->catatan; ?>
 						</div>
 

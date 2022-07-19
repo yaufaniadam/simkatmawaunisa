@@ -46,10 +46,13 @@ class Pengajuan_model extends CI_Model
 	public function get_pengajuan($role)
 	{
 
+		echo $this->session->userdata('role');
+		echo $this->session->userdata('id_prodi');
+
 		if ($this->session->userdata('role') == 1) {
 			$prodi = '';
 		} else {
-			$prodi = "AND u.id_prodi = '" . $this->session->userdata('id_prodi') . "'";
+			$prodi = "AND d.DEPARTMENT_ID = '" . $this->session->userdata('id_prodi') . "'";
 		}
 		
 
@@ -78,12 +81,12 @@ class Pengajuan_model extends CI_Model
 			LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
 			LEFT JOIN mstr_department d ON d.DEPARTMENT_ID = m.DEPARTMENT_ID
 			WHERE ps.status_id = (SELECT MAX(status_id) FROM tr_pengajuan_status ps WHERE ps.pengajuan_id = p.pengajuan_id) 
-			$id_status AND NOT ps.status_id=20"
+			$id_status $prodi AND NOT ps.status_id=20" 
 		);
 		return $result = $query->result_array();
 	}
 
-	public function pengajuan_perlu_diproses($tahun)
+	public function pengajuan_perlu_diproses($tahun, $sem)
 	{
 		// $this->db->query("SELECT * FROM tr_pengajuan p 
 		// LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id = p.pengajuan_id
@@ -91,37 +94,59 @@ class Pengajuan_model extends CI_Model
 		// AND ps.status_id != 10")->num_rows();
 
 		if ($_SESSION['role'] == 5) {
-			$prodi_user = $this->db->select('prodi')
-				->from('users')
-				->where([
-					'id' => $_SESSION['user_id']
-				])
-				->get()
-				->row_object()
-				->prodi;
+			$prodi_user =  $this->session->userdata('id_prodi');
 
-			return $this->db->select("*")
-				->from("tr_pengajuan p")
-				->join("v_mahasiswa m", "m.STUDENTID=p.nim")
-				->join("tr_pengajuan_status ps", "ps.pengajuan_id=p.pengajuan_id")
-				->where([
-					"m.DEPARTMENT_ID =" => $prodi_user,
-					"ps.status_id =" => 2,
-					"YEAR(ps.date) =" => $tahun,
-				])
-				->get()
-				->num_rows();
+			if ($tahun) {
+				if ($sem) {
+					if ($sem == 1) {
+						$tahun = $tahun;
+						$where = "WHERE ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12 AND m.DEPARTMENT_ID =". $prodi_user;
+	
+					} elseif ($sem == 2) {
+						$tahun = $tahun;					
+						$where = "WHERE ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6 AND m.DEPARTMENT_ID =". $prodi_user;
+					}
+				} else {
+					$tahun = $tahun;
+					$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6 AND m.DEPARTMENT_ID =". $prodi_user.") OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12 AND m.DEPARTMENT_ID =". $prodi_user.")";
+				}
+			} else {
+				echo $tahun = date('Y');
+				$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6 AND m.DEPARTMENT_ID =". $prodi_user.") OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12 AND m.DEPARTMENT_ID =". $prodi_user.")";
+			}
+
 		} else {
-			return $this->db->select("*")
-				->from("tr_pengajuan p")
-				->join("v_mahasiswa m", "m.STUDENTID=p.nim")
-				->join("tr_pengajuan_status ps", "ps.pengajuan_id=p.pengajuan_id")
-				->where([
-					"ps.status_id =" => 2,
-					"YEAR(ps.date) =" => $tahun,
-				])->get()
-				->num_rows();
+
+			if ($tahun) {
+				if ($sem) {
+					if ($sem == 1) {
+						$tahun = $tahun;
+						$where = "WHERE ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12";
+	
+					} elseif ($sem == 2) {
+						$tahun = $tahun;					
+						$where = "WHERE ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6";
+					}
+				} else {
+					$tahun = $tahun;
+					$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6) OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12)";
+				}
+			} else {
+				echo $tahun = date('Y');
+				$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6) OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12)";
+			}
+		
+
 		}
+
+		$result = $this->db->query("SELECT p.*, ps.status_id, m.STUDENTID, ps.catatan FROM tr_pengajuan p 
+		LEFT JOIN v_mahasiswa m ON m.STUDENTID=p.nim 
+		LEFT JOIN tr_pengajuan_status ps ON ps.pengajuan_id=p.pengajuan_id		
+		$where			
+		")->num_rows();
+
+		return $result;
+
 	}
 
 	public function pengajuan_selesai()
@@ -183,28 +208,46 @@ class Pengajuan_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getbulan()
+	public function getbulan($tahun, $sem)
 	{
+
+		$prodinya = $_SESSION['id_prodi'];
+
+	if ($prodinya == 0) {
+		$prodi = '';
+	} else {
+		$prodi = 'AND DEPARTMENT_ID = ' . $prodinya;
+	}
+
+	if ($tahun) {
+		if ($sem) {
+			if ($sem == 1) {
+				$tahun = $tahun;
+				$where = "WHERE status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi;
+	
+			} elseif ($sem == 2) {
+				$tahun = $tahun;					
+				$where = "WHERE status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi;
+			}
+		} else {
+			$tahun = $tahun;
+			$where = "WHERE ( status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR ( status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+				}
+	} else {
+		$tahun = date('Y');
+		$where = "WHERE ( status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR ( status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+	}
+
 		return $this->db->query(
 			"SELECT 
-			-- distinct(FORMAT (ps.date, 'MMMM')) AS bulan 
-			distinct(MONTH(ps.date)) AS bulan 
-			FROM tr_pengajuan_status ps
-			WHERE ps.status_id = 2 
-			-- AND FORMAT (ps.date, 'yyyy') = YEAR(NOW())
+			distinct(MONTH(tanggal)) AS bulan 
+			FROM v_prestasi
+			$where
 			ORDER BY bulan ASC
 			"
 		)->result_array();
 
-		// SELECT 
-		// distinct(FORMAT (ps.date, 'MMMM')) AS bulan 
-		// FROM tr_pengajuan_status ps
-		// LEFT JOIN tr_pengajuan p ON p.pengajuan_id = ps.pengajuan_id
-		// LEFT JOIN v_mahasiswa m ON m.STUDENTID = p.nim
-		// WHERE ps.status_id = 2 
-		// AND FORMAT (ps.date, 'yyyy') = YEAR(NOW())
-		// AND m.DEPARTMENT_ID = '1'
-		// ORDER BY bulan DESC
+
 	}
 	public function get_tahun()
 	{

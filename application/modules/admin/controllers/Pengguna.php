@@ -54,7 +54,7 @@ class Pengguna extends Admin_Controller
 					'username' => $this->input->post('username'),
 					'email' => $this->input->post('email'),
 					'role' => $this->input->post('role'),
-					'prodi' => ($this->input->post('role') == '5') ? $this->input->post('prodi') : '',					
+					'prodi' => ($this->input->post('role') == '2' || $this->input->post('role') == '5') ? $this->input->post('prodi') : '',					
 					'fullname' => $this->input->post('username'),
 					'password' =>  password_hash($this->input->post('password'), PASSWORD_BCRYPT),
 					'created_at' => date('Y-m-d h:m:s'),

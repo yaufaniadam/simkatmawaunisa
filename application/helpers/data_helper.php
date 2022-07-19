@@ -150,43 +150,45 @@ function get_nama_bulan($no_urut)
 	return $nama_bulan[$no];
 }
 
-function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id, $tahun)
+function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id, $tahun, $sem)
 {
 	$CI = &get_instance();
 
-	if ($_SESSION['role'] == 5) {
+	$prodinya = $_SESSION['id_prodi'];
 
-		$prodi_user = $CI->db->select('prodi')
-			->from('users')
-			->where([
-				'id' => $_SESSION['user_id']
-			])
-			->get()
-			->row_object()
-			->prodi;
-
-		return $CI->db->select('*')
-			->from('v_prestasi')
-			->where([
-				"Jenis_Pengajuan_Id" => $jenis_pengajuan_id,
-				"DEPARTMENT_ID" => $prodi_user,
-				'YEAR(tanggal)' => $tahun,
-			])
-			->get()
-			->num_rows();
+	if ($prodinya == 0) {
+		$prodi = '';
 	} else {
-		return $CI->db->select('*')
-			->from('v_prestasi')
-			->where([
-				'Jenis_Pengajuan_Id' => $jenis_pengajuan_id,
-				'YEAR(tanggal)' => $tahun,
-			])
-			->get()
-			->num_rows();
+		$prodi = 'AND DEPARTMENT_ID = ' . $prodinya;
 	}
+
+	if ($tahun) {
+		if ($sem) {
+			if ($sem == 1) {
+				$tahun = $tahun;
+				$where = "WHERE Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi;
+	
+			} elseif ($sem == 2) {
+				$tahun = $tahun;					
+				$where = "WHERE Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi;
+			}
+		} else {
+			$tahun = $tahun;
+			$where = "WHERE (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+				}
+	} else {
+		$tahun = date('Y');
+		$where = "WHERE (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR (Jenis_Pengajuan_Id  =".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+	}
+
+	$pengajuan = $CI->db->query("select * from v_prestasi $where")
+				->num_rows();
+
+		return $pengajuan;
+
 }
 
-function get_jumlah_pengajuan_per_prodi($tahun)
+function get_jumlah_pengajuan_per_prodi($tahun, $sem)
 {
 	$CI = &get_instance();
 
@@ -211,20 +213,42 @@ function get_jumlah_pengajuan_per_prodi($tahun)
 			->from('mstr_department')->get()->result_array();
 	}
 
+
 	foreach ($department as $department) {
+
+		$prodi = $department['DEPARTMENT_ID'];
+
+		if ($tahun) {
+			if ($sem) {
+				if ($sem == 1) {
+					$tahun = $tahun;
+					$where = "WHERE DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 ";
+	
+				} elseif ($sem == 2) {
+					$tahun = $tahun;					
+					$where = "WHERE DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 ";
+				}
+			} else {
+				$tahun = $tahun;
+				$where = "WHERE (DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6) OR (DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12)";
+					}
+		} else {
+			$tahun = date('Y');
+			$where = "WHERE (DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6) OR (DEPARTMENT_ID  =".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12)";
+		}
+
 		$pengajuan_per_prodi[] = [
 			'nama_prodi' => $department['NAME_OF_DEPARTMENT'],
-			'jumlah_pengajuan' => $CI->db->select('*')
-				->from('v_prestasi')
-				->where([
-					'DEPARTMENT_ID' => $department['DEPARTMENT_ID'],
-					'YEAR(tanggal)' => $tahun,
-				])
-				->get()
+			'jumlah_pengajuan' => $CI->db->query("select * from v_prestasi $where")
 				->num_rows()
 		];
+
+
+
 	}
 	return $pengajuan_per_prodi;
+
+	
 }
 
 function profPic($id, $w)

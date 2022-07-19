@@ -1,32 +1,66 @@
 <div class="col-12">
 	<div class="row">
-		<div class="col-md-2 mb-4 pt-2">
+		<div class="col-md-1 mb-4 pt-2">
 			Pilih Tahun 
 		</div>
-		<div class="col-md-2 mb-4">
-			<select name="pilih_tahun" id="pilihtahun" class="form-control">
+		<div class="col-6 col-md-1 mb-4">
+			<select name="pilih_tahun" id="pilihtahun" class="form-control criteriaSelector">
 				<?php 
 				foreach($alltahun as $tahun) { ?>
-					<option value="<?= base_url('admin/dashboard/index/' . $tahun['tahun']); ?>" <?= ($selected_tahun ==  $tahun['tahun']) ? "selected" :''; ?>><?= $tahun['tahun']; ?></option>
+					<option value="<?= $tahun['tahun']; ?>" <?= ($selected_tahun ==  $tahun['tahun']) ? "selected" :''; ?>><?= $tahun['tahun']; ?></option>
 				<?php } ?>
-<!-- 				
-				<option value="<?= base_url('admin/dashboard/index/2021'); ?>" <?= ($selected_tahun ==  '2021') ? "selected" :''; ?>>2021</option>
-				<option value="<?= base_url('admin/dashboard/index/2020'); ?>" <?= ($selected_tahun ==  '2020') ? "selected" :''; ?>>2020</option> -->
-			</select>
+			</select>	
 
-			<script>
-				$(document).ready( function() {
-					$('#pilihtahun').change( function() {
-							location.href = $(this).val();
-					});
-				});
-			</script>
 		</div>
+
+		<div class="col-6 col-md-1 mb-4">
+		<select name="pilih_tahun" id="pilihsem" class="form-control criteriaSelector">				
+					<option value="0" <?= ($selected_sem ==  0) ? "selected" :''; ?>>Semua</option>
+					<option value="1" <?= ($selected_sem ==  1) ? "selected" :''; ?>>Ganjil</option>
+					<option value="2" <?= ($selected_sem ==  2) ? "selected" :''; ?>>Genap</option>			
+			</select>		
+		</div>
+
+		<div class="col-md-2 mb-4">
+			<button class="btn btn-warning" id="filter">Filter</button>
+		</div>
+
+		<script>
+			 $('.criteriaSelector').change(function() {
+      // Initialize criteria string
+      var criteria = '';
+      // Set value for all selector
+      var showAll = true;
+			var val = '';
+
+      // Iterate over all criteriaSelectors
+      $('.criteriaSelector').each(function(){
+        // Get value
+        var val = $(this).children(':selected').val();
+        // Check if this limits our results
+        if(val !== 'all'){
+          // Append selector to criteria
+          criteria += '/' + val;
+         
+        }
+
+      });
+
+			console.log(criteria);
+
+			$('#filter').click( function() {
+							location.href = "<?= base_url(); ?>admin/dashboard/index/" + criteria +"";
+			});
+
+
+
+    });
+		</script>
 	</div>
 </div>
 <div class="col-12">
 	<div class="row">
-		<div class="col-6 col-md-6 mb-4">
+		<div class="col-12 col-md-6 mb-4">
 			<div class="card border-left-warning shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
@@ -49,7 +83,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-6 col-md-6 mb-4">
+		<div class="col-12 col-md-6 mb-4">
 			<div class="card border-left-success shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
@@ -79,7 +113,7 @@
 			<h4>Tingkatan prestasi</h4>
 		
 		</div>
-		<div class="col-4 col-md-3 mb-4">
+		<div class="col-12 col-md-3 mb-4">
 			<div class="card border-left-danger shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
@@ -98,7 +132,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-4 col-md-3 mb-4">
+		<div class="col-12 col-md-3 mb-4">
 			<div class="card border-left-ijomuda shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
@@ -117,7 +151,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-4 col-md-3 mb-4">
+		<div class="col-12 col-md-3 mb-4">
 			<div class="card border-left-ungutua shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
@@ -136,7 +170,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-4 col-md-3 mb-4">
+		<div class="col-12 col-md-3 mb-4">
 			<div class="card border-left-birutua shadow h-100 py-2">
 				<div class="card-body">
 					<div class="row no-gutters align-items-center">
@@ -227,7 +261,7 @@
 							<tbody>
 								<?php foreach ($jenis_pengajuan as $pengajuan) { 
 									
-									$juml_pengajuan = get_jumlah_pengajuan_per_jenis_pengajuan($pengajuan['Jenis_Pengajuan_Id'], $selected_tahun);
+									$juml_pengajuan = get_jumlah_pengajuan_per_jenis_pengajuan($pengajuan['Jenis_Pengajuan_Id'], $selected_tahun, $selected_sem);
 									
 									if ($juml_pengajuan > 0)  { ?>
 									<tr>
@@ -272,7 +306,7 @@
 								</thead>
 								<tbody>
 									<?php														
-									foreach (get_jumlah_pengajuan_per_prodi($selected_tahun) as $per_prodi) { 										
+									foreach (get_jumlah_pengajuan_per_prodi($selected_tahun, $selected_sem) as $per_prodi) { 										
 										
 										if( $per_prodi['jumlah_pengajuan'] > 0 ) { ?>
 										<tr>

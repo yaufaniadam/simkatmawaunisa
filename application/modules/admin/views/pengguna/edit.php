@@ -66,7 +66,7 @@
 						<select name="prodi" class="prodi form-control <?= (form_error('prodi')) ? 'is-invalid' : ''; ?>">
 							<option value="">Pilih Prodi</option>
 							<?php foreach ($prodi as $prodi) { ?>				
-								<option value="<?= $prodi['DEPARTMENT_ID']; ?>" <?= ($user['prodi'] == $prodi['DEPARTMENT_ID']) ? "selected"  : ""; ?> ><?= $prodi['NAME_OF_DEPARTMENT']; ?></option>
+								<option value="<?= $prodi['DEPARTMENT_ID']; ?>" <?= ($user['prodi'] == $prodi['DEPARTMENT_ID']) ? "selected"  : ""; ?> ><?= $prodi['NAME_OF_DEPARTMENT']; ?> (<?= $prodi['DEPARTMENT_ID']; ?>)</option>
 							<?php 
 							}
 							 ?>

@@ -1,6 +1,6 @@
 <?php call_styles(); ?>
 <div class="row">
-	<div class="col-8">
+	<div class="col-12 col-md-8">
 		<?php if (isset($msg) || validation_errors() !== '') : ?>
 			<div class="alert alert-danger alert-dismissible">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -215,7 +215,7 @@
 	</div>
 
 	<!-- /.col -->
-	<div class="col-4">
+	<div class="col-12 col-md-4">
 		<div class="card shadow">
 			<a href="#collMhs" class="d-block card-header pt-3 pb-2 bg-warning" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collMhs">
 				<p class="h6 font-weight-bold text-white">Pemohon</p>
@@ -290,7 +290,7 @@
 			</div>
 			
 			
-			<div class="alert alert-warning"><h6><i class="fas fa-comment-dots"></i> <strong>Catatan Admin</strong></h6>
+			<div class="alert alert-warning m-3"><h6><i class="fas fa-comment-dots"></i> <strong>Catatan Admin</strong></h6>
 				<?= $pengajuan['catatan']; ?>
 			</div>
 
