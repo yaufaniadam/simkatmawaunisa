@@ -46,9 +46,6 @@ class Pengajuan_model extends CI_Model
 	public function get_pengajuan($role)
 	{
 
-		echo $this->session->userdata('role');
-		echo $this->session->userdata('id_prodi');
-
 		if ($this->session->userdata('role') == 1) {
 			$prodi = '';
 		} else {
@@ -111,7 +108,7 @@ class Pengajuan_model extends CI_Model
 					$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6 AND m.DEPARTMENT_ID =". $prodi_user.") OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12 AND m.DEPARTMENT_ID =". $prodi_user.")";
 				}
 			} else {
-				echo $tahun = date('Y');
+				$tahun = date('Y');
 				$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6 AND m.DEPARTMENT_ID =". $prodi_user.") OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12 AND m.DEPARTMENT_ID =". $prodi_user.")";
 			}
 
@@ -132,7 +129,7 @@ class Pengajuan_model extends CI_Model
 					$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6) OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12)";
 				}
 			} else {
-				echo $tahun = date('Y');
+				$tahun = date('Y');
 				$where = "WHERE (ps.status_id = 2 AND YEAR(ps.date) = $tahun+1 AND MONTH(ps.date) BETWEEN 1 AND 6) OR (ps.status_id = 2 AND YEAR(ps.date) = $tahun AND MONTH(ps.date) BETWEEN 7 AND 12)";
 			}
 		
