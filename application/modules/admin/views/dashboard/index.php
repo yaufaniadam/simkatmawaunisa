@@ -3,7 +3,7 @@
 		<div class="col-md-1 mb-4 pt-2">
 			Pilih Tahun 
 		</div>
-		<div class="col-6 col-md-1 mb-4">
+		<div class="col-6 col-md-2 mb-4">
 			<select name="pilih_tahun" id="pilihtahun" class="form-control criteriaSelector">
 				<?php 
 				foreach($alltahun as $tahun) { ?>
@@ -13,7 +13,7 @@
 
 		</div>
 
-		<div class="col-6 col-md-1 mb-4">
+		<div class="col-6 col-md-2 mb-4">
 		<select name="pilih_tahun" id="pilihsem" class="form-control criteriaSelector">				
 					<option value="0" <?= ($selected_sem ==  0) ? "selected" :''; ?>>Semua</option>
 					<option value="1" <?= ($selected_sem ==  1) ? "selected" :''; ?>>Ganjil</option>
@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="col-md-2 mb-4">
-			<button class="btn btn-warning" id="filter">Filter</button>
+			<button class="btn btn-warning btn-block" id="filter">Filter</button>
 		</div>
 
 		<script>
@@ -49,7 +49,7 @@
 			console.log(criteria);
 
 			$('#filter').click( function() {
-							location.href = "<?= base_url(); ?>admin/dashboard/index/" + criteria +"";
+							location.href = "<?= base_url(); ?>admin/dashboard/index" + criteria +"";
 			});
 
 

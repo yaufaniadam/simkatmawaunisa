@@ -43,6 +43,19 @@ class Pengajuan_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function getPengajuanPerPeriodeForPrint($id_periode)
+	{
+		$query = $this->db->query(
+			"SELECT
+			distinct p.*
+			FROM tr_pengajuan p
+			LEFT JOIN v_prestasi vp ON p.pengajuan_id = vp.id_pengajuan 
+			WHERE vp.id_periode = '$id_periode' AND vp.status = 1"
+		);
+		
+		return $query->result_array();
+	}
+
 	public function get_pengajuan($role)
 	{
 

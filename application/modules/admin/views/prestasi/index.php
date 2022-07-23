@@ -45,8 +45,8 @@
 							<th  style="width:20%">Prodi</th>
 							<th  style="width:20%">Tahun</th>
 							<th  style="width:20%">Periode</th>
-							<th  style="width:20%">Tingkat</th>
-							<th  style="width:20%">Prestasi</th>
+							<!-- <th  style="width:20%">Tingkat</th>
+							<th  style="width:20%">Prestasi</th> -->
 						</tr>
 					</thead>
 				

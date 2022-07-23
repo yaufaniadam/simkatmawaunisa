@@ -100,12 +100,7 @@ function get_user_session($session_name)
 	$ci = &get_instance();
 	return $ci->session->userdata($session_name);
 }
-function get_mahasiswa_by_nim($nim)
-{
-	$CI = &get_instance();
-	$query = $CI->db->get_where('v_mahasiswa', array('STUDENTID' => $nim))->row_array();
-	return $query;
-}
+
 function get_dosen_by_id($id)
 {
 	$CI = &get_instance();

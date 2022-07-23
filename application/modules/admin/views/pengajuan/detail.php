@@ -254,9 +254,18 @@
 								<tr>
 									<td>No Rekening</td>
 									<td>
-										<?php if ($pengajuan['norekening'] ) { ?>
-										<?= $pengajuan['norekening'] ?> <?= $pengajuan['namabank'] ?> an. <?= $pengajuan['namadirekening'] ?> 
-										<?php } else { echo "-";} ?>
+										<?php if ($pengajuan['norekening'] ) { 
+
+											echo $pengajuan['norekening'] ." ";
+
+											if ($pengajuan['namabank'] ) { 											
+												echo $pengajuan['namabank']; 
+											}  
+										 	if ($pengajuan['namadirekening'] ) { 
+												echo " an. " . $pengajuan['namadirekening'];
+											} 
+
+									 } else { echo "-";} ?>
 									</td>
 								</tr>							
 							</table>

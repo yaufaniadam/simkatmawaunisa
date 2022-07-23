@@ -81,8 +81,8 @@ class Prestasi extends Admin_Controller
 					$row['NAME_OF_DEPARTMENT'],
 					$row['tahun'],
 					$row['nama_periode'],
-					get_tingkat(get_meta_value_by_type_field('select_tingkat', $row['id_pengajuan'], false))['Tingkat_Prestasi'],	
-					get_prestasi(get_meta_value_by_type_field('select_prestasi', $row['id_pengajuan'], false))['keterangan'],	
+					// get_tingkat(get_meta_value_by_type_field('select_tingkat', $row['id_pengajuan'], false))['Tingkat_Prestasi'],	
+					// get_prestasi(get_meta_value_by_type_field('select_prestasi', $row['id_pengajuan'], false))['keterangan'],	
 				);
 			}
 			$records['data'] = $data;

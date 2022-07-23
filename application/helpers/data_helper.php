@@ -166,19 +166,19 @@ function get_jumlah_pengajuan_per_jenis_pengajuan($jenis_pengajuan_id, $tahun, $
 		if ($sem) {
 			if ($sem == 1) {
 				$tahun = $tahun;
-				$where = "WHERE Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi;
+				$where = "WHERE (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12 " . $prodi.") OR (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) NOT BETWEEN 3 AND 8 " . $prodi.")";
 	
 			} elseif ($sem == 2) {
 				$tahun = $tahun;					
-				$where = "WHERE Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi;
+				$where = "WHERE Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 3 AND 8 " . $prodi;
 			}
 		} else {
-			$tahun = $tahun;
-			$where = "WHERE (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+			$tahun = $tahun;			
+			$where = "WHERE (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12 " . $prodi . ") OR (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 8 " . $prodi . ")";
 				}
 	} else {
 		$tahun = date('Y');
-		$where = "WHERE (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR (Jenis_Pengajuan_Id  =".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+		$where = "WHERE (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12 " . $prodi . ") OR (Jenis_Pengajuan_Id = ".$jenis_pengajuan_id." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 8 " . $prodi . ")";
 	}
 
 	$pengajuan = $CI->db->query("select * from v_prestasi $where")
@@ -222,19 +222,19 @@ function get_jumlah_pengajuan_per_prodi($tahun, $sem)
 			if ($sem) {
 				if ($sem == 1) {
 					$tahun = $tahun;
-					$where = "WHERE DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 ";
+					$where = "WHERE (status = 1 AND DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12 ) OR (DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) NOT BETWEEN 3 AND 8 )";
 	
 				} elseif ($sem == 2) {
 					$tahun = $tahun;					
-					$where = "WHERE DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 ";
+					$where = "WHERE status = 1 AND DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 3 AND 8 ";
 				}
 			} else {
 				$tahun = $tahun;
-				$where = "WHERE (DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6) OR (DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12)";
-					}
+				$where = "WHERE (status = 1 AND DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12) OR (status = 1 AND DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN  1 AND 8)";
+				}
 		} else {
 			$tahun = date('Y');
-			$where = "WHERE (DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6) OR (DEPARTMENT_ID  =".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12)";
+			$where = "WHERE (status = 1 AND DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12) OR (status = 1 AND DEPARTMENT_ID = ".$prodi." AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN  1 AND 8)";
 		}
 
 		$pengajuan_per_prodi[] = [
@@ -406,7 +406,7 @@ function get_meta_value($key, $id_pengajuan, $file)
 {
 	$CI = &get_instance();
 
-	$value = $CI->db->select("*")
+	$value = $CI->db->select("mf.field_id, mf.key, mf.type, fv.value")
 		->from('mstr_fields mf')
 		->join('tr_field_value fv', 'mf.field_id=fv.field_id', 'left')
 		->where(array("mf.key" => $key, 'fv.pengajuan_id' => $id_pengajuan))
@@ -424,7 +424,16 @@ function get_meta_value($key, $id_pengajuan, $file)
 				'filename' => $filename[1],
 			);
 		} else {
-			$value = $value->row_array()['value'];
+			$type = $value->row_array()['type'];
+			if( $type == 'select_mahasiswa') {
+				$expl = explode( ',' , $value->row_array()['value']);
+				$value = array();
+				foreach ($expl as $expl) {
+					$value[] = $expl;
+				}
+			} else {
+				$value = $value->row_array()['value'];
+			}
 		}
 	} else {
 		$value = "-";
@@ -582,4 +591,11 @@ function get_nominal_byorder($id_pengajuan, $order) {
 	}
 
 
+}
+
+function get_mahasiswa_by_nim($nim)
+{
+	$CI = &get_instance();
+	$query = $CI->db->get_where('v_mahasiswa', array('STUDENTID' => $nim))->row_array();
+	return $query;
 }
