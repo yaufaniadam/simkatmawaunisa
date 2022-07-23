@@ -192,6 +192,7 @@
 		
 	</div>
 
+	<?php /*
 	<div class="row">
 
 
@@ -240,6 +241,7 @@
 
 	</div>
 
+	*/ ?>
 
 
 	<div class="row">
@@ -331,7 +333,7 @@
 	<?php } ?>
 
 </div>
-
+<?php /*
 <script src="<?= base_url() ?>public/vendor/chart.js/Chart.min.js"></script>
 <!-- PERBULAN -->
 <script>
@@ -369,9 +371,8 @@
 	var myLineChart = new Chart(ctx, {
 		type: 'line',
 		data: {
-			// labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 			labels: [
-				<?php foreach ($nama_bulan as $bulan) { ?> "<?php echo get_nama_bulan($bulan['bulan']) ?>",
+				<?php foreach ($nama_bulan as $bulan) { ?> "<?= get_nama_bulan($bulan['bulan']) ?>",
 				<?php } ?>
 			],
 			datasets: [{
@@ -402,36 +403,22 @@
 				}
 			},
 			scales: {
-				xAxes: [{
-					time: {
-						unit: 'date'
-					},
-					gridLines: {
-						display: true,
-						drawBorder: true
-					},
-					ticks: {
-						maxTicksLimit: 1
-					}
-				}],
-				yAxes: [{
-					ticks: {
-						maxTicksLimit: 1,
-						padding: 10,
-						// Include a dollar sign in the ticks
-						callback: function(value, index, values) {
-							return number_format(value);
-						}
-					},
-					gridLines: {
-						color: "rgb(234, 236, 244)",
-						zeroLineColor: "rgb(234, 236, 244)",
-						drawBorder: false,
-						borderDash: [2],
-						zeroLineBorderDash: [2]
-					}
-				}],
-			},
+      x: {
+        display: true,
+        title: {
+          display: true
+        }
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: 'Value'
+        },
+        suggestedMin: -10,
+        suggestedMax: 200
+      }
+    },
 			legend: {
 				display: false
 			},
@@ -459,7 +446,7 @@
 		}
 	});
 </script>
-
+*/ ?>
 
 <!-- <script>
 	$('#data-pengajuan-table').DataTable({

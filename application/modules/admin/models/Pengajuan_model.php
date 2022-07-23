@@ -229,28 +229,29 @@ class Pengajuan_model extends CI_Model
 		$prodi = 'AND DEPARTMENT_ID = ' . $prodinya;
 	}
 
+
 	if ($tahun) {
 		if ($sem) {
 			if ($sem == 1) {
 				$tahun = $tahun;
-				$where = "WHERE status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi;
+				$where = "WHERE (status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12 " . $prodi . ") OR (status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) NOT BETWEEN 3 AND 8 " . $prodi . ")";
 	
 			} elseif ($sem == 2) {
 				$tahun = $tahun;					
-				$where = "WHERE status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi;
+				$where = "WHERE status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 3 AND 8 " . $prodi;
 			}
 		} else {
 			$tahun = $tahun;
-			$where = "WHERE ( status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR ( status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+			$where = "WHERE ( status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12 " . $prodi . ") OR ( status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 8 " . $prodi . ")";
 				}
 	} else {
 		$tahun = date('Y');
-		$where = "WHERE ( status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 6 " . $prodi . ") OR ( status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 7 AND 12 " . $prodi . ")";
+		$where = "WHERE ( status = 1 AND YEAR(tanggal) = $tahun AND MONTH(tanggal) BETWEEN 9 AND 12 " . $prodi . ") OR ( status = 1 AND YEAR(tanggal) = $tahun+1 AND MONTH(tanggal) BETWEEN 1 AND 8 " . $prodi . ")";
 	}
 
 		return $this->db->query(
 			"SELECT 
-			distinct(MONTH(tanggal)) AS bulan 
+			distinct(MONTH(tanggal)) AS bulan
 			FROM v_prestasi
 			$where
 			ORDER BY bulan ASC

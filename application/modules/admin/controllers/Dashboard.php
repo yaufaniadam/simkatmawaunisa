@@ -69,28 +69,12 @@ class Dashboard extends Admin_Controller
 		ORDER BY tahun ASC
 		")->num_rows();
 
-// echo '<pre> pengajuan_perlu_diproses <br> '; print_r($data['pengajuan_perlu_diproses']); echo '</pre>';
-
-// foreach ($data['pengajuan_perlu_diproses'] as $data) {
-// 	echo $data['catatan'] ." " . $data['tahun'] . "<hr>";
-// } 
-
-// exit;
-
 		$data['prestasi'] = $this->db->query("select * FROM v_prestasi $where_prestasi")->num_rows();
-
-		// echo '<pre> prestasi '; print_r($data['prestasi']); echo '</pre>';
-
-
 		$data['propinsi'] = $this->get_lingkup_kegiatan(1, $tahun, $sem);
-
-			// echo '<pre> Juara propinsi '; print_r($data['propinsi']); echo '</pre>';
-
 		$data['wilayah'] = $this->get_lingkup_kegiatan(2, $tahun, $sem);
 		$data['nasional'] = $this->get_lingkup_kegiatan(3, $tahun, $sem);
 		$data['internasional'] = $this->get_lingkup_kegiatan(4, $tahun, $sem);
 		$data['pt'] = $this->get_lingkup_kegiatan(5, $tahun, $sem);
-
 		$data['nama_bulan'] = $this->pengajuan_model->getbulan($tahun, $sem);
 
 		$data['jenis_pengajuan'] = $this->db->query(
