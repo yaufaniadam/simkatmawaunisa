@@ -65,7 +65,7 @@
 				<div class="form-group prodi">
 					<label for="prodi" class="control-label">Pilih Prodi</label>
 					<div>
-						<select name="PPengguna" class="prodi form-control <?= (form_error('prodi')) ? 'is-invalid' : ''; ?>">
+						<select name="prodi" class="prodi form-control <?= (form_error('prodi')) ? 'is-invalid' : ''; ?>">
 							<option value="">Pilih Prodi</option>
 							<?php foreach ($prodi as $prodi) { ?>				
 								<option value="<?= $prodi['DEPARTMENT_ID']; ?>" <?= (set_select('prodi', $prodi['DEPARTMENT_ID'])) ?>><?= $prodi['NAME_OF_DEPARTMENT']; ?> (<?= $prodi['DEPARTMENT_ID']; ?>)</option>
